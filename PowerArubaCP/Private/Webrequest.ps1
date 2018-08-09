@@ -29,9 +29,11 @@ function Invoke-ArubaCPWebRequest(){
 
         if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
             $sessionvariable = $DefaultArubaCPConnection.session
-            $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json," }
         }
-        $headers
+
+        #When headers, We need to have Accept and Content-type set to application/json...
+        $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
+
         try {
             if($body){
                 $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Headers $headers

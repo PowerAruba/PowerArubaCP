@@ -24,8 +24,8 @@ function Invoke-ArubaCPRestMethod(){
         $Server = ${DefaultArubaCPConnection}.Server
         $fullurl = "https://${Server}/${url}"
 
-
-        $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json" }
+        #When headers, We need to have Accept and Content-type set to application/json...
+        $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
 
         try {
             if($body){
