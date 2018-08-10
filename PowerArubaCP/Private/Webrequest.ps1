@@ -13,9 +13,7 @@ function Invoke-ArubaCPWebRequest(){
         #Valid POST, GET...
         [String]$method,
         [Parameter(Mandatory = $false)]
-        [psobject]$body,
-        [Parameter(Mandatory = $false)]
-        [Microsoft.PowerShell.Commands.WebRequestSession]$sessionvariable
+        [psobject]$body
     )
 
     Begin {
@@ -25,11 +23,6 @@ function Invoke-ArubaCPWebRequest(){
 
         $Server = ${DefaultArubaCPConnection}.Server
         $fullurl = "https://${Server}/${url}"
-
-
-        if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
-            $sessionvariable = $DefaultArubaCPConnection.session
-        }
 
         #When headers, We need to have Accept and Content-type set to application/json...
         $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
