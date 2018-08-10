@@ -4,18 +4,16 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Invoke-ArubaCPWebRequest(){
+function Invoke-ArubaCPWebRequest{
 
     Param(
         [Parameter(Mandatory = $true)]
-        [String]$url,
+        [String]$uri,
         [Parameter(Mandatory = $true)]
-        #Valid POST, GET...
+        [ValidateSet("GET", "PUT", "POST", "DELETE")]
         [String]$method,
         [Parameter(Mandatory = $false)]
-        [psobject]$body,
-        [Parameter(Mandatory = $false)]
-        [Microsoft.PowerShell.Commands.WebRequestSession]$sessionvariable
+        [psobject]$body
     )
 
     Begin {
@@ -24,14 +22,11 @@ function Invoke-ArubaCPWebRequest(){
     Process {
 
         $Server = ${DefaultArubaCPConnection}.Server
-        $fullurl = "https://${Server}/${url}"
+        $fullurl = "https://${Server}/${uri}"
 
+        #When headers, We need to have Accept and Content-type set to application/json...
+        $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
 
-        if( -Not $PsBoundParameters.ContainsKey('sessionvariable') ){
-            $sessionvariable = $DefaultArubaCPConnection.session
-            $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json," }
-        }
-        $headers
         try {
             if($body){
                 $response = Invoke-WebRequest $fullurl -Method $method -body ($body | ConvertTo-Json) -Headers $headers
@@ -41,19 +36,15 @@ function Invoke-ArubaCPWebRequest(){
         }
 
         catch {
-            If ($_.Exception.Response) {
+            If ($_.ErrorDetails) {
 
-                $result = $_.Exception.Response.GetResponseStream()
-                $reader = New-Object System.IO.StreamReader($result)
-                $responseBody = $reader.ReadToEnd()
-                $responseJson =  $responseBody | ConvertFrom-Json
+                $error = $_.ErrorDetails.Message | ConvertFrom-Json
 
-                Write-Host "The ClearPass API sends an error message:" -foreground yellow
-                Write-Host
-                Write-Host "Error description (code): $($_.Exception.Response.StatusDescription) ($($_.Exception.Response.StatusCode.Value__))" -foreground yellow
-                Write-Host "Error details: $($responseBody)" -foreground yellow
-                Write-Host
-            }
+                Write-Warning "The ClearPass API sends an error message:`n"
+                Write-Warning "Error description (code): $($error.title) ($($error.status))"
+                Write-Warning "Error details: $($error.detail)"
+
+                }
             throw "Unable to use ClearPass API"
         }
         $response
