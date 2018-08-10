@@ -8,7 +8,7 @@ function Invoke-ArubaCPWebRequest(){
 
     Param(
         [Parameter(Mandatory = $true)]
-        [String]$url,
+        [String]$uri,
         [Parameter(Mandatory = $true)]
         [ValidateSet("GET", "PUT", "POST", "DELETE")]
         [String]$method,
@@ -22,7 +22,7 @@ function Invoke-ArubaCPWebRequest(){
     Process {
 
         $Server = ${DefaultArubaCPConnection}.Server
-        $fullurl = "https://${Server}/${url}"
+        $fullurl = "https://${Server}/${uri}"
 
         #When headers, We need to have Accept and Content-type set to application/json...
         $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
