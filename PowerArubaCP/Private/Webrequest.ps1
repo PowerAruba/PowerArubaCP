@@ -50,11 +50,9 @@ function Invoke-ArubaCPWebRequest(){
                 $responseBody = $reader.ReadToEnd()
                 $responseJson =  $responseBody | ConvertFrom-Json
 
-                Write-Host "The ClearPass API sends an error message:" -foreground yellow
-                Write-Host
-                Write-Host "Error description (code): $($_.Exception.Response.StatusDescription) ($($_.Exception.Response.StatusCode.Value__))" -foreground yellow
-                Write-Host "Error details: $($responseBody)" -foreground yellow
-                Write-Host
+                Write-Warning "The ClearPass API sends an error message:`n"
+                Write-Warning "Error description (code): $($_.Exception.Response.StatusDescription) ($($_.Exception.Response.StatusCode.Value__))"
+                Write-Warning "Error details: $($responseJson)"
             }
             throw "Unable to use ClearPass API"
         }
