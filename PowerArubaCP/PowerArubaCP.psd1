@@ -95,10 +95,10 @@ PrivateData = @{
          Tags = @('Aruba', 'HPE', 'ClearPass', 'CPPM')
 
         # A URL to the license for this module.
-         LicenseUri = 'https://github.com/alagoutte/PowerArubaCP/blob/master/LICENSE'
+         LicenseUri = 'https://github.com/PowerAruba/PowerArubaCP/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-         ProjectUri = 'https://github.com/alagoutte/PowerArubaCP'
+         ProjectUri = 'https://github.com/PowerAruba/PowerArubaCP'
 
         # A URL to an icon representing this module.
         # IconUri = ''
