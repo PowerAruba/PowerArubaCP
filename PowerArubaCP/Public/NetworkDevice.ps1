@@ -169,3 +169,67 @@ function Get-ArubaCPNetworkDevice {
     End {
     }
 }
+
+function Remove-ArubaCPNetworkDevice {
+
+    <#
+        .SYNOPSIS
+        Remove a Network Device (NAD) on ClearPass
+
+        .DESCRIPTION
+        Remove a Network Device (NAS) on ClearPass
+
+        .EXAMPLE
+        $nad = Get-ArubaSWVlans -name NAD-PowerArubaCP
+        PS C:\>$nad | Remove-ArubaCPNetworkDevice
+
+        Remove Network Device named NAD-PowerArubaCP
+
+        .EXAMPLE
+        Remove-ArubaCPNetworkDevice -id 3001 -noconfirm
+
+        Remove Network Device id 3001 with no confirmation
+    #>
+
+    Param(
+        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [int]$id,
+        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="nad")]
+        #ValidateScript({ Validatenad $_ })]
+        [psobject]$nad,
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get nad id from nad ps object
+        if($nad){
+            $id = $nad.id
+        }
+
+        $url = "api/network-device/${id}"
+
+        if ( -not ( $Noconfirm )) {
+            $message  = "Remove Network Device on ClearPass"
+            $question = "Proceed with removal of Network Device ${id} ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove Network Device"
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url
+            Write-Progress -activity "Remove Network Device" -completed
+        }
+    }
+
+    End {
+    }
+}
