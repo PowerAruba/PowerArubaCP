@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Invoke-ArubaCPWebRequest(){
+function Invoke-ArubaCPWebRequest{
 
     Param(
         [Parameter(Mandatory = $true)]

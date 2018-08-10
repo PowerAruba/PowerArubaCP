@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Invoke-ArubaCPRestMethod(){
+function Invoke-ArubaCPRestMethod{
 
     Param(
         [Parameter(Mandatory = $true)]
