@@ -10,7 +10,7 @@ function Invoke-ArubaCPRestMethod(){
         [Parameter(Mandatory = $true)]
         [String]$url,
         [Parameter(Mandatory = $true)]
-        #Valid POST, GET...
+        [ValidateSet("GET", "PUT", "POST", "DELETE")]
         [String]$method,
         [Parameter(Mandatory = $false)]
         [psobject]$body
