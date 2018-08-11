@@ -52,8 +52,10 @@ All resource management functions are available with the Powershell verbs GET, A
 The first thing to do is to get API Client Token
 
 Go on WebGUI of your ClearPass, on Guest Modules
+![](./Medias/CPPM_Guest_API.PNG)  
 Go on `Adminstration` => `API Services` => `API Clients`
 
+![](./Medias/CPPM_Create_API_Client.PNG)  
 Create a `New API Client`
 - Client ID : a client name (for example PowerArubaCP)
 - Operator Profile : Super Administrator
@@ -62,9 +64,13 @@ Create a `New API Client`
 
 Click on `Create API Client` (you don't need to store the Client Secet)
 
-On `API Clients List`, select the your client and click on `Generate Access Token` 
+On `API Clients List`, select the your client
+![](./Medias/CPPM_Generate_Access_Token.PNG)  
 
-and kept the token (for example : 70680f1d19f86110800d5d5cb4414fbde7be12ae)
+Click on `Generate Access Token`
+
+![](./Medias/CPPM_Get_Token.PNG)  
+And kept the token (for example : 70680f1d19f86110800d5d5cb4414fbde7be12ae)
 
 
 After connect to a Aruba ClearPass with the command `Connect-ArubaCP` :
@@ -92,6 +98,10 @@ for example to get ClearPass version
     cloud_mode          : False
 ```
 to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
+![](./Medias/CPPM_API_Docs.PNG)  
+
+And choice a service (for example Platform)
+![](./Medias/CPPM_API_Docs_platform.PNG)  
 
 <!--
 ### NAD Management
