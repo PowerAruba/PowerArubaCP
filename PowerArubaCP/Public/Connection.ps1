@@ -8,14 +8,14 @@ function Connect-ArubaCP {
 
   <#
       .SYNOPSIS
-      Connect to a Aruba ClearPass
+      Connect to an Aruba ClearPass
 
       .DESCRIPTION
-      Connect to a Aruba ClearPass
+      Connect to an Aruba ClearPass
       .EXAMPLE
       Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
 
-      Connect to a ArubaCX Switch with IP 192.0.2.1 using token aaaaaaa
+      Connect to an Aruba ClearPass with IP 192.0.2.1 using token aaaaaaa
   #>
 
     Param(
