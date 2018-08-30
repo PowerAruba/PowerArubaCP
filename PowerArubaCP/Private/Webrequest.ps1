@@ -10,7 +10,7 @@ function Invoke-ArubaCPWebRequest{
         [Parameter(Mandatory = $true)]
         [String]$uri,
         [Parameter(Mandatory = $true)]
-        [ValidateSet("GET", "PUT", "POST", "DELETE")]
+        [ValidateSet("GET", "PUT", "POST", "DELETE", "PATCH")]
         [String]$method,
         [Parameter(Mandatory = $false)]
         [psobject]$body
