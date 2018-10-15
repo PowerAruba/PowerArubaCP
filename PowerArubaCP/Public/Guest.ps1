@@ -1,5 +1,6 @@
 #
 # Copyright 2018, Alexis La Goutte <alexis.lagoutte at gmail dot com>
+# Copyright 2018, Cédric Moreau <moreaucedric0 at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -9,8 +10,10 @@ function Get-ArubaCPGuest {
   <#
       .SYNOPSIS
       Get Guest account on Aruba ClearPass
+
       .DESCRIPTION
       Get Guest account on Aruba ClearPass
+
       .EXAMPLE
       Get-ArubaCPGuest
       Get all the guest accounts on Clearpass.
@@ -38,14 +41,17 @@ function Add-ArubaCPGuest {
     <#
         .SYNOPSIS
         Add Guest account on Aruba ClearPass
+
         .DESCRIPTION
         Add Guest account on Aruba ClearPass
         .EXAMPLE
-        Add-ArubaCPGuest -username -company -mail -role [-enable] [-expire]
+
+        Add-ArubaCPGuest -username -company -mail -role -enable
         Add the guest account with parameters.
         .EXAMPLE
-        Add-ArubaCPGuest -username matthew -company "Interstellar & Co" -mail matt.hew@matthew.com -role 2 -enable True
-        Add the guest account matthew with company Interstellar & Co, e-mail matt.hew@matthew.com and role 2 (Guest) and enable it on Clearpass.
+
+        Add-ArubaCPGuest -username matthew -company "Interstellar & Co" -mail matt.hew@matthew.com -role guest -enable True
+        Add the guest account matthew with company Interstellar & Co, e-mail matt.hew@matthew.com and role guest and enable it on Clearpass.
     #>
 
     Param(
@@ -56,7 +62,7 @@ function Add-ArubaCPGuest {
         [Parameter(Mandatory = $true)]
         [String]$mail,
         [Parameter(Mandatory = $true)]
-        [int]$role,
+        [string]$role,
         [Parameter(Mandatory = $false)]
         [ValidateSet ("True", "False")]
         [string]$enable
@@ -75,7 +81,22 @@ function Add-ArubaCPGuest {
 
         $guest | add-member -name "email" -membertype NoteProperty -Value $mail
 
-        $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
+        if ( $PsBoundParameters.ContainsKey('role'))
+        {
+            switch( $role ) {
+                guest {
+                    $role = 2
+                }
+                employee {
+                    $role = 3
+                }
+                contractor {
+                    $role = 1
+                }
+            }
+            $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
+        }
+        
         
         if ( $PsBoundParameters.ContainsKey('enable'))
         {
@@ -105,14 +126,17 @@ function Set-ArubaCPGuest {
     <#
         .SYNOPSIS
         Set information about a guest account.
+
         .DESCRIPTION
         Set information about a guest account based on his username on Aruba ClearPass.
+
         .EXAMPLE
-        Set-ArubaCPGuest -username test [-company] [-mail] [-role (1/2/3)] [-enable (true/false)] [-expire (hour/day/week/month/year)]/
+        Set-ArubaCPGuest -username test [-company] [-mail] [-role (contractor/employee/guest) ] [-enable (true/false)] [-expire (hour/day/week/month/year)]
         Set the information of the guest user.
+
         .EXAMPLE
-        Set-ArubaCPGuest -username matthew -enable true -expire hour
-        Set the guest account matthew enable with an expire time of an hour.
+        Set-ArubaCPGuest -username matthew -company "Company" -mail myemail@domain.com -role guest -enable true -expire hour
+        Set the guest account matthew enable, with his company, his email, the role guest and with an expire time of an hour.
     #>
 
     Param(
@@ -123,8 +147,7 @@ function Set-ArubaCPGuest {
         [Parameter(Mandatory = $false)]
         [String]$mail,
         [Parameter(Mandatory = $false)]
-        [ValidateRange (1,3)]
-        [int]$role,
+        [string]$role,
         [Parameter(Mandatory = $false)]
         [ValidateSet ("true", "false")]
         [string]$enable,
@@ -153,7 +176,18 @@ function Set-ArubaCPGuest {
 
         if ( $PsBoundParameters.ContainsKey('role'))
         {
-        $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
+            switch( $role ) {
+                guest {
+                    $role = 2
+                }
+                employee {
+                    $role = 3
+                }
+                contractor {
+                    $role = 1
+                }
+            }
+            $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
         }
 
         if ( $PsBoundParameters.ContainsKey('enable'))
