@@ -12,17 +12,25 @@ function Connect-ArubaCP {
 
       .DESCRIPTION
       Connect to an Aruba ClearPass
+
       .EXAMPLE
       Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
 
       Connect to an Aruba ClearPass with IP 192.0.2.1 using token aaaaaaa
+
+      .EXAMPLE
+      Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa -SkipCertificateCheck
+
+      Connect to an Aruba ClearPass using HTTPS (without check certificate validation) with IP 192.0.2.1 using token aaaaaaa
   #>
 
     Param(
         [Parameter(Mandatory = $true, position = 1)]
         [String]$Server,
         [Parameter(Mandatory = $false)]
-        [String]$token
+        [String]$token,
+        [Parameter(Mandatory = $false)]
+        [switch]$SkipCertificateCheck = $false
     )
 
     Begin {
@@ -33,8 +41,10 @@ function Connect-ArubaCP {
         $connection = @{server = ""; token = ""}
 
         #Allow untrusted SSL certificat and enable TLS 1.2 (needed by ClearPass)
-        Set-ArubaCPuntrustedSSL
         Set-ArubaCPCipherSSL
+        if ( $SkipCertificateCheck ) {
+            Set-ArubaCPuntrustedSSL
+        }
         $connection.server = $server
         $connection.token = $token
 
