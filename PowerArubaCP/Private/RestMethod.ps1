@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Invoke-ArubaCPRestMethod{
+function Invoke-ArubaCPRestMethod {
 
     Param(
         [Parameter(Mandatory = $true)]
@@ -28,9 +28,10 @@ function Invoke-ArubaCPRestMethod{
         $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
 
         try {
-            if($body){
+            if ($body) {
                 $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json) -Headers $headers
-            } else {
+            }
+            else {
                 $response = Invoke-RestMethod $fullurl -Method $method -Headers $headers
             }
         }
@@ -44,7 +45,7 @@ function Invoke-ArubaCPRestMethod{
                 Write-Warning "Error description (code): $($error.title) ($($error.status))"
                 Write-Warning "Error details: $($error.detail)"
 
-                }
+            }
             throw "Unable to use ClearPass API"
         }
         $response

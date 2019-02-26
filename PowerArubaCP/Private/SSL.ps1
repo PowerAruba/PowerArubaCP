@@ -5,8 +5,8 @@
 #
 Function Set-ArubaCPuntrustedSSL {
 
-  # Hack for allowing untrusted SSL certs with https connexions
-  Add-Type -TypeDefinition @"
+    # Hack for allowing untrusted SSL certs with https connexions
+    Add-Type -TypeDefinition @"
     using System.Net;
     using System.Security.Cryptography.X509Certificates;
     public class TrustAllCertsPolicy : ICertificatePolicy {
@@ -18,14 +18,14 @@ Function Set-ArubaCPuntrustedSSL {
     }
 "@
 
-[System.Net.ServicePointManager]::CertificatePolicy = New-Object -TypeName TrustAllCertsPolicy
+    [System.Net.ServicePointManager]::CertificatePolicy = New-Object -TypeName TrustAllCertsPolicy
 
 }
 
 Function Set-ArubaCPCipherSSL {
 
-  # Hack for allowing TLS 1.1 and TLS 1.2 (by default it is only SSL3 and TLS (1.0))
-  $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
-  [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
+    # Hack for allowing TLS 1.1 and TLS 1.2 (by default it is only SSL3 and TLS (1.0))
+    $AllProtocols = [System.Net.SecurityProtocolType]'Ssl3,Tls,Tls11,Tls12'
+    [System.Net.ServicePointManager]::SecurityProtocol = $AllProtocols
 
 }
