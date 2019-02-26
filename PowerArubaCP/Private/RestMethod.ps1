@@ -6,6 +6,29 @@
 
 function Invoke-ArubaCPRestMethod {
 
+    <#
+      .SYNOPSIS
+      Invoke RestMethod with ArubaCP connection (internal) variable
+
+      .DESCRIPTION
+       Invoke RestMethod with ArubaCP connection variable (token, csrf..)
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/cppm-version"
+
+      Invoke-RestMethod with ArubaCP connection for get api/cppm-version
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod "api/cppm-version"
+
+      Invoke-RestMethod with ArubaCP connection for get api/cppm-version uri with default GET method parameter
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "post" -uri "api/cppm-version" -body $body
+
+      Invoke-RestMethod with ArubaCP connection for post api/cppm-version uri with $body payload
+    #>
+
     Param(
         [Parameter(Mandatory = $true, position = 1)]
         [String]$uri,
