@@ -6,7 +6,7 @@
 
 function Connect-ArubaCP {
 
-  <#
+    <#
       .SYNOPSIS
       Connect to an Aruba ClearPass
 
@@ -19,7 +19,7 @@ function Connect-ArubaCP {
   #>
 
     Param(
-        [Parameter(Mandatory = $true, position=1)]
+        [Parameter(Mandatory = $true, position = 1)]
         [String]$Server,
         [Parameter(Mandatory = $false)]
         [String]$token
@@ -30,7 +30,7 @@ function Connect-ArubaCP {
 
     Process {
 
-        $connection = @{server="";token=""}
+        $connection = @{server = ""; token = ""}
 
         #Allow untrusted SSL certificat and enable TLS 1.2 (needed by ClearPass)
         Set-ArubaCPuntrustedSSL
@@ -78,7 +78,7 @@ function Disconnect-ArubaCP {
     Process {
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove Aruba ClearPass connection."
+            $message = "Remove Aruba ClearPass connection."
             $question = "Proceed with removal of Aruba ClearPass connection ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
