@@ -60,15 +60,7 @@ function Invoke-ArubaCPRestMethod {
         }
 
         catch {
-            If ($_.ErrorDetails) {
-
-                $error = $_.ErrorDetails.Message | ConvertFrom-Json
-
-                Write-Warning "The ClearPass API sends an error message:`n"
-                Write-Warning "Error description (code): $($error.title) ($($error.status))"
-                Write-Warning "Error details: $($error.detail)"
-
-            }
+            Show-ArubaCPException $_
             throw "Unable to use ClearPass API"
         }
         $response
