@@ -1,7 +1,4 @@
 
-
-Last release: [![GitHub version](https://badge.fury.io/gh/PowerAruba/powerarubacp.svg)](https://badge.fury.io/gh/PowerAruba/powerarubacp)
-
 # PowerArubaCP
 
 This is a Powershell module for configure a Aruba ClearPass (CPPM).
