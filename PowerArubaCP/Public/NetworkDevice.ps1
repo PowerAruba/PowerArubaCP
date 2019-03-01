@@ -35,25 +35,25 @@ function Add-ArubaCPNetworkDevice {
     #>
 
     Param(
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [int]$id,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$description,
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [string]$name,
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [ipaddress]$ip_address,
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [string]$radius_secret,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [string]$tacacs_secret,
-        [Parameter (Mandatory=$true)]
+        [Parameter (Mandatory = $true)]
         [string]$vendor_name,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$coa_capable,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [int]$coa_port,
-        [Parameter (Mandatory=$false)]
+        [Parameter (Mandatory = $false)]
         [switch]$radsec_enabled
     )
 
@@ -89,7 +89,8 @@ function Add-ArubaCPNetworkDevice {
         if ( $PsBoundParameters.ContainsKey('coa_capable') ) {
             if ( $coa_capable ) {
                 $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $True
-            } else {
+            }
+            else {
                 $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $false
             }
         }
@@ -101,7 +102,8 @@ function Add-ArubaCPNetworkDevice {
         if ( $PsBoundParameters.ContainsKey('radsec_enabled') ) {
             if ( $radsec_enabled ) {
                 $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $True
-            } else {
+            }
+            else {
                 $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
             }
         }
@@ -140,12 +142,12 @@ function Get-ArubaCPNetworkDevice {
 
     #>
 
-    [CmdLetBinding(DefaultParameterSetName="Default")]
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
-        [Parameter (Mandatory=$false, ParameterSetName="id")]
+        [Parameter (Mandatory = $false, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory=$false, ParameterSetName="name", Position=1)]
+        [Parameter (Mandatory = $false, ParameterSetName = "name", Position = 1)]
         [string]$Name
     )
 
@@ -192,9 +194,9 @@ function Remove-ArubaCPNetworkDevice {
     #>
 
     Param(
-        [Parameter (Mandatory=$true, ParameterSetName="id")]
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory=$true, ValueFromPipeline=$true, Position=1, ParameterSetName="nad")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
         #ValidateScript({ Validatenad $_ })]
         [psobject]$nad,
         [Parameter(Mandatory = $false)]
@@ -207,14 +209,14 @@ function Remove-ArubaCPNetworkDevice {
     Process {
 
         #get nad id from nad ps object
-        if($nad){
+        if ($nad) {
             $id = $nad.id
         }
 
         $url = "api/network-device/${id}"
 
         if ( -not ( $Noconfirm )) {
-            $message  = "Remove Network Device on ClearPass"
+            $message = "Remove Network Device on ClearPass"
             $question = "Proceed with removal of Network Device ${id} ?"
             $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
             $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
