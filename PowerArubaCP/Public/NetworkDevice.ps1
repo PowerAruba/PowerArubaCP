@@ -129,14 +129,14 @@ function Get-ArubaCPNetworkDevice {
         Get ALL NetworkDevice on the Clearpass
 
         .EXAMPLE
-        Get-ArubaSWVlans Aruba
+        Get-ArubaCPNetworkDevice NAD-PowerArubaCP
 
-        Get info about vlan named Aruba on the switch
+        Get info about NetworkDevice NAD-PowerArubaCP Aruba on the ClearPass
 
         .EXAMPLE
-        Get-ArubaSWVlans -id 23
+        Get-ArubaCPNetworkDevice -id 23
 
-        Get info about vlan id 23 on the switch
+        Get info about NetworkDevice id 23 on the ClearPass
 
     #>
 
@@ -180,7 +180,7 @@ function Remove-ArubaCPNetworkDevice {
         Remove a Network Device (NAS) on ClearPass
 
         .EXAMPLE
-        $nad = Get-ArubaSWVlans -name NAD-PowerArubaCP
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
         PS C:\>$nad | Remove-ArubaCPNetworkDevice
 
         Remove Network Device named NAD-PowerArubaCP
