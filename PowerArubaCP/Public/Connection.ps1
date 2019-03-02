@@ -38,15 +38,30 @@ function Connect-ArubaCP {
 
     Process {
 
-        $connection = @{server = ""; token = ""}
+        $connection = @{server = ""; token = ""; invokeParams = ""}
+        $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
 
-        #Allow untrusted SSL certificat and enable TLS 1.2 (needed by ClearPass)
-        Set-ArubaCPCipherSSL
-        if ( $SkipCertificateCheck ) {
-            Set-ArubaCPuntrustedSSL
+        if ("Desktop" -eq $PSVersionTable.PsEdition) {
+            #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
+            $invokeParams.remove("SkipCertificateCheck")
+        } else { #Core Edition
+            #Remove -UseBasicParsing (Enable by default with PowerShell 6/Core)
+            $invokeParams.remove("UseBasicParsing")
         }
+
+        #for PowerShell (<=) 5 (Desktop), Enable TLS 1.1, 1.2 and Disable SSL chain trust (needed/recommanded by ClearPass)
+        if ("Desktop" -eq $PSVersionTable.PsEdition) {
+            #Enable TLS 1.1 and 1.2
+            Set-ArubaCPCipherSSL
+            if ($SkipCertificateCheck) {
+                #Disable SSL chain trust...
+                Set-ArubaCPuntrustedSSL
+            }
+        }
+
         $connection.server = $server
         $connection.token = $token
+        $connection.invokeParams = $invokeParams
 
         set-variable -name DefaultArubaCPConnection -value $connection -scope Global
 
