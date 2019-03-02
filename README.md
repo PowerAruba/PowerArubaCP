@@ -149,7 +149,20 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
 if you use `Connect-ArubaCP` and get `Unable to Connect (certificate)`
 
 The issue coming from use Self-Signed or Expired Certificate for switch management
+
 Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
+
+# List of available command
+```powershell
+Add-ArubaCPNetworkDevice
+Connect-ArubaCP
+Disconnect-ArubaCP
+Get-ArubaCPNetworkDevice
+Invoke-ArubaCPRestMethod
+Remove-ArubaCPNetworkDevice
+Set-ArubaCPCipherSSL
+Set-ArubaCPuntrustedSSL
+```
 
 # Author
 
