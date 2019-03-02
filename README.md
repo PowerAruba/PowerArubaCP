@@ -3,7 +3,7 @@
 
 This is a Powershell module for configure a Aruba ClearPass (CPPM).
 
-With this module (version 0.1.0) you can manage:
+With this module (version 0.2.0) you can manage:
 
 - Network Device (Add / Get / Remove a NAS)
 - Invoke API using Invoke-ArubaCPRestMethod
