@@ -5,6 +5,7 @@ This is a Powershell module for configure a Aruba ClearPass (CPPM).
 
 With this module (version 0.1.0) you can manage:
 
+- Network Device (Add / Get / Remove a NAS)
 - Invoke API using Invoke-ArubaCPRestMethod
 
 More functionality will be added later.
@@ -14,12 +15,11 @@ Tested with Aruba ClearPass (using release 6.7.x)
 # Usage
 
 All resource management functions are available with the Powershell verbs GET, ADD, SET, REMOVE. 
-<!-- For example, you can manage Vlans with the following commands:
-- `Get-ArubaSWVlans`
-- `Add-ArubaSWVlans`
-- `Set-ArubaSWVlans`
-- `Remove-ArubaSWVlans`
--->
+For example, you can manage NAS (NetworkDevice) with the following commands:
+- `Get-ArubaCPNetworkDevice`
+- `Add-ArubaCPNetworkDevice`
+<!--- `Set-ArubaSWVlans`-->
+- `Remove-ArubaCPNetworkDevice`
 
 # Requirements
 
@@ -39,7 +39,7 @@ All resource management functions are available with the Powershell verbs GET, A
     Get-Command -Module PowerArubaCP
 
 # Get help
-    Get-Help Connect-ArubaCP -Full
+    Get-Help Add-ArubaCPArubaNetwork -Full
 ```
 
 # Examples
@@ -100,37 +100,38 @@ to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
 And choice a service (for example Platform)
 ![](./Medias/CPPM_API_Docs_platform.PNG)  
 
-<!--
-### NAD Management
+### NAS Management
 
-You can create a new LUN `Add-ArubaSWVlans`, retrieve its information `Get-ArubaSWVlans`, modify its properties `Set-ArubaSWVLans`, or delete it `Remove-ArubaSWVlans`.
+You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `Get-ArubaCPNetworkDevice`,<!-- modify its properties `Set-ArubaSWVLans`,--> or delete it `Remove-ArubaCPNetwork`.
 
 ```powershell
-# Create a vlan
-    Add-ArubaSWVlans -id 85 -Name 'PowerArubaSW' -is_voice_enabled
+# Create a NAS
+    Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
 
-    uri               : /vlans/85
-    vlan_id           : 85
-    name              : PowerArubaSW
-    status            : VS_PORT_BASED
-    type              : VT_STATIC
-    is_voice_enabled  : False
-    is_jumbo_enabled  : True
-    is_dsnoop_enabled : False
-
-
-# Get information about vlan
-    Get-ArubaSWVlans -name PowerArubaSW | ft
-
-    uri       vlan_id name         status        type      is_voice_enabled is_jumbo_enabled is_dsnoop_enabled is_management_vlan
-    ---       ------- ----         ------        ----      ---------------- ---------------- ----------------- ------------------
-    /vlans/85      85 PowerArubaSW VS_PORT_BASED VT_STATIC            False             True             False              False
+    id            : 3004
+    name          : SW1
+    description   : Add by PowerArubaCP
+    ip_address    : 192.0.2.1
+    radius_secret :
+    tacacs_secret :
+    vendor_name   : Aruba
+    coa_capable   : False
+    coa_port      : 3799
+    attributes    :
+    _links        : @{self=}
 
 
-# Remove a vlan
-    Remove-ArubaSWVlans -id 85
+# Get information about NAS
+    Get-ArubaCPNetworkDevice -name SW1 | Format-Table
+
+    id   name description         ip_address radius_secret tacacs_secret vendor_name coa_capable coa_port attributes
+    --   ---- -----------         ---------- ------------- ------------- ----------- ----------- -------- ----------
+    3004 SW1  Add by PowerArubaCP 192.0.2.1                              Aruba       False       3799
+
+# Remove a NAS
+    $nad = Get-ArubaCPNetworkDevice -name SW1
+    $nad | Remove-ArubaCPNetworkDevice -noconfirm
 ```
--->
 
 ### Disconnecting
 
