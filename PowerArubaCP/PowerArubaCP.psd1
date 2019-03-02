@@ -12,7 +12,7 @@
 RootModule = 'PowerArubaCP.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1'
+ModuleVersion = '0.2'
 
 # ID used to uniquely identify this module
 GUID = '24e1a5ba-e4e3-4109-b079-04d4d657da93'
