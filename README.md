@@ -94,6 +94,9 @@ for example to get ClearPass version
     eval_license        : False
     cloud_mode          : False
 ```
+
+if you get a warning about `Unable to connect` Look [Issue](#Issue)
+
 to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
 ![](./Medias/CPPM_API_Docs.PNG)  
 
@@ -139,6 +142,14 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
 # Disconnect from the Aruba ClearPass
     Disconnect-ArubaCP
 ```
+
+# Issue
+
+## Unable to connect (certificate)
+if you use `Connect-ArubaCP` and get `Unable to Connect (certificate)`
+
+The issue coming from use Self-Signed or Expired Certificate for switch management
+Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 
 # Author
 
