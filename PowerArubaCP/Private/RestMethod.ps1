@@ -45,6 +45,7 @@ function Invoke-ArubaCPRestMethod {
     Process {
 
         $Server = ${DefaultArubaCPConnection}.Server
+        $invokeParams = ${DefaultArubaCPConnection}.invokeParams
         $fullurl = "https://${Server}/${uri}"
 
         #When headers, We need to have Accept and Content-type set to application/json...
@@ -52,10 +53,10 @@ function Invoke-ArubaCPRestMethod {
 
         try {
             if ($body) {
-                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json) -Headers $headers
+                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json) -Headers $headers @invokeParams
             }
             else {
-                $response = Invoke-RestMethod $fullurl -Method $method -Headers $headers
+                $response = Invoke-RestMethod $fullurl -Method $method -Headers $headers @invokeParams
             }
         }
 

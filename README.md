@@ -23,8 +23,8 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
 
 # Requirements
 
-- Powershell 5 (If possible get the latest version)
-- A ClearPass (with release 6.7.x ) and API Client enable
+- Powershell 5 or 6 (Core) (If possible get the latest version)
+- A ClearPass (with release 6.7.x) and API Client enable
 
 # Instructions
 ### Install the module
