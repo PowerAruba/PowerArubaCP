@@ -26,8 +26,8 @@ All resource management functions are available with the Powershell verbs GET, A
 
 # Requirements
 
-- Powershell 5 (If possible get the latest version)
-- A ClearPass (with release 6.7.x ) and API Client enable
+- Powershell 5 or 6 (Core) (If possible get the latest version)
+- A ClearPass (with release 6.7.x) and API Client enable
 
 # Instructions
 ### Install the module
