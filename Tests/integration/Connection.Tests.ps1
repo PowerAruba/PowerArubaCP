@@ -24,9 +24,11 @@ Describe  "Connect to a ClearPass (using Token)" {
 
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will be fail, if there is valid certificate...
-    #It "Connect to a switch (using HTTPS) and check global variable" -Skip:("Desktop" -eq $PSEdition) {
-    #    { Connect-ArubaCP $ipaddress -Token $token } | Should throw "Unable to connect (certificate)"
-    #}
+    It "Throw when try to use Invoke-ArubaCPRestMethod with don't use -SkipCertifiateCheck" -Skip:("Desktop" -eq $PSEdition) {
+        Connect-ArubaCP $ipaddress -Token $token
+        { Invoke-ArubaCPRestMethod -uri "rest/v4/vlans" } | Should throw "Unable to connect (certificate)"
+        Disconnect-ArubaCP -noconfirm
+    }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
         { Invoke-ArubaCPRestMethod -uri "rest/v4/vlans" } | Should throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
     }
