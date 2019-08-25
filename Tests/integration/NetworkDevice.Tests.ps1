@@ -88,4 +88,33 @@ Describe  "Add Network Device" {
     }
 }
 
+Describe  "Remove Network Device" {
+
+    It "Remove Network Device by id" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.name | Should be "pester_SW1"
+        $nad.count | should be 1
+        Remove-ArubaCPNetworkDevice -id $nad.id -noconfirm
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad | Should BeNullOrEmpty
+        $nad.count | should be 0
+    }
+
+    It "Remove Network Device by name (and pipeline)" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.name | Should be "pester_SW1"
+        $nad.count | should be 1
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad | Should BeNullOrEmpty
+        $nad.count | should be 0
+    }
+
+    AfterEach {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+    }
+}
+
 Disconnect-ArubaCP -noconfirm
