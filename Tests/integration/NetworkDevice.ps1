@@ -87,3 +87,5 @@ Describe  "Add Network Device" {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
     }
 }
+
+Disconnect-ArubaCP -noconfirm
