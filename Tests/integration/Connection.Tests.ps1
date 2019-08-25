@@ -16,7 +16,7 @@ Describe  "Connect to a ClearPass (using Token)" {
         $DefaultArubaCPConnection.server | Should be $ipaddress
         $DefaultArubaCPConnection.token | Should be $token
     }
-    It "Disconnect to ClearPass (using HTTP) and check global variable" {
+    It "Disconnect to ClearPass and check global variable" {
         Disconnect-ArubaCP -noconfirm
         $DefaultArubaCPConnection | Should be $null
     }
