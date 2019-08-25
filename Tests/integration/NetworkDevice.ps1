@@ -48,3 +48,42 @@ Describe  "Get Network Device" {
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -noconfirm
     }
 }
+
+Describe  "Add Network Device" {
+
+    It "Add Network Device with Coa Enable and Change Port" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -coa_capable -coa_port 5000
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should not be BeNullOrEmpty
+        $nad.name | Should be "pester_SW1"
+        $nad.ip_address | Should be "192.0.2.1"
+        $nad.vendor_name | Should be "Aruba"
+        $nad.coa_capable | Should be "true"
+        $nad.coa_port | Should be "5000"
+    }
+
+    It "Add Network Device with TACACS secret (and Cisco vendor)" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Cisco -tacacs_secret MySecurePassword
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should not be BeNullOrEmpty
+        $nad.name | Should be "pester_SW1"
+        $nad.ip_address | Should be "192.0.2.1"
+        $nad.vendor_name | Should be "Cisco"
+        # radius_secret and tacacs_secret are always empty...
+    }
+
+    #Disable... need to check release version and some change with last 6.8 release... need to configure RadSec Settings...
+    #It "Add Network Device with RadSec" {
+    #    Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -radsec_enabled
+    #    $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+    #    $nad.id | Should not be BeNullOrEmpty
+    #    $nad.name | Should be "pester_SW1"
+    #    $nad.ip_address | Should be "192.0.2.1"
+    #    $nad.vendor_name | Should be "Aruba"
+    #    $nad.radsec_enabled | Should be true
+    #}
+
+    AfterEach {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+    }
+}
