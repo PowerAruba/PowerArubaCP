@@ -14,5 +14,5 @@ else {
 . ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
 
-Connect-ArubaCP -Server $ipaddress -Token $tolen  -SkipCertificateCheck
+Connect-ArubaCP -Server $ipaddress -Token $token -SkipCertificateCheck
 
