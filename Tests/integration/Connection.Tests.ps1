@@ -67,8 +67,15 @@ Describe  "Invoke ArubaCP RestMethod tests" {
         Add-ArubaCPNetworkDevice -name pester_SW26 -ip_address 192.0.2.26 -radius_secret MySecurePassword -vendor Aruba
     }
 
+#   It "Use Invoke-ArubaCPRestMethod without limit parameter" {
+#        #Need to found only 25 entries...
+#        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device"
+#        $nad = $response._embedded.items | where-object { $_.name -match "pester_"}
+#        $nad.count | should be 25
+#    }
+
     It "Use Invoke-ArubaCPRestMethod with limit parameter" {
-        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/Network-device" -limit 1000
+        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device" -limit 1000
         $nad = $response._embedded.items | where-object { $_.name -match "pester_"}
         $nad.count | should be 26
     }
@@ -101,5 +108,7 @@ Describe  "Invoke ArubaCP RestMethod tests" {
         Get-ArubaCPNetworkDevice -name pester_SW24 | Remove-ArubaCPNetworkDevice -noconfirm
         Get-ArubaCPNetworkDevice -name pester_SW25 | Remove-ArubaCPNetworkDevice -noconfirm
         Get-ArubaCPNetworkDevice -name pester_SW26 | Remove-ArubaCPNetworkDevice -noconfirm
+        #And disconnect
+        Disconnect-ArubaCP -noconfirm
     }
 }
