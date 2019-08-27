@@ -33,3 +33,82 @@ Describe  "Connect to a ClearPass (using Token)" {
         { Invoke-ArubaCPRestMethod -uri "rest/v4/vlans" } | Should throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
     }
 }
+
+Describe  "Invoke ArubaCP RestMethod tests" {
+    BeforeAll {
+        #connect...
+        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck
+        #Add 26 Network Device (NAS)
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW4 -ip_address 192.0.2.4 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW5 -ip_address 192.0.2.5 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW7 -ip_address 192.0.2.7 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW8 -ip_address 192.0.2.8 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW9 -ip_address 192.0.2.9 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW10 -ip_address 192.0.2.10 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW11 -ip_address 192.0.2.11 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW12 -ip_address 192.0.2.12 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW13 -ip_address 192.0.2.13 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW14 -ip_address 192.0.2.14 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW15 -ip_address 192.0.2.15 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW16 -ip_address 192.0.2.16 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW17 -ip_address 192.0.2.17 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW18 -ip_address 192.0.2.18 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW19 -ip_address 192.0.2.19 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW20 -ip_address 192.0.2.20 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW21 -ip_address 192.0.2.21 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW22 -ip_address 192.0.2.22 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW23 -ip_address 192.0.2.23 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW24 -ip_address 192.0.2.24 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW25 -ip_address 192.0.2.25 -radius_secret MySecurePassword -vendor Aruba
+        Add-ArubaCPNetworkDevice -name pester_SW26 -ip_address 192.0.2.26 -radius_secret MySecurePassword -vendor Aruba
+    }
+
+   It "Use Invoke-ArubaCPRestMethod without limit parameter" {
+        #Need to found only less 25 entries...
+        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device"
+        $nad = $response._embedded.items | where-object { $_.name -match "pester_"}
+        $nad.count | should -BeLessOrEqual 25
+    }
+
+    It "Use Invoke-ArubaCPRestMethod with limit parameter" {
+        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device" -limit 1000
+        $nad = $response._embedded.items | where-object { $_.name -match "pester_"}
+        $nad.count | should be 26
+    }
+
+    AfterAll {
+        #Remove NAD entries...
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW4 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW5 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW6 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW7 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW8 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW9 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW10 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW11 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW12 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW13 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW14 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW15 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW16 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW17 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW18 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW19 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW20 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW21 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW22 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW23 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW24 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW25 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW26 | Remove-ArubaCPNetworkDevice -noconfirm
+        #And disconnect
+        Disconnect-ArubaCP -noconfirm
+    }
+}

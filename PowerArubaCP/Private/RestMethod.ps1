@@ -36,7 +36,10 @@ function Invoke-ArubaCPRestMethod {
         [ValidateSet("GET", "PUT", "POST", "DELETE", "PATCH")]
         [String]$method = "GET",
         [Parameter(Mandatory = $false)]
-        [psobject]$body
+        [psobject]$body,
+        [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 1000)]
+        [int]$limit
     )
 
     Begin {
@@ -52,6 +55,17 @@ function Invoke-ArubaCPRestMethod {
         $invokeParams = ${DefaultArubaCPConnection}.invokeParams
         $fullurl = "https://${Server}/${uri}"
 
+        if ($fullurl -NotMatch "\?") {
+            $fullurl += "?"
+        }
+
+        #Add calculate_count to each get command to get the number of
+        if ($method -eq "GET") {
+            $fullurl += "&calculate_count=true"
+        }
+        if ($limit) {
+            $fullurl += "&limit=$limit"
+        }
         #When headers, We need to have Accept and Content-type set to application/json...
         $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
 
@@ -67,6 +81,13 @@ function Invoke-ArubaCPRestMethod {
         catch {
             Show-ArubaCPException $_
             throw "Unable to use ClearPass API"
+        }
+        #Only if limit is no set and $response._embedded.items(.count) is not empty
+        if (-Not $limit -and $response._embedded.items.count) {
+            #Check if number a item calculate by CPPM (calculate_count) is superior to return item (and generate a warning about use -limit)
+            if ($response.count -gt $response._embedded.items.count) {
+                Write-Warning "There is extra items use -limit parameter to display"
+            }
         }
         $response
 
