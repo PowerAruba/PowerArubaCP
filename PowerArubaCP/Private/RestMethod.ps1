@@ -82,8 +82,8 @@ function Invoke-ArubaCPRestMethod {
             Show-ArubaCPException $_
             throw "Unable to use ClearPass API"
         }
-        #Only if limit is no set
-        if (-Not $limit) {
+        #Only if limit is no set and $response._embedded.items(.count) is not empty
+        if (-Not $limit -and $response._embedded.items.count) {
             #Check if number a item calculate by CPPM (calculate_count) is superior to return item (and generate a warning about use -limit)
             if ($response.count -gt $response._embedded.items.count) {
                 Write-Warning "There is extra items use -limit parameter to display"
