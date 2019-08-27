@@ -59,6 +59,10 @@ function Invoke-ArubaCPRestMethod {
             $fullurl += "?"
         }
 
+        #Add calculate_count to each get command to get the number of
+        if ($method -eq "GET") {
+            $fullurl += "&calculate_count=true"
+        }
         if ($limit) {
             $fullurl += "&limit=$limit"
         }
@@ -77,6 +81,13 @@ function Invoke-ArubaCPRestMethod {
         catch {
             Show-ArubaCPException $_
             throw "Unable to use ClearPass API"
+        }
+        #Only if limit is no set
+        if (-Not $limit) {
+            #Check if number a item calculate by CPPM (calculate_count) is superior to return item (and generate a warning about use -limit)
+            if ($response.count -gt $response._embedded.items.count) {
+                Write-Warning "There is extra items use -limit parameter to display"
+            }
         }
         $response
 
