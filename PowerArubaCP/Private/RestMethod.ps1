@@ -49,7 +49,7 @@ function Invoke-ArubaCPRestMethod {
 
     Process {
 
-        if ($null -eq $DefaultArubaCPConnection){
+        if ($null -eq $DefaultArubaCPConnection) {
             Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
         }
 
