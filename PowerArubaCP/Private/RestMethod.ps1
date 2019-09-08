@@ -27,6 +27,26 @@ function Invoke-ArubaCPRestMethod {
       Invoke-ArubaCPRestMethod -method "post" -uri "api/cppm-version" -body $body
 
       Invoke-RestMethod with ArubaCP connection for post api/cppm-version uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "post" -uri "api/cppm-version" -body $body
+
+      Invoke-RestMethod with ArubaCP connection for post api/cppm-version uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -limit 1000
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with limit to 1000
+
+     .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -filter @{ "name" = "PowerArubaCP" }
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with filter name equal PowerArubaCP
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -filter @{ "name" = @{ "`$contains" = "PowerArubaCP" } }
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with filter name contains PowerArubaCP
     #>
 
     Param(
