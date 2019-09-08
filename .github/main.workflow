@@ -1,11 +1,11 @@
 workflow "script-analysis" {
   resolves = ["analyze"]
-  on       = "push"
+  on = "push"
 }
 
 workflow "pr-script-analysis" {
-  on       = "pull_request"
   resolves = "analyze-pr"
+  on = "pull_request"
 }
 
 action "filter-to-pr-open-synced" {
@@ -14,12 +14,12 @@ action "filter-to-pr-open-synced" {
 }
 
 action "analyze-pr" {
-  uses    = "devblackops/github-action-psscriptanalyzer@master"
-  needs   = "filter-to-pr-open-synced"
+  uses = "devblackops/github-action-psscriptanalyzer@master"
+  needs = "filter-to-pr-open-synced"
   secrets = ["GITHUB_TOKEN"]
 }
 
 action "analyze" {
-  uses    = "devblackops/github-action-psscriptanalyzer@master"
+  uses = "devblackops/github-action-psscriptanalyzer@master"
   secrets = ["GITHUB_TOKEN"]
 }
