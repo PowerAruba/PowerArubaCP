@@ -80,6 +80,20 @@ Describe  "Invoke ArubaCP RestMethod tests" {
         $nad.count | should be 26
     }
 
+    It "Use Invoke-ArubaCPRestMethod with filter parameter (equal)" {
+        #Need to found only pester_SW1
+        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device" -filter @{ "name" = "pester_SW1" }
+        $nad = $response._embedded.items
+        $nad.count | should -BeLessOrEqual 1
+    }
+
+    It "Use Invoke-ArubaCPRestMethod with filter parameter (contains)" {
+        #Need to found only pester_SW1[X] (11 entries)
+        $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device" -filter @{ "name" = @{ "`$contains" = "pester_SW1" } }
+        $nad = $response._embedded.items
+        $nad.count | should -BeLessOrEqual 11
+    }
+
     AfterAll {
         #Remove NAD entries...
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm

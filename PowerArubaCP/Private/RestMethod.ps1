@@ -27,6 +27,26 @@ function Invoke-ArubaCPRestMethod {
       Invoke-ArubaCPRestMethod -method "post" -uri "api/cppm-version" -body $body
 
       Invoke-RestMethod with ArubaCP connection for post api/cppm-version uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "post" -uri "api/cppm-version" -body $body
+
+      Invoke-RestMethod with ArubaCP connection for post api/cppm-version uri with $body payload
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -limit 1000
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with limit to 1000
+
+     .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -filter @{ "name" = "PowerArubaCP" }
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with filter name equal PowerArubaCP
+
+      .EXAMPLE
+      Invoke-ArubaCPRestMethod -method "get" -uri "api/network-device" -filter @{ "name" = @{ "`$contains" = "PowerArubaCP" } }
+
+      Invoke-RestMethod with ArubaCP connection for get api/network-device uri with filter name contains PowerArubaCP
     #>
 
     Param(
@@ -39,7 +59,9 @@ function Invoke-ArubaCPRestMethod {
         [psobject]$body,
         [Parameter(Mandatory = $false)]
         [ValidateRange(1, 1000)]
-        [int]$limit
+        [int]$limit,
+        [Parameter(Mandatory = $false)]
+        [array]$filter
     )
 
     Begin {
@@ -47,7 +69,7 @@ function Invoke-ArubaCPRestMethod {
 
     Process {
 
-        if ($null -eq $DefaultArubaCPConnection){
+        if ($null -eq $DefaultArubaCPConnection) {
             Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
         }
 
@@ -65,6 +87,9 @@ function Invoke-ArubaCPRestMethod {
         }
         if ($limit) {
             $fullurl += "&limit=$limit"
+        }
+        if ($filter) {
+            $fullurl += "&filter=$($filter | ConvertTo-Json -Compress)"
         }
         #When headers, We need to have Accept and Content-type set to application/json...
         $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
