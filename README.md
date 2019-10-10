@@ -10,11 +10,11 @@ With this module (version 0.2.0) you can manage:
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.7.x)
+Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)
 
 # Usage
 
-All resource management functions are available with the Powershell verbs GET, ADD, SET, REMOVE. 
+All resource management functions are available with the Powershell verbs GET, ADD, SET, REMOVE.  
 For example, you can manage NAS (NetworkDevice) with the following commands:
 - `Get-ArubaCPNetworkDevice`
 - `Add-ArubaCPNetworkDevice`
@@ -24,12 +24,12 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
 # Requirements
 
 - Powershell 5 or 6 (Core) (If possible get the latest version)
-- A ClearPass (with release 6.7.x) and API Client enable
+- A ClearPass (with release >= 6.7.x) and API Client enable
 
 # Instructions
 ### Install the module
 ```powershell
-# Automated installation (Powershell 5):
+# Automated installation (Powershell 5 and later):
     Install-Module PowerArubaCP
 
 # Import the module
@@ -50,7 +50,7 @@ The first thing to do is to get API Client Token
 
 Go on WebGUI of your ClearPass, on Guest Modules
 ![](./Medias/CPPM_Guest_API.PNG)  
-Go on `Adminstration` => `API Services` => `API Clients`
+Go on `Administration` => `API Services` => `API Clients`
 
 ![](./Medias/CPPM_Create_API_Client.PNG)  
 Create a `New API Client`
@@ -150,6 +150,48 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     $nad = Get-ArubaCPNetworkDevice -name SW1
     $nad | Remove-ArubaCPNetworkDevice -noconfirm
 ```
+### Filtering
+For `Invoke-ArubaCPRestMethod`, it is possible to use -filter parameter
+You need to use ClearPass API syntax :
+
+|Description |	JSON Filter Syntax |
+| ---------- | ------------------- |
+| No filter, matches everything | {} |
+| Field is equal to "value" | {"fieldName":"value"} or {"fieldName":{"$eq":"value"}} |
+| Field is one of a list of values | {"fieldName":["value1", "value2"]}  or {"fieldName":{"$in":["value1", "value2"]}} |
+| Field is not one of a list of values | {"fieldName":{"$nin":["value1", "value2"]}} |
+| Field contains a substring "value" | {"fieldName":{"$contains":"value"}} |
+| Field is not equal to "value" | {"fieldName":{"$ne":"value"}} |
+| Field is greater than "value" | {"fieldName":{"$gt":"value"}} |
+| Field is greater than or equal to "value" | {"fieldName":{"$gte":"value"}} |
+| Field is less than "value" | {"fieldName":{"$lt":"value"}} |
+| Field is less than or equal to "value" | {"fieldName":{"$lte":"value"}} |
+| Field matches a regular expression (case-sensitive) | {"fieldName":{"$regex":"regex"}} |
+| Field matches a regular expression (case-insensitive) | {"fieldName":{"$regex":"regex", "$options":"i"}} |
+| Field exists (does not contain a null value) | {"fieldName":{"$exists":true}} |
+| Field is NULL | {"fieldName":{"$exists":false}} |
+| Combining filter expressions with AND | {"$and":[ filter1, filter2, ... ]} |
+| Combining filter expressions with OR | {"$or":[ filter1, filter2, ... ]} |
+| Inverting a filter expression | {"$not":{ filter }} |
+| Field is greater than or equal to 2 and less than 5 | {"fieldName":{"$gte":2, "$lt":5}} {"$and":[ {"fieldName":{"$gte":2}}, {"fieldName":{"$lt":5}} ]}
+
+For `Get-XXX` cmdlet like `Get-ArubaCPNetwork`, it is possible to using some helper filter (`-filter_attribute`, `-filter_type`, `-filter_value`)
+
+```powershell
+# Get NetworkDevice named NAD-PowerArubaCP
+    Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+...
+
+# Get NetworkDevice contains NAD-PowerArubaCP
+    Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP -filter_type contains
+...
+
+# Get NetworkDevice where ip_address equal 192.168.1.1
+    Get-ArubaCPNetworkDevice -filter_attribute ip_address -filter_type equal -filter_value 192.168.1.1
+...
+
+```
+Actually, support only `equal` and `contains` filter type
 
 ### Disconnecting
 
@@ -170,6 +212,7 @@ Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 # List of available command
 ```powershell
 Add-ArubaCPNetworkDevice
+Confirm-ArubaCPNetworkDevice
 Connect-ArubaCP
 Disconnect-ArubaCP
 Get-ArubaCPNetworkDevice
@@ -178,6 +221,7 @@ Remove-ArubaCPNetworkDevice
 Set-ArubaCPCipherSSL
 Set-ArubaCPNetworkDevice
 Set-ArubaCPuntrustedSSL
+Show-ArubaCPException
 ```
 
 # Author
