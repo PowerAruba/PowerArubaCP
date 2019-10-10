@@ -140,15 +140,39 @@ function Get-ArubaCPNetworkDevice {
 
         Get info about NetworkDevice id 23 on the ClearPass
 
+        .EXAMPLE
+        Get-ArubaCPNetworkDevice NAD-PowerArubaCP -filter_type contains
+
+        Get info about NetworkDevice where name contains NAD-PowerArubaCP
+
+       .EXAMPLE
+        Get-ArubaCPNetworkDevice -filter_attribute ip_address -filter_type equal -filter_value 192.168.1.1
+
+        Get info about NetworkDevice where ip_address equal 192.168.1.1
+
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
-        [Parameter (Mandatory = $false, ParameterSetName = "id")]
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory = $false, ParameterSetName = "name", Position = 1)]
+        [Parameter (Mandatory = $false, Position = 1)]
+        [Parameter (ParameterSetName = "name")]
         [string]$Name,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [string]$filter_attribute,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
+        [Parameter (ParameterSetName = "name")]
+        [Parameter (ParameterSetName = "filter")]
+        [ValidateSet('equal', 'contains')]
+        [string]$filter_type,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [psobject]$filter_value,
         [Parameter (Mandatory = $false)]
         [int]$limit
     )
@@ -163,16 +187,173 @@ function Get-ArubaCPNetworkDevice {
             $invokeParams.add( 'limit', $limit )
         }
 
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "id" {
+                $filter_value = $id
+                $filter_attribute = "id"
+            }
+            "name" {
+                $filter_value = $name
+                $filter_attribute = "name"
+            }
+            default { }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('filter_type') ) {
+            switch ( $filter_type ) {
+                "equal" {
+                    $filter_value = @{ "`$eq" = $filter_value }
+                }
+                "contains" {
+                    $filter_value = @{ "`$contains" = $filter_value }
+                }
+                default { }
+            }
+        }
+
+        if ($filter_value -and $filter_attribute) {
+            $filter = @{ $filter_attribute = $filter_value }
+            $invokeParams.add( 'filter', $filter )
+        }
+
         $url = "api/network-device"
 
         $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams
 
+        $nad._embedded.items
+    }
 
-        switch ( $PSCmdlet.ParameterSetName ) {
-            "name" { $nad._embedded.items  | where-object { $_.name -match $name}}
-            "id" { $nad._embedded.items | where-object { $_.id -eq $id}}
-            default { $nad._embedded.items }
+    End {
+    }
+}
+
+function Set-ArubaCPNetworkDevice {
+
+    <#
+        .SYNOPSIS
+        Configure a Network Device (NAD) on ClearPass
+
+        .DESCRIPTION
+        Configure a Network Device (NAS) on ClearPass
+
+        .EXAMPLE
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS C:\>$nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
+
+        Rename Network Device to NAD-PowerArubaCP2
+
+        .EXAMPLE
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS C:\>$nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
+
+        Change IP Address and radius_secret of NAD-PowerArubaCP
+
+        .EXAMPLE
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS C:\>$nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
+
+        Set Vendor Name to Cisco and (re)configure TACACS Secret of NAD-PowerArubaCP
+
+        .EXAMPLE
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS C:\>$nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
+
+        Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
+
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
+        [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
+        [psobject]$nad,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $false)]
+        [string]$name,
+        [Parameter (Mandatory = $false)]
+        [ipaddress]$ip_address,
+        [Parameter (Mandatory = $false)]
+        [string]$radius_secret,
+        [Parameter (Mandatory = $false)]
+        [string]$tacacs_secret,
+        [Parameter (Mandatory = $false)]
+        [string]$vendor_name,
+        [Parameter (Mandatory = $false)]
+        [switch]$coa_capable,
+        [Parameter (Mandatory = $false)]
+        [int]$coa_port,
+        [Parameter (Mandatory = $false)]
+        [switch]$radsec_enabled
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get nad id from nad ps object
+        if ($nad) {
+            $id = $nad.id
         }
+
+        $url = "api/network-device/${id}"
+        $_nad = new-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_nad | add-member -name "id" -membertype NoteProperty -Value $id
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_nad | add-member -name "description" -membertype NoteProperty -Value $description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('name') ) {
+            $_nad | add-member -name "name" -membertype NoteProperty -Value $name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('ip_address') ) {
+            $_nad | add-member -name "ip_address" -membertype NoteProperty -Value $ip_address.ToString()
+        }
+
+        if ( $PsBoundParameters.ContainsKey('radius_secret') ) {
+            $_nad | add-member -name "radius_secret" -membertype NoteProperty -Value $radius_secret
+        }
+
+        if ( $PsBoundParameters.ContainsKey('tacacs_secret') ) {
+            $_nad | add-member -name "tacacs_secret" -membertype NoteProperty -Value $tacacs_secret
+        }
+
+        if ( $PsBoundParameters.ContainsKey('vendor_name') ) {
+            $_nad | add-member -name "vendor_name" -membertype NoteProperty -Value $vendor_name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('coa_capable') ) {
+            if ( $coa_capable ) {
+                $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $false
+            }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('coa_port') ) {
+            $_nad | add-member -name "coa_port" -membertype NoteProperty -Value $coa_port
+        }
+
+        if ( $PsBoundParameters.ContainsKey('radsec_enabled') ) {
+            if ( $radsec_enabled ) {
+                $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
+            }
+        }
+
+        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $url
+        $nad
+
     }
 
     End {
@@ -204,7 +385,7 @@ function Remove-ArubaCPNetworkDevice {
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
-        #ValidateScript({ Validatenad $_ })]
+        [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
         [psobject]$nad,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm
