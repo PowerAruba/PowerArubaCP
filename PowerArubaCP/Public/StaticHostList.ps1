@@ -4,7 +4,88 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-ArubaCPStaticHostList {
 
+    <#
+        .SYNOPSIS
+        Add a Static Host List on ClearPass
+
+        .DESCRIPTION
+        Add a Static Host List with Id, Name, description, host format/type ....
+
+        .EXAMPLE
+        Add-ArubaCPStaticHostList -name SHL-list-IPAddress -host_format list -host_type IPAddress -host_entries_address 192.2.0.1 -host_entries_description "Add via PowerArubaCP"
+
+        Add Static Host List with format list and type IP Address (192.2.0.1....)
+
+        .EXAMPLE
+        Add-ArubaCPStaticHostList -name SHL-list-MACAddress -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
+
+        Add Static Host List with format list and type MAC Address (00:01:02:03:04:05....)
+    #>
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [int]$id,
+        [Parameter (Mandatory = $true)]
+        [string]$name,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $true)]
+        #[ValidateSet("subnet", "regex", "list")]
+        [ValidateSet("list", IgnoreCase = $false)]
+        [string]$host_format,
+        [Parameter (Mandatory = $false)]
+        [ValidateSet("IPAddress", "MACAddress", IgnoreCase = $false)]
+        [string]$host_type,
+        #[Parameter (Mandatory = $false)]
+        #[string]$value,
+        #[Parameter (Mandatory = $false)]
+        #[psobject]$host_entries,
+        [Parameter (Mandatory = $false)]
+        [string]$host_entries_address,
+        [Parameter (Mandatory = $false)]
+        [string]$host_entries_description
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "api/static-host-list"
+
+        $_shl = New-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_shl | Add-Member -name "id" -MemberType NoteProperty -Value $id
+        }
+        $_shl | Add-Member -name "name" -MemberType NoteProperty -Value $name
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_shl | Add-Member -name "description" -MemberType NoteProperty -Value $description
+        }
+
+        $_shl | Add-Member -name "host_format" -MemberType NoteProperty -Value $host_format
+
+        if ( $PsBoundParameters.ContainsKey('host_type') ) {
+            $_shl | Add-Member -name "host_type" -MemberType NoteProperty -Value $host_type
+        }
+
+        if ( $PsBoundParameters.ContainsKey('host_entries_address') -and $PsBoundParameters.ContainsKey('host_entries_description')) {
+            $host_entries = New-Object -TypeName PSObject
+            $host_entries | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_entries_address
+            $host_entries | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description
+            $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($host_entries)
+        }
+
+        $shl = Invoke-ArubaCPRestMethod -method "POST" -body $_shl -uri $url
+        $shl
+    }
+
+    End {
+    }
+}
 function Get-ArubaCPStaticHostList {
 
     <#
