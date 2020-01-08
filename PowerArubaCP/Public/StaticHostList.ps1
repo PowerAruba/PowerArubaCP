@@ -196,3 +196,67 @@ function Get-ArubaCPStaticHostList {
     End {
     }
 }
+
+function Remove-ArubaCPStaticHostList {
+
+    <#
+        .SYNOPSIS
+        Remove a Static Host List on ClearPass
+
+        .DESCRIPTION
+        Remove a Static Host List on ClearPass
+
+        .EXAMPLE
+        $shl = Get-ArubaCPStaticHostList -name SHL-PowerArubaCP
+        PS C:\>$shl | Remove-ArubaCPStaticHostList
+
+        Remove Network Device named SHL-PowerArubaCP
+
+        .EXAMPLE
+        Remove-ArubaCPStaticHostList -id 3001 -noconfirm
+
+        Remove Static Host List id 3001 with no confirmation
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "shl")]
+        [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
+        [psobject]$shl,
+        [Parameter(Mandatory = $false)]
+        [switch]$noconfirm
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get shl id from shl ps object
+        if ($shl) {
+            $id = $shl.id
+        }
+
+        $url = "api/static-host-list/${id}"
+
+        if ( -not ( $Noconfirm )) {
+            $message = "Remove Static Host List on ClearPass"
+            $question = "Proceed with removal of Static Host List ${id} ?"
+            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
+            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
+
+            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
+        }
+        else { $decision = 0 }
+        if ($decision -eq 0) {
+            Write-Progress -activity "Remove Static Host List"
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url
+            Write-Progress -activity "Remove Static Host List" -completed
+        }
+    }
+
+    End {
+    }
+}
