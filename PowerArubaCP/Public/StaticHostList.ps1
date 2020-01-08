@@ -188,9 +188,9 @@ function Get-ArubaCPStaticHostList {
 
         $url = "api/static-host-list"
 
-        $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams
+        $shl = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams
 
-        $nad._embedded.items
+        $shl._embedded.items
     }
 
     End {
