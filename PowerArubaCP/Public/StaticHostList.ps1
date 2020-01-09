@@ -315,3 +315,57 @@ function Remove-ArubaCPStaticHostList {
     End {
     }
 }
+
+function Remove-ArubaCPStaticHostListMember {
+
+    <#
+        .SYNOPSIS
+        Remove a Static Host List Member on ClearPass
+
+        .DESCRIPTION
+        Remove a Static Host List Member (IPAddress or MACAddress)
+
+        .EXAMPLE
+        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 192.2.0.2
+
+        Remove Static Host List with format list and type IP Address (192.2.0.2....)
+
+        .EXAMPLE
+        Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
+
+        Remove Static Host List with format list and type MAC Address (00:01:02:03:04:06....)
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
+        [psobject]$shl,
+        [Parameter (Mandatory = $true)]
+        [string]$host_entries_address
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $shl.id
+        $url = "api/static-host-list/${id}"
+
+        $_shl = New-Object -TypeName PSObject
+
+        $host_entries = $shl.host_entries | Where-Object { $_.host_address -ne $host_entries_address }
+
+        if ( $host_entries.count -eq 0 ) {
+            Throw "You can't remove all entries. Use Remove-ArubaCPStaticHostList to remove Static Host List"
+        }
+
+        $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($host_entries)
+
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url
+        $shl
+    }
+
+    End {
+    }
+}
