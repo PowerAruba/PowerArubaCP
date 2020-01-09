@@ -24,13 +24,13 @@ Describe  "Get Static Host List" {
         $shl.count | Should not be $NULL
     }
 
-    It "Get Static Host List (pester_SW1)" {
+    It "Get Static Host List (pester_SHL-list-IPAddress)" {
         $shl = Get-ArubaCPStaticHostList | Where-Object { $_.name -eq "pester_SHL-list-IPAddress" }
         $shl.id | Should not be BeNullOrEmpty
         $shl.name | Should be "pester_SHL-list-IPAddress"
     }
 
-    It "Get Static Host List (pester_SW1) and confirm (via Confirm-ArubaCPStaticHostList)" {
+    It "Get Static Host List (pester_SHL-list-IPAddress) and confirm (via Confirm-ArubaCPStaticHostList)" {
         $shl = Get-ArubaCPStaticHostList | Where-Object { $_.name -eq "pester_SHL-list-IPAddress" }
         Confirm-ArubaCPStaticHostList $shl | Should be $true
     }
