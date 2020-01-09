@@ -56,7 +56,7 @@ Describe  "Get Static Host List" {
 
 Describe  "Add Static Host List" {
 
-    It "Add Static Host List wiht format list and type IPAddress" {
+    It "Add Static Host List with format list and type IPAddress" {
         Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl.id | Should not be BeNullOrEmpty
@@ -82,7 +82,7 @@ Describe  "Add Static Host List" {
         $shl.host_entries[1].host_address_desc | Should be "Add via ArubaCPStaticHostListMember"
     }
 
-    It "dd Static Host List wiht format list and type MACAddress" {
+    It "Add Static Host List with format list and type MACAddress" {
         Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl.id | Should not be BeNullOrEmpty
