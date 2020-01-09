@@ -86,6 +86,61 @@ function Add-ArubaCPStaticHostList {
     End {
     }
 }
+
+function Add-ArubaCPStaticHostListMember {
+
+    <#
+        .SYNOPSIS
+        Add a Static Host List Member on ClearPass
+
+        .DESCRIPTION
+        Add a Static Host List Member (IPAddress or MACAddress)
+
+        .EXAMPLE
+        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Add-ArubaCPStaticHostListMember -host_entries_address 192.2.0.2 -host_entries_description "Add via PowerArubaCP"
+
+        Add Static Host List with format list and type IP Address (192.2.0.2....)
+
+        .EXAMPLE
+        Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
+
+        Add Static Host List with format list and type MAC Address (00:01:02:03:04:06....)
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
+        [psobject]$shl,
+        [Parameter (Mandatory = $true)]
+        [string]$host_entries_address,
+        [Parameter (Mandatory = $true)]
+        [string]$host_entries_description
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $shl.id
+        $url = "api/static-host-list/${id}"
+
+        $_shl = New-Object -TypeName PSObject
+
+        $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($shl.host_entries)
+
+        $host_entries = New-Object -TypeName PSObject
+        $host_entries | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_entries_address
+        $host_entries | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description
+        $_shl.host_entries += $host_entries
+
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url
+        $shl
+    }
+
+    End {
+    }
+}
 function Get-ArubaCPStaticHostList {
 
     <#
