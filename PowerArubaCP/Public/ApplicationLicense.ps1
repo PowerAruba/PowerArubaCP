@@ -4,6 +4,52 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-ArubaCPApplicationLicense {
+
+    <#
+        .SYNOPSIS
+        Add Application License info on CPPM
+
+        .DESCRIPTION
+        Add Application License (Id, Name, Type, user Count...)
+
+        .EXAMPLE
+        Add-ArubaCPApplicationLicense -product_name Access -license_key XXXXXXX
+
+        Add a Application licence type Access with licence key XXXXXXX
+
+    #>
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [ValidateSet('Access', 'Access Upgrade', 'Entry', 'Onboard', 'OnGuard', IgnoreCase = $false)]
+        [string]$product_name,
+        [Parameter (Mandatory = $false)]
+        [string]$license_key
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "api/application-license"
+
+        $_al = New-Object psobject
+
+        $_al | Add-Member -name "product_name" -MemberType NoteProperty -Value $product_name
+
+        $_al | Add-Member -name "license_key" -MemberType NoteProperty -Value $license_key
+
+        $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $url
+
+        $al
+    }
+
+    End {
+    }
+}
+
 function Get-ArubaCPApplicationLicense {
 
     <#
@@ -68,4 +114,3 @@ function Get-ArubaCPApplicationLicense {
     End {
     }
 }
-
