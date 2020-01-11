@@ -28,7 +28,7 @@ Describe  "Get Application License" {
 Describe  "Add and Remove Application License" {
 
     It "Add Application License ($pester_license_type)" -Skip:($pester_license -eq $null) {
-        #Add-ArubaCPApplicationLicense -product_name $pester_license_type -license_key $pester_license
+        Add-ArubaCPApplicationLicense -product_name $pester_license_type -license_key $pester_license
         $al = Get-ArubaCPApplicationLicense -product_name $pester_license_type #Only check if search work !
         $al.id | Should not be BeNullOrEmpty
         $al.product_name | Should be $pester_license_type
