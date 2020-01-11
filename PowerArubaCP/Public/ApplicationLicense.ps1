@@ -57,7 +57,7 @@ function Get-ArubaCPApplicationLicense {
         Get Application License info on CPPM
 
         .DESCRIPTION
-        Get Application License (Id, Name, Type, user Count...)
+        Get Application License (Id, Name, Type, User Count...)
 
         .EXAMPLE
         Get-ArubaCPApplicationLicense
