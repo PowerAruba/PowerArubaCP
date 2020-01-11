@@ -9,7 +9,7 @@
 $script:ipaddress = "10.44.23.213"
 $script:token = "aaaaaaaaaaaaaaaaaa"
 
-#Uncomment if you want to enable add and Remove Application License (recommanded to use Onboard license for test...)
+#Uncomment if you want to enable add and Remove Application License (recommended to use Onboard license for test...)
 #$script:pester_license_type = "Onboard"
 #$script:pester_license = "
 #-----BEGIN CLEARPASS ONBOARD LICENSE KEY-----
