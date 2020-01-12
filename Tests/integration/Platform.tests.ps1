@@ -21,4 +21,25 @@ Describe  "Get Server Version" {
     }
 }
 
+Describe  "Get CPPM Version" {
+
+    It "Get CPPMVersion Does not throw an error" {
+        {
+            Get-ArubaCPCPPMVersion
+        } | Should Not Throw
+    }
+
+    It "Get CPPM Version (Major, Minor, service, hardware...)" {
+        $cv = Get-ArubaCPCPPMVersion
+        $cv.app_major_version | Should be "6"
+        $cv.app_minor_version | Should -BeIn (7..9)
+        $cv.app_service_release | Should -BeIn (0..15)
+        $cv.app_build_number | Should not be $NULL
+        $cv.hardware_version | Should not be $NULL
+        $cv.fips_enabled | Should not be $NULL
+        $cv.eval_license | Should not be $NULL
+        $cv.cloud_mode | Should not be $NULL
+    }
+}
+
 Disconnect-ArubaCP -noconfirm
