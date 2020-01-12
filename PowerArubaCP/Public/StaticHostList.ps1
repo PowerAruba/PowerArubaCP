@@ -14,9 +14,9 @@ function Add-ArubaCPStaticHostList {
         Add a Static Host List with Id, Name, description, host format/type ....
 
         .EXAMPLE
-        Add-ArubaCPStaticHostList -name SHL-list-IPAddress -host_format list -host_type IPAddress -host_entries_address 192.2.0.1 -host_entries_description "Add via PowerArubaCP"
+        Add-ArubaCPStaticHostList -name SHL-list-IPAddress -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"
 
-        Add Static Host List with format list and type IP Address (192.2.0.1....)
+        Add Static Host List with format list and type IP Address (192.0.2.1....)
 
         .EXAMPLE
         Add-ArubaCPStaticHostList -name SHL-list-MACAddress -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
@@ -109,9 +109,9 @@ function Add-ArubaCPStaticHostListMember {
         Add a Static Host List Member (IPAddress or MACAddress)
 
         .EXAMPLE
-        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Add-ArubaCPStaticHostListMember -host_entries_address 192.2.0.2 -host_entries_description "Add via PowerArubaCP"
+        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Add-ArubaCPStaticHostListMember -host_entries_address 192.0.2.2 -host_entries_description "Add via PowerArubaCP"
 
-        Add Static Host List with format list and type IP Address (192.2.0.2....)
+        Add Static Host List with format list and type IP Address (192.0.2.2....)
 
         .EXAMPLE
         Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
@@ -419,9 +419,9 @@ function Remove-ArubaCPStaticHostListMember {
         Remove a Static Host List Member (IPAddress or MACAddress)
 
         .EXAMPLE
-        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 192.2.0.2
+        Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 192.0.2.2
 
-        Remove Static Host List with format list and type IP Address (192.2.0.2....)
+        Remove Static Host List with format list and type IP Address (192.0.2.2....)
 
         .EXAMPLE
         Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
