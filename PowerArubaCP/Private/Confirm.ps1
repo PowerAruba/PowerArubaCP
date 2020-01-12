@@ -3,7 +3,42 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+Function Confirm-ArubaCPApplicationLicense {
 
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Application License element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name product_id -Membertype Properties)) {
+        throw "Element specified does not contain an product_id property."
+    }
+    if ( -not ( $argument | get-member -name product_name -Membertype Properties)) {
+        throw "Element specified does not contain a product_name property."
+    }
+    if ( -not ( $argument | get-member -name license_key -Membertype Properties)) {
+        throw "Element specified does not contain a license_key property."
+    }
+    if ( -not ( $argument | get-member -name license_type -Membertype Properties)) {
+        throw "Element specified does not contain a license_type property."
+    }
+    if ( -not ( $argument | get-member -name user_count -Membertype Properties)) {
+        throw "Element specified does not contain a user_count property."
+    }
+    if ( -not ( $argument | get-member -name license_added_on -Membertype Properties)) {
+        throw "Element specified does not contain a license_added_on property."
+    }
+    if ( -not ( $argument | get-member -name activation_status -Membertype Properties)) {
+        throw "Element specified does not contain a activation_status property."
+    }
+    $true
+
+}
 Function Confirm-ArubaCPNetworkDevice {
 
     Param (
@@ -40,3 +75,4 @@ Function Confirm-ArubaCPNetworkDevice {
     $true
 
 }
+
