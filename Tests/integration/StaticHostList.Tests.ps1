@@ -67,7 +67,6 @@ Describe  "Add Static Host List" {
         $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
     }
 
-
     It "Add Static Host List with format list and type IPAddress (and add second entries)" {
         Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"
         Get-ArubaCPStaticHostList -name pester_SHL | Add-ArubaCPStaticHostListMember -host_entries_address 192.0.2.2 -host_entries_description "Add via ArubaCPStaticHostListMember"
@@ -252,7 +251,6 @@ Describe  "Remove Static Host List Member" {
         ($shl.host_entries).count | Should be "1"
         $shl.host_entries[0].host_address | Should be "00:01:02:03:04:06"
         $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
-
     }
 
     It "Throw when remove all Entry" {
