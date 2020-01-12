@@ -121,6 +121,43 @@ Describe  "Add Static Host List" {
 }
 
 
+Describe  "Set Static Host List" {
+    BeforeEach {
+        Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
+    }
+
+    It "Set Static Host List (Name and Description)" {
+        Get-ArubaCPStaticHostList -name pester_SHL | Set-ArubaCPStaticHostList -name pester_SHL2 -description "Change via PowerArubaCP"
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL2
+        $shl.name | Should be "pester_SHL2"
+        $shl.description | Should be "Change via PowerArubaCP"
+    }
+
+    It "Set Static Host List (host_entries)" {
+        $host_entries = @()
+        $host_entries += @{ host_address = "00:01:02:03:04:06"; host_address_desc = "Change via PowerArubaCP" }
+        Get-ArubaCPStaticHostList -name pester_SHL | Set-ArubaCPStaticHostList -host_entries $host_entries
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL
+        ($shl.host_entries).count | Should be "1"
+        $shl.host_entries[0].host_address | Should be "00:01:02:03:04:06"
+        $shl.host_entries[0].host_address_desc | Should be "Change via PowerArubaCP"
+        $host_entries = @()
+        $host_entries += @{ host_address = "00:01:02:03:04:05"; host_address_desc = "Change via PowerArubaCP" }
+        $host_entries += @{ host_address = "00:01:02:03:04:06"; host_address_desc = "Change via PowerArubaCP" }
+        Get-ArubaCPStaticHostList -name pester_SHL | Set-ArubaCPStaticHostList -host_entries $host_entries
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL
+        ($shl.host_entries).count | Should be "2"
+        $shl.host_entries[0].host_address | Should be "00:01:02:03:04:05"
+        $shl.host_entries[0].host_address_desc | Should be "Change via PowerArubaCP"
+        $shl.host_entries[1].host_address | Should be "00:01:02:03:04:06"
+        $shl.host_entries[1].host_address_desc | Should be "Change via PowerArubaCP"
+    }
+
+    AfterEach {
+        Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
+        Get-ArubaCPStaticHostList -name pester_SHL2 | Remove-ArubaCPStaticHostList -noconfirm
+    }
+}
 
 Describe  "Remove Static Host List" {
 
