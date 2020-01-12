@@ -57,7 +57,15 @@ function Get-ArubaCPServerConfiguration {
     #>
 
 
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+
     Param(
+        [Parameter (Mandatory = $false, ParameterSetName = "uuid")]
+        [string]$uuid,
+        [Parameter (Mandatory = $false, ParameterSetName = "name")]
+        [string]$name,
+        [Parameter (Mandatory = $false, ParameterSetName = "ip_address")]
+        [ipaddress]$ip_address
     )
 
     Begin {
@@ -69,7 +77,12 @@ function Get-ArubaCPServerConfiguration {
 
         $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $url
 
-        $sc._embedded.items
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "uuid" { $sc._embedded.items | Where-Object { $_.server_uuid -eq $uuid } }
+            "name" { $sc._embedded.items | Where-Object { $_.name -eq $name } }
+            "ip_address" { $sc._embedded.items | Where-Object { $_.management_ip -eq $ip_address } }
+            default { $sc._embedded.items }
+        }
     }
 
     End {
