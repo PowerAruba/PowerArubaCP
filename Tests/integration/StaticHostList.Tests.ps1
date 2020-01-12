@@ -227,7 +227,6 @@ Describe  "Remove Static Host List Member" {
         ($shl.host_entries).count | Should be "2"
         #Remove a entries...
         $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:05
-        $shl = Get-ArubaCPStaticHostList -name pester_SHL
         ($shl.host_entries).count | Should be "1"
     }
 
