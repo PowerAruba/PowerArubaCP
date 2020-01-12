@@ -124,9 +124,9 @@ function Add-ArubaCPStaticHostListMember {
         [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
         [psobject]$shl,
         [Parameter (Mandatory = $true)]
-        [string]$host_entries_address,
-        [Parameter (Mandatory = $true)]
-        [string]$host_entries_description
+        [string[]]$host_entries_address,
+        [Parameter (Mandatory = $false)]
+        [string[]]$host_entries_description
     )
 
     Begin {
@@ -141,10 +141,20 @@ function Add-ArubaCPStaticHostListMember {
 
         $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($shl.host_entries)
 
-        $host_entries = New-Object -TypeName PSObject
-        $host_entries | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_entries_address
-        $host_entries | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description
-        $_shl.host_entries += $host_entries
+        $i = 0
+        foreach ($host_address in $host_entries_address) {
+            $host_entry = New-Object -TypeName PSObject
+            $host_entry | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_address
+            #if there is not description (or the same number of description and address), set description to "Add via PowerArubaCP"
+            if ($PsBoundParameters.ContainsKey('host_entries_description') -and $host_entries_description[$i]) {
+                $host_entry | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description[$i]
+            }
+            else {
+                $host_entry | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value "Add via PowerArubaCP"
+            }
+            $_shl.host_entries += $host_entry
+            $i++
+        }
 
         $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url
         $shl
