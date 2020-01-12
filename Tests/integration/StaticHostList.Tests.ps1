@@ -256,6 +256,11 @@ Describe  "Remove Static Host List Member" {
 
     }
 
+    It "Throw when remove all Entry" {
+        Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05
+        { Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:05 } | Should throw "You can't remove all entries. Use Remove-ArubaCPStaticHostList to remove Static Host List"
+    }
+
     AfterEach {
         Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
     }
