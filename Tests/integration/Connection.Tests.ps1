@@ -29,7 +29,7 @@ Describe  "Connect to a ClearPass (using Token)" {
         Disconnect-ArubaCP -noconfirm
     }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
-        { Invoke-ArubaCPRestMethod -uri "rest/v4/vlans" } | Should throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
+        { Invoke-ArubaCPRestMethod -uri "api/cppm-version" } | Should throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
     }
 }
 
