@@ -38,7 +38,7 @@ function Connect-ArubaCP {
 
     Process {
 
-        $connection = @{server = ""; token = ""; invokeParams = "" }
+        $connection = @{server = ""; token = ""; invokeParams = "" ; version = "" }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
         if ("Desktop" -eq $PSVersionTable.PsEdition) {
@@ -66,6 +66,9 @@ function Connect-ArubaCP {
         $connection.invokeParams = $invokeParams
 
         set-variable -name DefaultArubaCPConnection -value $connection -scope Global
+
+        $cv = Get-ArubaCPCPPMVersion
+        $connection.version = [version]"$($cv.app_major_version).$($cv.app_minor_version).$($cv.app_service_release)"
 
     }
 
