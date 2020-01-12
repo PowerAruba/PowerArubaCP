@@ -14,6 +14,11 @@ function Connect-ArubaCP {
       Connect to an Aruba ClearPass
 
       .EXAMPLE
+      Connect-ArubaCP -Server 192.0.2.1 -client_id PowerArubaCP -client_secret MySecret
+
+      Connect to an Aruba ClearPass with IP 192.0.2.1 using client_id PowerArubaCP and client_secret MySecret
+
+      .EXAMPLE
       Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
 
       Connect to an Aruba ClearPass with IP 192.0.2.1 using token aaaaaaa
@@ -43,8 +48,12 @@ function Connect-ArubaCP {
     Param(
         [Parameter(Mandatory = $true, position = 1)]
         [String]$Server,
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ParameterSetName = "token")]
         [String]$token,
+        [Parameter(Mandatory = $false, ParameterSetName = "client_credentials")]
+        [String]$client_id,
+        [Parameter(Mandatory = $false, ParameterSetName = "client_credentials")]
+        [String]$client_secret,
         [Parameter(Mandatory = $false)]
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
@@ -80,6 +89,22 @@ function Connect-ArubaCP {
                 #Disable SSL chain trust...
                 Set-ArubaCPuntrustedSSL
             }
+        }
+
+        #Try to oauth...
+        if ($PSCmdlet.ParameterSetName -eq "client_credentials") {
+
+            $oauth = @{
+                grant_type    = 'client_credentials';
+                client_id     = $client_id;
+                client_secret = $client_secret;
+            }
+
+            $headers = @{ Accept = "application/json"; "Content-type" = "application/json" }
+            $fullurl = "https://${Server}/api/oauth"
+            $response = Invoke-RestMethod -uri $fullurl -Method "POST" -body ($oauth | ConvertTo-Json) -Headers $headers @invokeParams
+
+            $token = $response.access_token
         }
 
         $connection.server = $server
