@@ -5,6 +5,30 @@
 #
 . ../common.ps1
 
+Describe  "Get Server Configuration" {
+
+    It "Get ServerConfiguration Does not throw an error" {
+        {
+            Get-ArubaCPServerConfiguration
+        } | Should Not Throw
+    }
+
+    It "Get Server Configuration (name, uuid, server / management ip... )" {
+        $sc = Get-ArubaCPServerConfiguration
+        $sc.name | Should not be $NULL
+        $sc.local_server | Should not be $NULL
+        $sc.server_uuid | Should not be $NULL
+        $sc.server_dns_name | Should not be $NULL
+        $sc.management_ip | Should not be $NULL
+        $sc.is_master | Should not be $NULL
+        $sc.is_insight_enabled | Should not be $NULL
+        $sc.is_insight_master | Should not be $NULL
+        $sc.replication_status | Should not be $NULL
+        $sc.is_profiler_enabled | Should not be $NULL
+    }
+}
+
+
 Describe  "Get Server Version" {
 
     It "Get ServerVersion Does not throw an error" {
@@ -41,5 +65,6 @@ Describe  "Get CPPM Version" {
         $cv.cloud_mode | Should not be $NULL
     }
 }
+
 
 Disconnect-ArubaCP -noconfirm
