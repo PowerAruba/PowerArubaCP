@@ -115,6 +115,33 @@ Describe  "Add Static Host List" {
         ($shl.host_entries).count | Should be "1"
     }
 
+    It "Add Static Host List with format list and type IPAddress (add multiple entries on same time)" {
+        Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1, 192.0.2.2 -host_entries_description "pester entry 1", "pester entry 2"
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL
+        $shl.id | Should not be BeNullOrEmpty
+        $shl.name | Should be "pester_SHL"
+        $shl.host_format | Should be "list"
+        $shl.host_type | Should be "IPAddress"
+        $shl.host_entries[0].host_address | Should be "192.0.2.1"
+        $shl.host_entries[0].host_address_desc | Should be "pester entry 1"
+        $shl.host_entries[1].host_address | Should be "192.0.2.2"
+        $shl.host_entries[1].host_address_desc | Should be "pester entry 2"
+    }
+
+    It "Add Static Host List with format list and type MACAddress (add multiple entries on same time without second description)" {
+        Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05, 00:01:02:03:04:06 -host_entries_description "pester entry 1"
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL
+        $shl.id | Should not be BeNullOrEmpty
+        $shl.name | Should be "pester_SHL"
+        $shl.host_format | Should be "list"
+        $shl.host_type | Should be "MACAddress"
+        $shl.host_entries[0].host_address | Should be "00:01:02:03:04:05"
+        $shl.host_entries[0].host_address_desc | Should be "pester entry 1"
+        $shl.host_entries[1].host_address | Should be "00:01:02:03:04:06"
+        $shl.host_entries[1].host_address_desc | Should be "Add via PowerArubaCP"
+    }
+
+
     AfterEach {
         Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
     }

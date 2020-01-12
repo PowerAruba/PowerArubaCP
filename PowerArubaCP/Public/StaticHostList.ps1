@@ -43,9 +43,9 @@ function Add-ArubaCPStaticHostList {
         #[Parameter (Mandatory = $false)]
         #[psobject]$host_entries,
         [Parameter (Mandatory = $false)]
-        [string]$host_entries_address,
+        [string[]]$host_entries_address,
         [Parameter (Mandatory = $false)]
-        [string]$host_entries_description
+        [string[]]$host_entries_description
     )
 
     Begin {
@@ -72,11 +72,23 @@ function Add-ArubaCPStaticHostList {
             $_shl | Add-Member -name "host_type" -MemberType NoteProperty -Value $host_type
         }
 
-        if ( $PsBoundParameters.ContainsKey('host_entries_address') -and $PsBoundParameters.ContainsKey('host_entries_description')) {
-            $host_entries = New-Object -TypeName PSObject
-            $host_entries | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_entries_address
-            $host_entries | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description
-            $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($host_entries)
+        if ( $PsBoundParameters.ContainsKey('host_entries_address') ) {
+            $host_entries = @( )
+            $i = 0
+            foreach ($host_address in $host_entries_address) {
+                $host_entry = New-Object -TypeName PSObject
+                $host_entry | Add-Member -name "host_address" -MemberType NoteProperty -Value $host_address
+                #if there is not description (or the same number of description and address), set description to "Add via PowerArubaCP"
+                if ($PsBoundParameters.ContainsKey('host_entries_description') -and $host_entries_description[$i]) {
+                    $host_entry | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value $host_entries_description[$i]
+                }
+                else {
+                    $host_entry | Add-Member -name "host_address_desc" -MemberType NoteProperty -Value "Add via PowerArubaCP"
+                }
+                $host_entries += $host_entry
+                $i++
+            }
+            $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value $host_entries
         }
 
         $shl = Invoke-ArubaCPRestMethod -method "POST" -body $_shl -uri $url
