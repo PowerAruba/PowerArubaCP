@@ -4,6 +4,42 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Get-ArubaCPCPPMVersion {
+
+    <#
+        .SYNOPSIS
+        Get CPPM Version info on CPPM
+
+        .DESCRIPTION
+        Get CPPM Version (major, minor, hardware, eval... )
+
+        .EXAMPLE
+        Get-ArubaCPCPPMVersion
+
+        Get CPPM Version
+
+    #>
+
+
+    Param(
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "api/cppm-version"
+
+        $cv = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+
+        $cv
+    }
+
+    End {
+    }
+}
+
 function Get-ArubaCPServerVersion {
 
     <#
@@ -39,4 +75,3 @@ function Get-ArubaCPServerVersion {
     End {
     }
 }
-
