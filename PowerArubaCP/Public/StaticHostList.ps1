@@ -252,6 +252,77 @@ function Get-ArubaCPStaticHostList {
     }
 }
 
+function Set-ArubaCPStaticHostList {
+
+    <#
+        .SYNOPSIS
+        Configure a Static Host List on ClearPass
+
+        .DESCRIPTION
+        Configure a Static Host List with Id, Name, description, host format/type ....
+
+        .EXAMPLE
+        Get-ArubaCPStaticHostList -name My-SHL-list | Set-ArubaCPStaticHostList -name SHL-list-IPAddress -description "Update via PowerArubaCP"
+
+        Change Static Host List name and description
+
+        .EXAMPLE
+        $host_entries = @( )
+        PS > $host_entries += @{ host_address = "00:01:02:03:04:05"; host_address_desc = "Change via PowerArubaCP" }
+        PS > $host_entries += @{ host_address = "00:01:02:03:04:06"; host_address_desc = "Change via PowerArubaCP" }
+        PS > Get-ArubaCPStaticHostList -name My-SHL-list | Set-ArubaCPStaticHostList -host_entries $host_entries
+
+        Change Static Host List with $host_entries
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "shl")]
+        [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
+        [psobject]$shl,
+        [Parameter (Mandatory = $false)]
+        [string]$name,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $false)]
+        [psobject]$host_entries
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get shl id from shl ps object
+        if ($shl) {
+            $id = $shl.id
+        }
+
+        $url = "api/static-host-list/${id}"
+
+        $_shl = New-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('name') ) {
+            $_shl | Add-Member -name "name" -MemberType NoteProperty -Value $name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_shl | Add-Member -name "description" -MemberType NoteProperty -Value $description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('host_entries') ) {
+            $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value $host_entries
+        }
+
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url
+        $shl
+    }
+
+    End {
+    }
+}
+
 function Remove-ArubaCPStaticHostList {
 
     <#
