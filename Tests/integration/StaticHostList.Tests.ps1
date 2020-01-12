@@ -220,6 +220,8 @@ Describe  "Remove Static Host List Member" {
         #Remove a entries...
         $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 192.0.2.1
         ($shl.host_entries).count | Should be "1"
+        $shl.host_entries[0].host_address | Should be "192.0.2.2"
+        $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
     }
 
     It "Remove a entry of Static Host List with format list and type MACAddress" {
@@ -228,6 +230,9 @@ Describe  "Remove Static Host List Member" {
         #Remove a entries...
         $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:05
         ($shl.host_entries).count | Should be "1"
+        $shl.host_entries[0].host_address | Should be "00:01:02:03:04:06"
+        $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
+
     }
 
     It "Remove two entries of Static Host List with format list and type IPAddress " {
@@ -236,6 +241,8 @@ Describe  "Remove Static Host List Member" {
         #Remove 2 entries...
         $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 192.0.2.1, 192.0.2.3
         ($shl.host_entries).count | Should be "1"
+        $shl.host_entries[0].host_address | Should be "192.0.2.2"
+        $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
     }
 
     It "Remove a entry of Static Host List with format list and type MACAddress" {
@@ -244,6 +251,9 @@ Describe  "Remove Static Host List Member" {
         #Remove 2 entries...
         $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:05, 00:01:02:03:04:07
         ($shl.host_entries).count | Should be "1"
+        $shl.host_entries[0].host_address | Should be "00:01:02:03:04:06"
+        $shl.host_entries[0].host_address_desc | Should be "Add via PowerArubaCP"
+
     }
 
     AfterEach {
