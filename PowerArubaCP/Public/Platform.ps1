@@ -40,6 +40,41 @@ function Get-ArubaCPCPPMVersion {
     }
 }
 
+function Get-ArubaCPServerConfiguration {
+
+    <#
+        .SYNOPSIS
+        Get Server Configuration info on CPPM
+
+        .DESCRIPTION
+        Get Server Configuration (name, uuid, server / management ip... )
+
+        .EXAMPLE
+        Get-ArubaCPServerConfiguration
+
+        Get Server Configuration
+
+    #>
+
+
+    Param(
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $url = "api/cluster/server"
+
+        $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+
+        $sc._embedded.items
+    }
+
+    End {
+    }
+}
 function Get-ArubaCPServerVersion {
 
     <#
