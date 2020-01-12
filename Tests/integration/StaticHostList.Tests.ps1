@@ -231,6 +231,22 @@ Describe  "Remove Static Host List Member" {
         ($shl.host_entries).count | Should be "1"
     }
 
+    It "Remove two entries of Static Host List with format list and type IPAddress " {
+        $shl = Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1, 192.0.2.2, 192.0.2.3
+        ($shl.host_entries).count | Should be "3"
+        #Remove 2 entries...
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 192.0.2.1, 192.0.2.3
+        ($shl.host_entries).count | Should be "1"
+    }
+
+    It "Remove a entry of Static Host List with format list and type MACAddress" {
+        $shl = Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05, 00:01:02:03:04:06, 00:01:02:03:04:07
+        ($shl.host_entries).count | Should be "3"
+        #Remove 2 entries...
+        $shl = Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:05, 00:01:02:03:04:07
+        ($shl.host_entries).count | Should be "1"
+    }
+
     AfterEach {
         Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
     }

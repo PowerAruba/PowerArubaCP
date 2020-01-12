@@ -434,7 +434,7 @@ function Remove-ArubaCPStaticHostListMember {
         [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
         [psobject]$shl,
         [Parameter (Mandatory = $true)]
-        [string]$host_entries_address
+        [string[]]$host_entries_address
     )
 
     Begin {
@@ -447,7 +447,10 @@ function Remove-ArubaCPStaticHostListMember {
 
         $_shl = New-Object -TypeName PSObject
 
-        $host_entries = $shl.host_entries | Where-Object { $_.host_address -ne $host_entries_address }
+        $host_entries = $shl.host_entries
+        foreach ($host_address in $host_entries_address) {
+            $host_entries = $host_entries | Where-Object { $_.host_address -ne $host_address }
+        }
 
         if ( $host_entries.count -eq 0 ) {
             Throw "You can't remove all entries. Use Remove-ArubaCPStaticHostList to remove Static Host List"
