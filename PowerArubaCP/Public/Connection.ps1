@@ -38,13 +38,15 @@ function Connect-ArubaCP {
 
     Process {
 
-        $connection = @{server = ""; token = ""; invokeParams = ""}
-        $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck}
+        $connection = @{server = ""; token = ""; invokeParams = "" ; version = "" }
+        $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
         if ("Desktop" -eq $PSVersionTable.PsEdition) {
             #Remove -SkipCertificateCheck from Invoke Parameter (not supported <= PS 5)
             $invokeParams.remove("SkipCertificateCheck")
-        } else { #Core Edition
+        }
+        else {
+            #Core Edition
             #Remove -UseBasicParsing (Enable by default with PowerShell 6/Core)
             $invokeParams.remove("UseBasicParsing")
         }
@@ -64,6 +66,9 @@ function Connect-ArubaCP {
         $connection.invokeParams = $invokeParams
 
         set-variable -name DefaultArubaCPConnection -value $connection -scope Global
+
+        $cv = Get-ArubaCPCPPMVersion
+        $connection.version = [version]"$($cv.app_major_version).$($cv.app_minor_version).$($cv.app_service_release)"
 
     }
 
