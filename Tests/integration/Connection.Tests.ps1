@@ -33,6 +33,46 @@ Describe  "Connect to a ClearPass (using Token)" {
     }
 }
 
+Describe  "Connect to a ClearPass (using multi connection)" {
+    BeforeAll {
+        #Disconnect "default connection"
+        Disconnect-ArubaCP -noconfirm
+    }
+    It "Connect to a ClearPass (using token and store on cppm variable)" {
+        $script:cppm = Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -DefaultConnection:$false
+        $DefaultArubaCPConnection | Should -BeNullOrEmpty
+        $cppm.server | Should be $ipaddress
+        $cppm.token | Should be $token
+    }
+
+    Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
+        It "Use Multi connection for call Get Applicetion License" {
+            { Get-ArubaCPApplicationLicense -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get CPPM Version" {
+            { Get-ArubaCPCPPMVersion -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get Network Device" {
+            { Get-ArubaCPNetworkDevice -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get Server Configuration" {
+            { Get-ArubaCPServerConfiguration -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get Server Version" {
+            { Get-ArubaCPServerVersion -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get Static Host List" {
+            { Get-ArubaCPStaticHostList -connection $cppm } | Should Not throw
+        }
+    }
+
+    It "Disconnect to a ClearPass (Multi connection)" {
+        Disconnect-ArubaCP -connection $cppm -noconfirm
+        $DefaultArubaCPConnection | Should be $null
+    }
+
+}
+
 Describe  "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...

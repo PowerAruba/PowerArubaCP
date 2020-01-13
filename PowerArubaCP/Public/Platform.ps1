@@ -22,6 +22,9 @@ function Get-ArubaCPCPPMVersion {
 
 
     Param(
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -29,9 +32,9 @@ function Get-ArubaCPCPPMVersion {
 
     Process {
 
-        $url = "api/cppm-version"
+        $uri = "api/cppm-version"
 
-        $cv = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+        $cv = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         $cv
     }
@@ -65,7 +68,10 @@ function Get-ArubaCPServerConfiguration {
         [Parameter (Mandatory = $false, ParameterSetName = "name")]
         [string]$name,
         [Parameter (Mandatory = $false, ParameterSetName = "ip_address")]
-        [ipaddress]$ip_address
+        [ipaddress]$ip_address,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -73,9 +79,9 @@ function Get-ArubaCPServerConfiguration {
 
     Process {
 
-        $url = "api/cluster/server"
+        $uri = "api/cluster/server"
 
-        $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+        $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
             "uuid" { $sc._embedded.items | Where-Object { $_.server_uuid -eq $uuid } }
@@ -106,6 +112,9 @@ function Get-ArubaCPServerVersion {
 
 
     Param(
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -113,9 +122,9 @@ function Get-ArubaCPServerVersion {
 
     Process {
 
-        $url = "api/server/version"
+        $uri = "api/server/version"
 
-        $sv = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+        $sv = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         $sv
     }

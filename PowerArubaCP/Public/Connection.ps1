@@ -22,6 +22,17 @@ function Connect-ArubaCP {
       Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa -SkipCertificateCheck
 
       Connect to an Aruba ClearPass using HTTPS (without check certificate validation) with IP 192.0.2.1 using token aaaaaaa
+
+      .EXAMPLE
+      $cppm1 = Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
+
+      Connect to an ArubaOS ClaerPass with IP 192.0.2.1 and store connection info to $cppm1 variable
+
+      .EXAMPLE
+      $cppm2 = Connect-ArubaSW -Server 192.0.2.1 -token aaaaaaaaaaaaa -DefaultConnection:$false
+
+      Connect to an ArubaOS Switch with IP 192.0.2.1 and store connection info to $cppm2 variable
+      and don't store connection on global ($DefaultArubaCPConnection) variable
   #>
 
     Param(
@@ -30,7 +41,9 @@ function Connect-ArubaCP {
         [Parameter(Mandatory = $false)]
         [String]$token,
         [Parameter(Mandatory = $false)]
-        [switch]$SkipCertificateCheck = $false
+        [switch]$SkipCertificateCheck = $false,
+        [Parameter(Mandatory = $false)]
+        [boolean]$DefaultConnection = $true
     )
 
     Begin {
@@ -65,11 +78,14 @@ function Connect-ArubaCP {
         $connection.token = $token
         $connection.invokeParams = $invokeParams
 
-        set-variable -name DefaultArubaCPConnection -value $connection -scope Global
+        if ( $DefaultConnection ) {
+            set-variable -name DefaultArubaCPConnection -value $connection -scope Global
+        }
 
-        $cv = Get-ArubaCPCPPMVersion
+        $cv = Get-ArubaCPCPPMVersion -connection $connection
         $connection.version = [version]"$($cv.app_major_version).$($cv.app_minor_version).$($cv.app_service_release)"
 
+        $connection
     }
 
     End {
@@ -99,7 +115,10 @@ function Disconnect-ArubaCP {
 
     Param(
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -120,7 +139,7 @@ function Disconnect-ArubaCP {
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba ClearPass connection"
             write-progress -activity "Remove Aruba ClearPass connection" -completed
-            if (Get-Variable -Name DefaultArubaCPConnection -scope global ) {
+            if ( Test-Path variable:global:DefaultArubaCPConnection ) {
                 Remove-Variable -name DefaultArubaCPConnection -scope global
             }
         }
