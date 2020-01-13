@@ -56,7 +56,7 @@ function Add-ArubaCPStaticHostList {
 
     Process {
 
-        $url = "api/static-host-list"
+        $uri = "api/static-host-list"
 
         $_shl = New-Object -TypeName PSObject
 
@@ -94,7 +94,7 @@ function Add-ArubaCPStaticHostList {
             $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value $host_entries
         }
 
-        $shl = Invoke-ArubaCPRestMethod -method "POST" -body $_shl -uri $url -connection $connection
+        $shl = Invoke-ArubaCPRestMethod -method "POST" -body $_shl -uri $uri -connection $connection
         $shl
     }
 
@@ -141,7 +141,7 @@ function Add-ArubaCPStaticHostListMember {
     Process {
 
         $id = $shl.id
-        $url = "api/static-host-list/${id}"
+        $uri = "api/static-host-list/${id}"
 
         $_shl = New-Object -TypeName PSObject
 
@@ -162,7 +162,7 @@ function Add-ArubaCPStaticHostListMember {
             $i++
         }
 
-        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url -connection $connection
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
         $shl
     }
 
@@ -272,9 +272,9 @@ function Get-ArubaCPStaticHostList {
             $invokeParams.add( 'filter', $filter )
         }
 
-        $url = "api/static-host-list"
+        $uri = "api/static-host-list"
 
-        $shl = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection @invokeParams
+        $shl = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection @invokeParams
 
         $shl._embedded.items
     }
@@ -333,7 +333,7 @@ function Set-ArubaCPStaticHostList {
             $id = $shl.id
         }
 
-        $url = "api/static-host-list/${id}"
+        $uri = "api/static-host-list/${id}"
 
         $_shl = New-Object -TypeName PSObject
 
@@ -349,7 +349,7 @@ function Set-ArubaCPStaticHostList {
             $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value $host_entries
         }
 
-        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url -connection $connection
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
         $shl
     }
 
@@ -401,7 +401,7 @@ function Remove-ArubaCPStaticHostList {
             $id = $shl.id
         }
 
-        $url = "api/static-host-list/${id}"
+        $uri = "api/static-host-list/${id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Static Host List on ClearPass"
@@ -415,7 +415,7 @@ function Remove-ArubaCPStaticHostList {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Static Host List"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url -connection $connection
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Static Host List" -completed
         }
     }
@@ -461,7 +461,7 @@ function Remove-ArubaCPStaticHostListMember {
     Process {
 
         $id = $shl.id
-        $url = "api/static-host-list/${id}"
+        $uri = "api/static-host-list/${id}"
 
         $_shl = New-Object -TypeName PSObject
 
@@ -476,7 +476,7 @@ function Remove-ArubaCPStaticHostListMember {
 
         $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($host_entries)
 
-        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $url -connection $connection
+        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
         $shl
     }
 

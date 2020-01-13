@@ -32,9 +32,9 @@ function Get-ArubaCPCPPMVersion {
 
     Process {
 
-        $url = "api/cppm-version"
+        $uri = "api/cppm-version"
 
-        $cv = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection
+        $cv = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         $cv
     }
@@ -79,9 +79,9 @@ function Get-ArubaCPServerConfiguration {
 
     Process {
 
-        $url = "api/cluster/server"
+        $uri = "api/cluster/server"
 
-        $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection
+        $sc = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
             "uuid" { $sc._embedded.items | Where-Object { $_.server_uuid -eq $uuid } }
@@ -122,9 +122,9 @@ function Get-ArubaCPServerVersion {
 
     Process {
 
-        $url = "api/server/version"
+        $uri = "api/server/version"
 
-        $sv = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection
+        $sv = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         $sv
     }

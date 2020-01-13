@@ -36,7 +36,7 @@ function Add-ArubaCPApplicationLicense {
 
     Process {
 
-        $url = "api/application-license"
+        $uri = "api/application-license"
 
         $_al = New-Object psobject
 
@@ -44,7 +44,7 @@ function Add-ArubaCPApplicationLicense {
 
         $_al | Add-Member -name "license_key" -MemberType NoteProperty -Value $license_key
 
-        $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $url -connection $connection
+        $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $uri -connection $connection
 
         $al
     }
@@ -105,9 +105,9 @@ function Get-ArubaCPApplicationLicense {
 
     Process {
 
-        $url = "api/application-license"
+        $uri = "api/application-license"
 
-        $al = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection
+        $al = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
             "id" { $al._embedded.items | Where-Object { $_.id -eq $id } }
@@ -165,7 +165,7 @@ function Remove-ArubaCPApplicationLicense {
             $id = $al.id
         }
 
-        $url = "api/application-license/${id}"
+        $uri = "api/application-license/${id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Application License on ClearPass"
@@ -179,7 +179,7 @@ function Remove-ArubaCPApplicationLicense {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Application License"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url -connection $connection
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Application License" -completed
         }
     }

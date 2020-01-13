@@ -65,7 +65,7 @@ function Add-ArubaCPNetworkDevice {
 
     Process {
 
-        $url = "api/network-device"
+        $uri = "api/network-device"
 
         $_nad = new-Object -TypeName PSObject
 
@@ -111,7 +111,7 @@ function Add-ArubaCPNetworkDevice {
             }
         }
 
-        $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $url -connection $connection
+        $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $uri -connection $connection
         $nad
     }
 
@@ -222,9 +222,9 @@ function Get-ArubaCPNetworkDevice {
             $invokeParams.add( 'filter', $filter )
         }
 
-        $url = "api/network-device"
+        $uri = "api/network-device"
 
-        $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams -connection $connection
+        $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
 
         $nad._embedded.items
     }
@@ -307,7 +307,7 @@ function Set-ArubaCPNetworkDevice {
             $id = $nad.id
         }
 
-        $url = "api/network-device/${id}"
+        $uri = "api/network-device/${id}"
         $_nad = new-Object -TypeName PSObject
 
         if ( $PsBoundParameters.ContainsKey('id') ) {
@@ -360,7 +360,7 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
-        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $url -connection $connection
+        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
         $nad
 
     }
@@ -413,7 +413,7 @@ function Remove-ArubaCPNetworkDevice {
             $id = $nad.id
         }
 
-        $url = "api/network-device/${id}"
+        $uri = "api/network-device/${id}"
 
         if ( -not ( $Noconfirm )) {
             $message = "Remove Network Device on ClearPass"
@@ -427,7 +427,7 @@ function Remove-ArubaCPNetworkDevice {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Network Device"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url -connection $connection
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
             Write-Progress -activity "Remove Network Device" -completed
         }
     }
