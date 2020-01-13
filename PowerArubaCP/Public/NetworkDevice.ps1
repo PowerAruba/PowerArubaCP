@@ -54,7 +54,10 @@ function Add-ArubaCPNetworkDevice {
         [Parameter (Mandatory = $false)]
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
-        [switch]$radsec_enabled
+        [switch]$radsec_enabled,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -108,7 +111,7 @@ function Add-ArubaCPNetworkDevice {
             }
         }
 
-        $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $url
+        $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $url -connection $connection
         $nad
     }
 
@@ -174,7 +177,10 @@ function Get-ArubaCPNetworkDevice {
         [Parameter (ParameterSetName = "filter")]
         [psobject]$filter_value,
         [Parameter (Mandatory = $false)]
-        [int]$limit
+        [int]$limit,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -218,7 +224,7 @@ function Get-ArubaCPNetworkDevice {
 
         $url = "api/network-device"
 
-        $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams
+        $nad = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams -connection $connection
 
         $nad._embedded.items
     }
@@ -285,7 +291,10 @@ function Set-ArubaCPNetworkDevice {
         [Parameter (Mandatory = $false)]
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
-        [switch]$radsec_enabled
+        [switch]$radsec_enabled,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -351,7 +360,7 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
-        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $url
+        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $url -connection $connection
         $nad
 
     }
@@ -388,7 +397,10 @@ function Remove-ArubaCPNetworkDevice {
         [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
         [psobject]$nad,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -415,7 +427,7 @@ function Remove-ArubaCPNetworkDevice {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Network Device"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url -connection $connection
             Write-Progress -activity "Remove Network Device" -completed
         }
     }

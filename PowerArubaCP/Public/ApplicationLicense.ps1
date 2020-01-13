@@ -25,7 +25,10 @@ function Add-ArubaCPApplicationLicense {
         [ValidateSet('Access', 'Access Upgrade', 'Entry', 'Onboard', 'OnGuard', IgnoreCase = $false)]
         [string]$product_name,
         [Parameter (Mandatory = $false)]
-        [string]$license_key
+        [string]$license_key,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -41,7 +44,7 @@ function Add-ArubaCPApplicationLicense {
 
         $_al | Add-Member -name "license_key" -MemberType NoteProperty -Value $license_key
 
-        $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $url
+        $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $url -connection $connection
 
         $al
     }
@@ -91,7 +94,10 @@ function Get-ArubaCPApplicationLicense {
         [string]$product_name,
         [Parameter (Mandatory = $false, ParameterSetName = "license_type")]
         [ValidateSet('Evaluation', 'Permanent', IgnoreCase = $false)]
-        [string]$license_type
+        [string]$license_type,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -101,7 +107,7 @@ function Get-ArubaCPApplicationLicense {
 
         $url = "api/application-license"
 
-        $al = Invoke-ArubaCPRestMethod -method "GET" -uri $url
+        $al = Invoke-ArubaCPRestMethod -method "GET" -uri $url -connection $connection
 
         switch ( $PSCmdlet.ParameterSetName ) {
             "id" { $al._embedded.items | Where-Object { $_.id -eq $id } }
@@ -143,7 +149,10 @@ function Remove-ArubaCPApplicationLicense {
         [ValidateScript( { Confirm-ArubaCPApplicationLicense $_ })]
         [psobject]$al,
         [Parameter(Mandatory = $false)]
-        [switch]$noconfirm
+        [switch]$noconfirm,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -170,7 +179,7 @@ function Remove-ArubaCPApplicationLicense {
         else { $decision = 0 }
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Application License"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $url -connection $connection
             Write-Progress -activity "Remove Application License" -completed
         }
     }
