@@ -118,3 +118,41 @@ function Get-ArubaCPService {
     }
 }
 
+function  Enable-ArubaCPService {
+
+    <#
+        .SYNOPSIS
+        Enable a Service on ClearPass
+
+        .DESCRIPTION
+        Enable a Service on ClearPass
+
+        .EXAMPLE
+        Get-ArubaCPService -name PowerArubaCP | Enable-ArubaCPService
+
+        Enable Service PowerArubaCP)
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        #[ValidateScript( { Confirm-ArubaCPService $_ })]
+        [psobject]$cs,
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $cs.id
+        $uri = "api/config/service/${id}/enable"
+
+        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+        $cs
+    }
+
+    End {
+    }
+}
