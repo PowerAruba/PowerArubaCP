@@ -61,7 +61,9 @@ function Invoke-ArubaCPRestMethod {
         [ValidateRange(1, 1000)]
         [int]$limit,
         [Parameter(Mandatory = $false)]
-        [array]$filter
+        [array]$filter,
+        [Parameter(Mandatory = $false)]
+        [psobject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -69,12 +71,12 @@ function Invoke-ArubaCPRestMethod {
 
     Process {
 
-        if ($null -eq $DefaultArubaCPConnection) {
+        if ($null -eq $connection) {
             Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
         }
 
-        $Server = ${DefaultArubaCPConnection}.Server
-        $invokeParams = ${DefaultArubaCPConnection}.invokeParams
+        $Server = $connection.Server
+        $invokeParams = $connection.invokeParams
         $fullurl = "https://${Server}/${uri}"
 
         if ($fullurl -NotMatch "\?") {
@@ -92,7 +94,7 @@ function Invoke-ArubaCPRestMethod {
             $fullurl += "&filter=$($filter | ConvertTo-Json -Compress)"
         }
         #When headers, We need to have Accept and Content-type set to application/json...
-        $headers = @{ Authorization = "Bearer " + $DefaultArubaCPConnection.token; Accept = "application/json"; "Content-type" = "application/json" }
+        $headers = @{ Authorization = "Bearer " + $connection.token; Accept = "application/json"; "Content-type" = "application/json" }
 
         try {
             if ($body) {
