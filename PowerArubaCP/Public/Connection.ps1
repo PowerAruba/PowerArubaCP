@@ -24,6 +24,11 @@ function Connect-ArubaCP {
       Connect to an Aruba ClearPass using HTTPS (without check certificate validation) with IP 192.0.2.1 using token aaaaaaa
 
       .EXAMPLE
+      Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa -port 4443
+
+      Connect to an Aruba ClearPass with IP 192.0.2.1 using token aaaaaaa on port 4443
+
+      .EXAMPLE
       $cppm1 = Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
 
       Connect to an ArubaOS ClaerPass with IP 192.0.2.1 and store connection info to $cppm1 variable
