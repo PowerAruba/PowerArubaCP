@@ -4,7 +4,95 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-ArubaCPApiClient {
 
+    <#
+        .SYNOPSIS
+        Add an API Client on ClearPass
+
+        .DESCRIPTION
+        Add an API Client with client id, client secret, grand_types...
+
+        .EXAMPLE
+        Add-ArubaCPApiClient -client_id Client1 -grant_types client_credentials -profile_id 1
+
+        Add API Client Client1 type client_credentials with profile id 1 (Super Administrator)
+
+        .EXAMPLE
+        Add-ArubaCPApiClient -client_id Client2 -client_secret mySecret -client_description "Add via PowerArubaCP" -grant_types client_credentials -profile_id 1
+
+        Add API Client Client2 with Client Secret mySecret and client description "Add Via PowerArubaCP"
+
+        .EXAMPLE
+        Add-ArubaCPApiClient -client_id Client3 -grant_types client_credentials -profile_id 1 -enabled:$false
+
+        Add API Client Client3 with enabled status to disabled
+    #>
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [int]$id,
+        [Parameter (Mandatory = $true)]
+        [string]$client_id,
+        [Parameter (Mandatory = $false)]
+        [string]$client_secret,
+        [Parameter (Mandatory = $false)]
+        [string]$client_description,
+        [Parameter (Mandatory = $true)]
+        [ValidateSet('client_credentials', 'password')]
+        [string]$grant_types,
+        [Parameter (Mandatory = $true)]
+        [string]$profile_id,
+        [Parameter (Mandatory = $false)]
+        [switch]$enabled,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = "api/api-client"
+
+        $_ac = new-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_ac | add-member -name "id" -membertype NoteProperty -Value $id
+        }
+
+        $_ac | add-member -name "client_id" -membertype NoteProperty -Value $client_id
+
+        if ( $PsBoundParameters.ContainsKey('client_description') ) {
+            $_ac | add-member -name "client_description" -membertype NoteProperty -Value $client_description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('client_secret') ) {
+            $_ac | add-member -name "client_secret" -membertype NoteProperty -Value $client_secret
+        }
+
+        $_ac | add-member -name "grant_types" -membertype NoteProperty -Value $grant_types
+
+        $_ac | add-member -name "profile_id" -membertype NoteProperty -Value $profile_id
+
+        if ( $PsBoundParameters.ContainsKey('enabled') ) {
+            if ( $enabled ) {
+                $_ac | add-member -name "enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_ac | add-member -name "enabled" -membertype NoteProperty -Value $false
+            }
+        }
+
+        $ac = invoke-ArubaCPRestMethod -method "POST" -body $_ac -uri $uri -connection $connection
+        $ac
+    }
+
+    End {
+    }
+}
 function Get-ArubaCPApiClient {
 
     <#
