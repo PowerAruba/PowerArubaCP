@@ -66,7 +66,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         }
     }
 
-    It "Disconnect to a switch (Multi connection)" {
+    It "Disconnect to a ClearPass (Multi connection)" {
         Disconnect-ArubaCP -connection $cppm -noconfirm
         $DefaultArubaCPConnection | Should be $null
     }
