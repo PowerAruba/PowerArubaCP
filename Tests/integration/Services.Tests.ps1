@@ -63,4 +63,20 @@ Describe  "Get Service" {
 
 }
 
+Describe  "Enable / Disable Service" {
+
+    It "Disable Service (id 1)" {
+        $s = Get-ArubaCPService -id 1
+        $s.enabled | Should be "True"
+        $s = Get-ArubaCPService -id 1 | Disable-ArubaCPService
+        $s.enabled | Should be "false"
+    }
+
+    It "Enable Service (id 1)" {
+        $s = Get-ArubaCPService -id 1 | Enable-ArubaCPService
+        $s.enabled | Should be "true"
+    }
+
+}
+
 Disconnect-ArubaCP -noconfirm
