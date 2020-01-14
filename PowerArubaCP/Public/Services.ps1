@@ -140,7 +140,7 @@ function Enable-ArubaCPService {
 
     Param(
         [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
-        #[ValidateScript( { Confirm-ArubaCPService $_ })]
+        [ValidateScript( { Confirm-ArubaCPService $_ })]
         [psobject]$cs,
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -184,7 +184,7 @@ function Disable-ArubaCPService {
 
     Param(
         [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
-        #[ValidateScript( { Confirm-ArubaCPService $_ })]
+        [ValidateScript( { Confirm-ArubaCPService $_ })]
         [psobject]$cs,
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
