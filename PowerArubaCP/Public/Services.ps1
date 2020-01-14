@@ -118,7 +118,7 @@ function Get-ArubaCPService {
     }
 }
 
-function  Enable-ArubaCPService {
+function Enable-ArubaCPService {
 
     <#
         .SYNOPSIS
@@ -130,7 +130,12 @@ function  Enable-ArubaCPService {
         .EXAMPLE
         Get-ArubaCPService -name PowerArubaCP | Enable-ArubaCPService
 
-        Enable Service PowerArubaCP)
+        Enable Service PowerArubaCP
+
+        .EXAMPLE
+        Get-ArubaCPService -id 1 | Enable-ArubaCPService
+
+        Enable Service with id 1
     #>
 
     Param(
@@ -157,7 +162,7 @@ function  Enable-ArubaCPService {
     }
 }
 
-function  Disable-ArubaCPService {
+function Disable-ArubaCPService {
 
     <#
         .SYNOPSIS
@@ -170,6 +175,11 @@ function  Disable-ArubaCPService {
         Get-ArubaCPService -name PowerArubaCP | Disable-ArubaCPService
 
         Disable Service PowerArubaCP
+
+        .EXAMPLE
+        Get-ArubaCPService -id 1 | Disable-ArubaCPService
+
+        Disable Service with id 1
     #>
 
     Param(
