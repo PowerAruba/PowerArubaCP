@@ -117,7 +117,7 @@ function Add-ArubaCPStaticHostListMember {
         Add Static Host List with format list and type IP Address (192.0.2.2....)
 
         .EXAMPLE
-        Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
+        Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
 
         Add Static Host List with format list and type MAC Address (00:01:02:03:04:06....)
     #>
