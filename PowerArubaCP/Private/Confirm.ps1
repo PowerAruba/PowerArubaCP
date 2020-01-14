@@ -77,6 +77,37 @@ Function Confirm-ArubaCPNetworkDevice {
 
 }
 
+Function Confirm-ArubaCPService {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Service element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name name -Membertype Properties)) {
+        throw "Element specified does not contain an name property."
+    }
+    if ( -not ( $argument | get-member -name type -Membertype Properties)) {
+        throw "Element specified does not contain a type property."
+    }
+    if ( -not ( $argument | get-member -name template -Membertype Properties)) {
+        throw "Element specified does not contain a template property."
+    }
+    if ( -not ( $argument | get-member -name enabled -Membertype Properties)) {
+        throw "Element specified does not contain a enabled property."
+    }
+    if ( -not ( $argument | get-member -name orderNo -Membertype Properties)) {
+        throw "Element specified does not contain a orderNo property."
+    }
+    $true
+
+}
+
 Function Confirm-ArubaCPStaticHostList {
 
     Param (
