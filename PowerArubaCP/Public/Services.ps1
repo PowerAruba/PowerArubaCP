@@ -156,3 +156,42 @@ function  Enable-ArubaCPService {
     End {
     }
 }
+
+function  Disable-ArubaCPService {
+
+    <#
+        .SYNOPSIS
+        Disable a Service on ClearPass
+
+        .DESCRIPTION
+        Disable a Service on ClearPass
+
+        .EXAMPLE
+        Get-ArubaCPService -name PowerArubaCP | Disable-ArubaCPService
+
+        Disable Service PowerArubaCP
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        #[ValidateScript( { Confirm-ArubaCPService $_ })]
+        [psobject]$cs,
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $cs.id
+        $uri = "api/config/service/${id}/disable"
+
+        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+        $cs
+    }
+
+    End {
+    }
+}
