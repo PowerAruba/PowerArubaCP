@@ -63,7 +63,9 @@ Function Confirm-ArubaCPStaticHostList {
     }
     $true
 
-}Function Confirm-ArubaCPNetworkDevice {
+}
+
+Function Confirm-ArubaCPNetworkDevice {
 
     Param (
         [Parameter (Mandatory = $true)]
