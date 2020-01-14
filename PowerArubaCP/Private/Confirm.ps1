@@ -40,31 +40,6 @@ Function Confirm-ArubaCPApplicationLicense {
 
 }
 
-Function Confirm-ArubaCPStaticHostList {
-
-    Param (
-        [Parameter (Mandatory = $true)]
-        [object]$argument
-    )
-
-    #Check if it looks like an Static Host List element
-
-    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
-    }
-    if ( -not ( $argument | get-member -name name -Membertype Properties)) {
-        throw "Element specified does not contain an name property."
-    }
-    if ( -not ( $argument | get-member -name host_format -Membertype Properties)) {
-        throw "Element specified does not contain a host_format property."
-    }
-    if ( -not ( $argument | get-member -name host_type -Membertype Properties)) {
-        throw "Element specified does not contain a host_type property."
-    }
-    $true
-
-}
-
 Function Confirm-ArubaCPNetworkDevice {
 
     Param (
@@ -102,3 +77,27 @@ Function Confirm-ArubaCPNetworkDevice {
 
 }
 
+Function Confirm-ArubaCPStaticHostList {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Static Host List element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name name -Membertype Properties)) {
+        throw "Element specified does not contain an name property."
+    }
+    if ( -not ( $argument | get-member -name host_format -Membertype Properties)) {
+        throw "Element specified does not contain a host_format property."
+    }
+    if ( -not ( $argument | get-member -name host_type -Membertype Properties)) {
+        throw "Element specified does not contain a host_type property."
+    }
+    $true
+
+}
