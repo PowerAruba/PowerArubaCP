@@ -62,7 +62,7 @@ function Add-ArubaCPGuest {
         [Parameter(Mandatory = $true)]
         [String]$mail,
         [Parameter(Mandatory = $true)]
-        [string]$role,
+        [int]$role,
         [Parameter(Mandatory = $false)]
         [ValidateSet ("True", "False")]
         [string]$enable
@@ -83,20 +83,8 @@ function Add-ArubaCPGuest {
 
         if ( $PsBoundParameters.ContainsKey('role'))
         {
-            switch( $role ) {
-                guest {
-                    $role = 2
-                }
-                employee {
-                    $role = 3
-                }
-                contractor {
-                    $role = 1
-                }
-            }
             $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
         }
-        
         
         if ( $PsBoundParameters.ContainsKey('enable'))
         {
@@ -147,12 +135,12 @@ function Set-ArubaCPGuest {
         [Parameter(Mandatory = $false)]
         [String]$mail,
         [Parameter(Mandatory = $false)]
-        [string]$role,
+        [int]$role,
         [Parameter(Mandatory = $false)]
         [ValidateSet ("true", "false")]
         [string]$enable,
         [Parameter(Mandatory = $false)]
-        [String]$expire
+        [int]$expire
     )
 
     Begin {
@@ -176,17 +164,6 @@ function Set-ArubaCPGuest {
 
         if ( $PsBoundParameters.ContainsKey('role'))
         {
-            switch( $role ) {
-                guest {
-                    $role = 2
-                }
-                employee {
-                    $role = 3
-                }
-                contractor {
-                    $role = 1
-                }
-            }
             $guest | add-member -name "role_id" -membertype NoteProperty -Value $role
         }
 
@@ -205,33 +182,6 @@ function Set-ArubaCPGuest {
 
         if ( $PsBoundParameters.ContainsKey('expire'))
         {   
-            $time = Get-ArubaCPGuest | Where-Object username -eq $username
-
-            if ($expire = "hour")
-            {
-                $expire = $time.start_time + 3600
-            }
-
-            if ($expire = "day")
-            {
-                $expire = $time.start_time + 86400
-            }
-
-            if ($expire = "week")
-            {
-                $expire = $time.start_time + 604800
-            }
-
-            if ($expire = "month")
-            {
-                $expire = $time.start_time + 2419200
-            }
-
-            if ($expire = "year")
-            {
-                $expire = $time.start_time + 29030400
-            }
-
             $guest | add-member -name "expire_time" -membertype NoteProperty -Value $expire
         }
 
