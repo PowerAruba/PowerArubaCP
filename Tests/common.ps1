@@ -4,15 +4,20 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-if ("Desktop" -eq $PSVersionTable.PsEdition) { # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
+if ("Desktop" -eq $PSVersionTable.PsEdition) {
+    # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
     $script:pester_longint = "int"
 }
 else {
     $script:pester_longint = "long"
 }
 
+if ($port) {
+    $script:port = "443"
+}
+
 . ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
 
-Connect-ArubaCP -Server $ipaddress -Token $token -SkipCertificateCheck
+Connect-ArubaCP -Server $ipaddress -port $port -Token $token -SkipCertificateCheck
 

@@ -11,10 +11,11 @@ Describe  "Connect to a ClearPass (using Token)" {
         Disconnect-ArubaCP -noconfirm
     }
     It "Connect to ClearPass (using Token) and check global variable" {
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck
+        Connect-ArubaCP $ipaddress -Token $token -port $port -SkipCertificateCheck
         $DefaultArubaCPConnection | Should Not BeNullOrEmpty
         $DefaultArubaCPConnection.server | Should be $ipaddress
         $DefaultArubaCPConnection.token | Should be $token
+        $DefaultArubaCPConnection.port | Should be $port
     }
     It "Disconnect to ClearPass and check global variable" {
         Disconnect-ArubaCP -noconfirm
@@ -25,7 +26,7 @@ Describe  "Connect to a ClearPass (using Token)" {
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will be fail, if there is valid certificate...
     It "Throw when try to use Connect-ArubaCP  with don't use -SkipCertifiateCheck" -Skip:("Desktop" -eq $PSEdition) {
-        { Connect-ArubaCP $ipaddress -Token $token } | Should throw "Unable to connect (certificate)"
+        { Connect-ArubaCP $ipaddress -Token $token -port $port } | Should throw "Unable to connect (certificate)"
         Disconnect-ArubaCP -noconfirm
     }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
@@ -39,10 +40,11 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         Disconnect-ArubaCP -noconfirm
     }
     It "Connect to a ClearPass (using token and store on cppm variable)" {
-        $script:cppm = Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -DefaultConnection:$false
+        $script:cppm = Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port -DefaultConnection:$false
         $DefaultArubaCPConnection | Should -BeNullOrEmpty
         $cppm.server | Should be $ipaddress
         $cppm.token | Should be $token
+        $cppm.port | Should be $port
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
@@ -76,7 +78,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
 Describe  "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck
+        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
         #Add 26 Network Device (NAS)
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
         Add-ArubaCPNetworkDevice -name pester_SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba
