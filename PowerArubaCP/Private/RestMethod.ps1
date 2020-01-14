@@ -75,9 +75,10 @@ function Invoke-ArubaCPRestMethod {
             Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
         }
 
+        $port = $connection.port
         $Server = $connection.Server
         $invokeParams = $connection.invokeParams
-        $fullurl = "https://${Server}/${uri}"
+        $fullurl = "https://${Server}:${port}/${uri}"
 
         if ($fullurl -NotMatch "\?") {
             $fullurl += "?"

@@ -24,6 +24,11 @@ function Connect-ArubaCP {
       Connect to an Aruba ClearPass using HTTPS (without check certificate validation) with IP 192.0.2.1 using token aaaaaaa
 
       .EXAMPLE
+      Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa -port 4443
+
+      Connect to an Aruba ClearPass with IP 192.0.2.1 using token aaaaaaa on port 4443
+
+      .EXAMPLE
       $cppm1 = Connect-ArubaCP -Server 192.0.2.1 -token aaaaaaaaaaaaa
 
       Connect to an ArubaOS ClaerPass with IP 192.0.2.1 and store connection info to $cppm1 variable
@@ -43,6 +48,9 @@ function Connect-ArubaCP {
         [Parameter(Mandatory = $false)]
         [switch]$SkipCertificateCheck = $false,
         [Parameter(Mandatory = $false)]
+        [ValidateRange(1, 65535)]
+        [int]$port = 443,
+        [Parameter(Mandatory = $false)]
         [boolean]$DefaultConnection = $true
     )
 
@@ -51,7 +59,7 @@ function Connect-ArubaCP {
 
     Process {
 
-        $connection = @{server = ""; token = ""; invokeParams = "" ; version = "" }
+        $connection = @{server = ""; token = ""; invokeParams = "" ; version = "" ; port = $port }
         $invokeParams = @{DisableKeepAlive = $false; UseBasicParsing = $true; SkipCertificateCheck = $SkipCertificateCheck }
 
         if ("Desktop" -eq $PSVersionTable.PsEdition) {
