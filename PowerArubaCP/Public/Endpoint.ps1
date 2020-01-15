@@ -13,13 +13,32 @@ function Get-ArubaCPEndpoint {
         Get Enpoint info on CPPM
 
         .DESCRIPTION
-        Get Network Device (Id, MAC Address, Status, Attributes)
+        Get Endpoint (Id, MAC Address, Status, Attributes)
 
         .EXAMPLE
         Get-ArubaCPEndpoint
 
         Get ALL Endpoint on the Clearpass
 
+        .EXAMPLE
+        Get-ArubaCPEndpoint 000102030405
+
+        Get info about Endpoint 000102030405 Aruba on the ClearPass
+
+        .EXAMPLE
+        Get-ArubaCPEndpoint -id 23
+
+        Get info about Endpoint id 23 on the ClearPass
+
+        .EXAMPLE
+        Get-ArubaCPEndpoint 000102030405 -filter_type contains
+
+        Get info about Endpoint where name contains 000102
+
+       .EXAMPLE
+        Get-ArubaCPEndpoint -filter_attribute attribute -filter_type contains -filter_value 192.0.2.1
+
+        Get info about Endpoint where attribute contains 192.0.2.1
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
@@ -40,7 +59,8 @@ function Get-ArubaCPEndpoint {
         [string]$filter_attribute,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
-        [Parameter (ParameterSetName = "name")]
+        [Parameter (ParameterSetName = "mac_address")]
+        [Parameter (ParameterSetName = "status")]
         [Parameter (ParameterSetName = "filter")]
         [ValidateSet('equal', 'contains')]
         [string]$filter_type,
@@ -69,9 +89,13 @@ function Get-ArubaCPEndpoint {
                 $filter_value = $id
                 $filter_attribute = "id"
             }
-            "name" {
-                $filter_value = $name
-                $filter_attribute = "name"
+            "mac_address" {
+                $filter_value = $mac_address
+                $filter_attribute = "mac_address"
+            }
+            "status" {
+                $filter_value = $status
+                $filter_attribute = "status"
             }
             default { }
         }
