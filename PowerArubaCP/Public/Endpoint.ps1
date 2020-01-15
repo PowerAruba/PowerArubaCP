@@ -22,10 +22,36 @@ function Get-ArubaCPEndpoint {
 
     #>
 
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
         [Parameter (Mandatory = $false)]
-        [int]$limit
+        [Parameter (ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $false, Position = 1)]
+        [Parameter (ParameterSetName = "mac_address")]
+        [string]$mac_address,
+        [Parameter (Mandatory = $false, Position = 1)]
+        [Parameter (ParameterSetName = "status")]
+        [ValidateSet('Known', 'Unknown', 'Disabled')]
+        [string]$status,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [string]$filter_attribute,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
+        [Parameter (ParameterSetName = "name")]
+        [Parameter (ParameterSetName = "filter")]
+        [ValidateSet('equal', 'contains')]
+        [string]$filter_type,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [psobject]$filter_value,
+        [Parameter (Mandatory = $false)]
+        [int]$limit,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
     )
 
     Begin {
@@ -38,9 +64,38 @@ function Get-ArubaCPEndpoint {
             $invokeParams.add( 'limit', $limit )
         }
 
-        $url = "api/endpoint"
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "id" {
+                $filter_value = $id
+                $filter_attribute = "id"
+            }
+            "name" {
+                $filter_value = $name
+                $filter_attribute = "name"
+            }
+            default { }
+        }
 
-        $endpoint = Invoke-ArubaCPRestMethod -method "GET" -uri $url @invokeParams
+        if ( $PsBoundParameters.ContainsKey('filter_type') ) {
+            switch ( $filter_type ) {
+                "equal" {
+                    $filter_value = @{ "`$eq" = $filter_value }
+                }
+                "contains" {
+                    $filter_value = @{ "`$contains" = $filter_value }
+                }
+                default { }
+            }
+        }
+
+        if ($filter_value -and $filter_attribute) {
+            $filter = @{ $filter_attribute = $filter_value }
+            $invokeParams.add( 'filter', $filter )
+        }
+
+        $uri = "api/endpoint"
+
+        $endpoint = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
 
         $endpoint._embedded.items
     }
