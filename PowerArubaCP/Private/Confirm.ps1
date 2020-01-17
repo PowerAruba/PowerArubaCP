@@ -40,6 +40,31 @@ Function Confirm-ArubaCPApplicationLicense {
 
 }
 
+Function Confirm-ArubaCPEndpoint {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an EndPoint element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain a id property."
+    }
+    if ( -not ( $argument | get-member -name mac_address -Membertype Properties)) {
+        throw "Element specified does not contain an product_id property."
+    }
+    if ( -not ( $argument | get-member -name status -Membertype Properties)) {
+        throw "Element specified does not contain a status property."
+    }
+    if ( -not ( $argument | get-member -name attributes -Membertype Properties)) {
+        throw "Element specified does not contain a attributes property."
+    }
+    $true
+
+}
+
 Function Confirm-ArubaCPNetworkDevice {
 
     Param (
