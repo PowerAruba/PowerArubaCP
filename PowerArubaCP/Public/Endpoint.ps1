@@ -90,7 +90,7 @@ function Get-ArubaCPEndpoint {
                 $filter_attribute = "id"
             }
             "mac_address" {
-                $filter_value = $mac_address
+                $filter_value = Format-ArubaCPMACAddress $mac_address
                 $filter_attribute = "mac_address"
             }
             "status" {
