@@ -226,7 +226,7 @@ function Set-ArubaCPEndPoint {
 
         .EXAMPLE
         $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
-        PS C:\>$attributes = @{Disabled by=PowerArubaCP}
+        PS C:\>$attributes = @{"Disabled by"= "PowerArubaCP"}
         PS C:\>$ep | Set-ArubaCPEndpoint -attributes $attributes
 
         Change attributes for MAC Address 00:01:02:03:04:05
@@ -253,7 +253,7 @@ function Set-ArubaCPEndPoint {
         [ValidateSet('Known', 'Unknown', 'Disabled', IgnoreCase = $false)]
         [string]$status,
         [Parameter (Mandatory = $false)]
-        [psobject]$atttributes,
+        [psobject]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
