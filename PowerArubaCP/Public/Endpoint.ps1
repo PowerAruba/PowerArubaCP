@@ -60,7 +60,7 @@ function Add-ArubaCPEndpoint {
             $_ep | add-member -name "id" -membertype NoteProperty -Value $id
         }
 
-        $_ep | add-member -name "mac_address" -membertype NoteProperty -Value (Format-ArubaCPMacAdress $mac_address)
+        $_ep | add-member -name "mac_address" -membertype NoteProperty -Value (Format-ArubaCPMacAddress $mac_address)
 
         if ( $PsBoundParameters.ContainsKey('description') ) {
             $_ep | add-member -name "description" -membertype NoteProperty -Value $description
