@@ -203,7 +203,7 @@ function Get-ArubaCPEndpoint {
 }
 
 
-function Set-ArubaCPEndPoint {
+function Set-ArubaCPEndpoint {
 
     <#
         .SYNOPSIS
