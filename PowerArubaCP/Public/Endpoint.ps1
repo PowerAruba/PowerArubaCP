@@ -14,24 +14,20 @@ function Add-ArubaCPEndpoint {
         Add an Endoint with mac address, description, status, attributes
 
         .EXAMPLE
-        Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
+        Add-ArubaCPNetworkDevice -mac_address 000102030405 -description "Add by PowerArubaCP"
 
-        Add Network Device SW1 with ip address 192.0.2.1 from vendor Aruba and a description
-
-        .EXAMPLE
-        Add-ArubaCPNetworkDevice -name SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba -coa_capable -coa_port 5000
-
-        Add Network Device SW2 with COA Capability on port 5000
+        Add an Endpoint with MAC Address 000102030405 and a description
 
         .EXAMPLE
-        Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -tacacs_secret MySecurePassword
+        Add-ArubaCPNetworkDevice -mac_address 00:01:02:03:04:06 -status Known
 
-        Add Network Device SW3 with a tacacs secret from vendor Cisco
+        Add an Endpoint with MAC Address 00:01:02:03:04:06 with Known Status
 
         .EXAMPLE
-        Add-ArubaCPNetworkDevice -name SW4 -ip_address 192.0.2.4 -radius_secret MySecurePassword -vendor Hewlett-Packard-Enterprise -radsec_enabled
+        $atttributes = @{Disabled by=PowerArubaCP}
+        PS >Add-ArubaCPNetworkDevice -mac_address 000102-030407 -Status Disabled -attributes $attributes
 
-        Add Network Device SW4 with RadSec from vendor HPE
+        Add an Endpoint with MAC Address 000102030405 with Disabled Status and attributes to Disabled by PowerArubaCP
     #>
 
     Param(
