@@ -327,8 +327,8 @@ function Remove-ArubaCPEndpoint {
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ep")]
-        [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
-        [psobject]$nad,
+        [ValidateScript( { Confirm-ArubaCPEndpoint $_ })]
+        [psobject]$ep,
         [Parameter(Mandatory = $false)]
         [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
