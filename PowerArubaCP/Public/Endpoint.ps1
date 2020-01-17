@@ -4,7 +4,87 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-ArubaCPEndpoint {
 
+    <#
+        .SYNOPSIS
+        Add an Endpoint on ClearPass
+
+        .DESCRIPTION
+        Add an Endoint with mac address, description, status, attributes
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
+
+        Add Network Device SW1 with ip address 192.0.2.1 from vendor Aruba and a description
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba -coa_capable -coa_port 5000
+
+        Add Network Device SW2 with COA Capability on port 5000
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -tacacs_secret MySecurePassword
+
+        Add Network Device SW3 with a tacacs secret from vendor Cisco
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW4 -ip_address 192.0.2.4 -radius_secret MySecurePassword -vendor Hewlett-Packard-Enterprise -radsec_enabled
+
+        Add Network Device SW4 with RadSec from vendor HPE
+    #>
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [int]$id,
+        [Parameter (Mandatory = $true)]
+        [string]$mac_address,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $false)]
+        [ValidateSet('Known', 'Unknown', 'Disabled')]
+        [string]$status,
+        [Parameter (Mandatory = $false)]
+        [psobject]$attributes,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = "api/endpoint"
+
+        $_ep = new-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_ep | add-member -name "id" -membertype NoteProperty -Value $id
+        }
+
+        $_ep | add-member -name "mac_address" -membertype NoteProperty -Value (Format-ArubaCPMacAdress $mac_address)
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_ep | add-member -name "description" -membertype NoteProperty -Value $description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('status') ) {
+            $_ep | add-member -name "status" -membertype NoteProperty -Value $status
+        }
+
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_ep | add-member -name "attributes" -membertype NoteProperty -Value $attributes
+        }
+
+        $ep = invoke-ArubaCPRestMethod -method "POST" -body $_ep -uri $uri -connection $connection
+        $ep
+    }
+
+    End {
+    }
+}
 
 function Get-ArubaCPEndpoint {
 
