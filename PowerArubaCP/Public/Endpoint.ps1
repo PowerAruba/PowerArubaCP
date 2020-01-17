@@ -14,17 +14,17 @@ function Add-ArubaCPEndpoint {
         Add an Endoint with mac address, description, status, attributes
 
         .EXAMPLE
-        Add-ArubaCPEndpoint -mac_address 000102030405 -description "Add by PowerArubaCP"
+        Add-ArubaCPEndpoint -mac_address 000102030405 -description "Add by PowerArubaCP" -Status Known
 
-        Add an Endpoint with MAC Address 000102030405 and a description
-
-        .EXAMPLE
-        Add-ArubaCPEndpoint -mac_address 00:01:02:03:04:06 -status Known
-
-        Add an Endpoint with MAC Address 00:01:02:03:04:06 with Known Status
+        Add an Endpoint with MAC Address 000102030405 with Known Sattus and a description
 
         .EXAMPLE
-        $atttributes = @{Disabled by=PowerArubaCP}
+        Add-ArubaCPEndpoint -mac_address 00:01:02:03:04:06 -status Unknown
+
+        Add an Endpoint with MAC Address 00:01:02:03:04:06 with Unknown Status
+
+        .EXAMPLE
+        $attributes = @{"Disabled by"="PowerArubaCP"}
         PS >Add-ArubaCPEndpoint -mac_address 000102-030407 -Status Disabled -attributes $attributes
 
         Add an Endpoint with MAC Address 000102030405 with Disabled Status and attributes to Disabled by PowerArubaCP
@@ -37,8 +37,8 @@ function Add-ArubaCPEndpoint {
         [string]$mac_address,
         [Parameter (Mandatory = $false)]
         [string]$description,
-        [Parameter (Mandatory = $false)]
-        [ValidateSet('Known', 'Unknown', 'Disabled')]
+        [Parameter (Mandatory = $true)]
+        [ValidateSet('Known', 'Unknown', 'Disabled', IgnoreCase = $false)]
         [string]$status,
         [Parameter (Mandatory = $false)]
         [psobject]$attributes,
@@ -66,9 +66,7 @@ function Add-ArubaCPEndpoint {
             $_ep | add-member -name "description" -membertype NoteProperty -Value $description
         }
 
-        if ( $PsBoundParameters.ContainsKey('status') ) {
-            $_ep | add-member -name "status" -membertype NoteProperty -Value $status
-        }
+        $_ep | add-member -name "status" -membertype NoteProperty -Value $status
 
         if ( $PsBoundParameters.ContainsKey('attributes') ) {
             $_ep | add-member -name "attributes" -membertype NoteProperty -Value $attributes
@@ -252,7 +250,7 @@ function Set-ArubaCPEndPoint {
         [Parameter (Mandatory = $false)]
         [string]$description,
         [Parameter (Mandatory = $false)]
-        [ValidateSet('Known', 'Unknown', 'Disabled')]
+        [ValidateSet('Known', 'Unknown', 'Disabled', IgnoreCase = $false)]
         [string]$status,
         [Parameter (Mandatory = $false)]
         [psobject]$atttributes,
