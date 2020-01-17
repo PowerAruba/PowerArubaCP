@@ -204,6 +204,104 @@ function Get-ArubaCPEndpoint {
     }
 }
 
+
+function Set-ArubaCPEndPoint {
+
+    <#
+        .SYNOPSIS
+        Configure an Endpoint on ClearPass
+
+        .DESCRIPTION
+        Configure an Endpoint on ClearPass
+
+        .EXAMPLE
+        $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+        PS C:\>$ep | Set-ArubaCPEndpoint -status Disabled
+
+        Set Status Disabled for MAC Address 00:01:02:03:04:05
+
+        .EXAMPLE
+        $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+        PS C:\>$ep | Set-ArubaCPEndpoint -description "Change by PowerAruba"
+
+        Change Description for MAC Address 00:01:02:03:04:05
+
+        .EXAMPLE
+        $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+        PS C:\>$attributes = @{Disabled by=PowerArubaCP}
+        PS C:\>$ep | Set-ArubaCPEndpoint -attributes $attributes
+
+        Change attributes for MAC Address 00:01:02:03:04:05
+
+        .EXAMPLE
+        $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+        PS C:\>$ep | Set-ArubaCPEndpoint -mac_address 00:01:02:03:04:06
+
+        Change MAC Address 00:01:02:03:04:05 => 00:01:02:03:04:06
+
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ep")]
+        [ValidateScript( { Confirm-ArubaCPEndpoint $_ })]
+        [psobject]$ep,
+        [Parameter (Mandatory = $false)]
+        [string]$mac_address,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $false)]
+        [ValidateSet('Known', 'Unknown', 'Disabled')]
+        [string]$status,
+        [Parameter (Mandatory = $false)]
+        [psobject]$atttributes,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get nad id from nad ps object
+        if ($ep) {
+            $id = $ep.id
+        }
+
+        $uri = "api/endpoint/${id}"
+        $_ep = new-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_ep | add-member -name "id" -membertype NoteProperty -Value $id
+        }
+
+        if ( $PsBoundParameters.ContainsKey('mac_address') ) {
+            $_ep | add-member -name "mac_address" -membertype NoteProperty -Value $mac_address
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_ep | add-member -name "description" -membertype NoteProperty -Value $description
+        }
+
+        if ( $PsBoundParameters.ContainsKey('status') ) {
+            $_ep | add-member -name "status" -membertype NoteProperty -Value $status
+        }
+
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_ep | add-member -name "attributes" -membertype NoteProperty -Value $attributes
+        }
+
+        $ep = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ep -uri $uri -connection $connection
+        $ep
+
+    }
+
+    End {
+    }
+}
 function Remove-ArubaCPEndpoint {
 
     <#
