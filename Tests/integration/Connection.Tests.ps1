@@ -69,6 +69,9 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Endpoint" {
             { Get-ArubaCPEndpoint -connection $cppm } | Should Not throw
         }
+        It "Use Multi connection for call Get Api Client" {
+            { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+        }
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
@@ -76,6 +79,33 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         $DefaultArubaCPConnection | Should be $null
     }
 
+}
+
+Describe "Connect using client_credentials" {
+    BeforeAll {
+        #connect...
+        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
+        #Create a API Client with client credentials
+        Add-ArubaCPApiClient -client_id pester_PowerArubaCP -client_secret pester_MySecret  -grant_types "client_credentials" -profile_id 1
+    }
+
+    It "Connect to a ClearPass (using client_credentials and store on cppm variable)" {
+        $script:cppm = Connect-ArubaCP $ipaddress -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $port -DefaultConnection:$false
+        $cppm.server | Should be $ipaddress
+        $cppm.token | Should not be BeNullOrEmpty
+        $cppm.port | Should be $port
+    }
+
+    It "Use Multi connection for call Get (Api Client)" {
+        { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+    }
+
+    AfterAll {
+        #Remove API Client
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP | Remove-ArubaCPApiClient -noconfirm
+        #And disconnect
+        Disconnect-ArubaCP -noconfirm
+    }
 }
 
 Describe  "Invoke ArubaCP RestMethod tests" {

@@ -3,6 +3,31 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+
+Function Confirm-ArubaCPApiClient {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Api Client element
+
+    if ( -not ( $argument | get-member -name client_id -Membertype Properties)) {
+        throw "Element specified does not contain a client_id property."
+    }
+    if ( -not ( $argument | get-member -name client_secret -Membertype Properties)) {
+        throw "Element specified does not contain an client_secret property."
+    }
+    if ( -not ( $argument | get-member -name grant_types -Membertype Properties)) {
+        throw "Element specified does not contain a grant_types property."
+    }
+    if ( -not ( $argument | get-member -name profile_id -Membertype Properties)) {
+        throw "Element specified does not contain a profile_id property."
+    }
+    $true
+
+}
 Function Confirm-ArubaCPApplicationLicense {
 
     Param (
