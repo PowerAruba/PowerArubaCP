@@ -46,7 +46,7 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
     Get-Command -Module PowerArubaCP
 
 # Get help
-    Get-Help Add-ArubaCPArubaNetwork -Full
+    Get-Help Add-ArubaCPNetworkDevice -Full
 ```
 
 # Examples
