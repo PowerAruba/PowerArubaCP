@@ -69,6 +69,9 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Endpoint" {
             { Get-ArubaCPEndpoint -connection $cppm } | Should Not throw
         }
+        It "Use Multi connection for call Get Api Client" {
+            { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+        }
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
