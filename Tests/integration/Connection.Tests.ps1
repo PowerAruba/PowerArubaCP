@@ -48,7 +48,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
-        It "Use Multi connection for call Get Applicetion License" {
+        It "Use Multi connection for call Get Applicetion License " -Skip:$VersionBefore680 {
             { Get-ArubaCPApplicationLicense -connection $cppm } | Should Not throw
         }
         It "Use Multi connection for call Get CPPM Version" {
@@ -72,7 +72,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Api Client" {
             { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
         }
-        It "Use Multi connection for call Get Service" {
+        It "Use Multi connection for call Get Service" -Skip:$VersionBefore680 {
             { Get-ArubaCPService -connection $cppm } | Should Not throw
         }
     }
