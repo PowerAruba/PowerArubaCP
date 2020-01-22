@@ -47,7 +47,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         $cppm.port | Should be $port
     }
 
-    Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
+    Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
         It "Use Multi connection for call Get Applicetion License" {
             { Get-ArubaCPApplicationLicense -connection $cppm } | Should Not throw
         }
