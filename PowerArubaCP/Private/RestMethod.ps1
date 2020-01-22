@@ -94,11 +94,15 @@ function Invoke-ArubaCPRestMethod {
         if ($filter) {
             $fullurl += "&filter=$($filter | ConvertTo-Json -Compress)"
         }
-        #When headers, We need to have Accept and Content-type set to application/json...
-        $headers = @{ Authorization = "Bearer " + $connection.token; Accept = "application/json"; "Content-type" = "application/json" }
+        #When headers, We need to have Accept set to application/json...
+        $headers = @{ Authorization = "Bearer " + $connection.token; Accept = "application/json" }
 
         try {
             if ($body) {
+
+                #Add Content-Type to application/json only when there is a body
+
+                $headers.add("Content-type", "application/json")
 
                 Write-Verbose ($body | ConvertTo-Json)
 

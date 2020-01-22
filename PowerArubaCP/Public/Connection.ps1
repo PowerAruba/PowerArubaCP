@@ -101,7 +101,7 @@ function Connect-ArubaCP {
             }
 
             $headers = @{ Accept = "application/json"; "Content-type" = "application/json" }
-            $fullurl = "https://${Server}/api/oauth"
+            $fullurl = "https://${Server}:${port}/api/oauth"
             $response = Invoke-RestMethod -uri $fullurl -Method "POST" -body ($oauth | ConvertTo-Json) -Headers $headers @invokeParams
 
             $token = $response.access_token

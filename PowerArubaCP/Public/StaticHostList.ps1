@@ -317,7 +317,7 @@ function Set-ArubaCPStaticHostList {
         [Parameter (Mandatory = $false)]
         [string]$description,
         [Parameter (Mandatory = $false)]
-        [psobject]$host_entries,
+        [array]$host_entries,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
