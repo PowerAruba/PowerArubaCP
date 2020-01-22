@@ -154,7 +154,7 @@ function Enable-ArubaCPService {
         $id = $cs.id
         $uri = "api/config/service/${id}/enable"
 
-        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -uri $uri -connection $connection
         $cs
     }
 
@@ -198,7 +198,7 @@ function Disable-ArubaCPService {
         $id = $cs.id
         $uri = "api/config/service/${id}/disable"
 
-        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+        $cs = Invoke-ArubaCPRestMethod -method "PATCH" -uri $uri -connection $connection
         $cs
     }
 
