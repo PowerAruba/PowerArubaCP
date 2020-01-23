@@ -56,9 +56,9 @@ Describe  "Get Service" {
 
     #Disable because freeze...
     # It "Search Service by attribute (type equal RADIUS)" {
-    #     $s = Get-ArubaCPService -filter_attribute ip_address -filter_type equal -filter_value 192.0.2.1
+    #     $s = Get-ArubaCPService -filter_attribute type -filter_type equal -filter_value RADIUS
     #     @($s).count | Should be 1
-    #     $s.type | Should be "RADIYS"
+    #     $s.type | Should be "RADIUS"
     # }
 
     It "Get Service throw a error when use with CPPM <= 6.8.0" -Skip: ($VersionBefore680 -eq 0) {
