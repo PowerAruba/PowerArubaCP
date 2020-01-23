@@ -23,6 +23,10 @@ Describe  "Get Application License" {
         Confirm-ArubaCPApplicationLicense $al[0] | Should be $true
     }
 
+    It "Get Application License thow a error when use with CPPM <= 6.8.0" -Skip: ($VersionBefore680 -eq 0) {
+        { Get-ArubaCPApplicationLicense } | Should throw "Need ClearPass >= 6.8.0 for use this cmdlet"
+    }
+
 }
 
 Describe  "Add and Remove Application License" {
