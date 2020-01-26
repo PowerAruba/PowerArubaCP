@@ -94,7 +94,7 @@ Click on `Create API Client`
 
 #### Use API Token
 
-Like for client_id/client_secret, generate a API Client but you need to store the Client Secret
+Like for client_id/client_secret, generate a API Client but you don't need to store the Client Secret
 
 On `API Clients List`, select the your client
 ![](./Medias/CPPM_Generate_Access_Token.PNG)  
