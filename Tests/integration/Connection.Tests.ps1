@@ -63,7 +63,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Server Version" {
             { Get-ArubaCPServerVersion -connection $cppm } | Should Not throw
         }
-        It "Use Multi connection for call Get Static Host List" -Skip:$VersionBefore {
+        It "Use Multi connection for call Get Static Host List" -Skip:$VersionBefore680 {
             { Get-ArubaCPStaticHostList -connection $cppm } | Should Not throw
         }
         It "Use Multi connection for call Get Endpoint" {
