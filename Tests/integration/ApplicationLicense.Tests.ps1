@@ -31,14 +31,14 @@ Describe  "Get Application License" {
 
 Describe  "Add and Remove Application License" {
 
-    It "Add Application License ($pester_license_type)" -Skip:($pester_license -eq $null -and $VersionBefore680) {
+    It "Add Application License ($pester_license_type)" -Skip:( -not ($pester_license -ne $null -and $VersionBefore680 -eq 0) ) {
         Add-ArubaCPApplicationLicense -product_name $pester_license_type -license_key $pester_license
         $al = Get-ArubaCPApplicationLicense -product_name $pester_license_type #Only check if search work !
         $al.id | Should not be BeNullOrEmpty
         $al.product_name | Should be $pester_license_type
     }
 
-    It "Remove Application License ($pester_license_type)" -Skip:($pester_license -eq $null -and $VersionBefore680) {
+    It "Remove Application License ($pester_license_type)" -Skip:( -not ($pester_license -ne $null -and $VersionBefore680 -eq 0)) {
         Get-ArubaCPApplicationLicense -product_name $pester_license_type | Remove-ArubaCPApplicationLicense -noconfirm
         $al = Get-ArubaCPApplicationLicense -product_name $pester_license_type
         $al | Should be $null
