@@ -9,7 +9,7 @@ With this module (version 0.3.0) you can manage:
 - Application License (Add / Get / Remove)
 - CPPM (Get Version)
 - Endpoint (Add / Get / Set / Remove)
-- Network Device (Add / Get / Set / Remove a NAS)
+- [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
 - Server (Get Configuration, Version)
 - Service (Get / Enable / Disable)
 - Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
