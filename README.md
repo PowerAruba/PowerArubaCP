@@ -17,6 +17,7 @@ With this module (version 0.3.0) you can manage:
 
 There is some extra feature
 - [Invoke API](#Invoke-API)
+- [Multi Connection](#MultiConnection)
 - [Filtering](#Filtering)
 
 More functionality will be added later.
@@ -191,6 +192,41 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     $nad = Get-ArubaCPNetworkDevice -name SW1
     $nad | Remove-ArubaCPNetworkDevice -noconfirm
 ```
+
+### MultiConnection
+
+From release 0.4.0, it is possible to connect on same times to multi ClearPass
+You need to use -connection parameter to cmdlet
+
+For example to get Vlan Ports of 2 switchs
+
+```powershell
+# Connect to first ClearPass
+    $cppm1 = Connect-ArubaCP 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to second ClearPass
+    $cppm2 = Connect-ArubaCP 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Static Host List for first ClearPass
+   Get-ArubaCPStaticHostList -connection $cppm1 | Format-Table
+
+  id name                description host_format host_type  value                 _links
+  -- ----                ----------- ----------- ---------  -----                 ------
+3001 SHL-list-IPAddress              list        IPAddress                        @{self=}
+....
+# Get Static Host List for first ClearPass
+   Get-ArubaCPStaticHostList -connection $cppm2 | Format-Table
+
+  id name                description host_format host_type  value                 _links
+  -- ----                ----------- ----------- ---------  -----                 ------
+3001 SHL-list-MACAddress             list        MACAddress                       @{self=}
+...
+
+#Each cmdlet can use -connection parameter
+```
+
 ### Filtering
 For `Invoke-ArubaCPRestMethod`, it is possible to use -filter parameter
 You need to use ClearPass API syntax :
