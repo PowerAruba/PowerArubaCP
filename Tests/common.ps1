@@ -21,3 +21,4 @@ if ($port) {
 
 Connect-ArubaCP -Server $ipaddress -port $port -Token $token -SkipCertificateCheck
 
+$script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"

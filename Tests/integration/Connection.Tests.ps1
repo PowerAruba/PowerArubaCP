@@ -47,8 +47,8 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         $cppm.port | Should be $port
     }
 
-    Context "Use Multi connection for call some (Get) cmdlet (Vlan, System...)" {
-        It "Use Multi connection for call Get Applicetion License" {
+    Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
+        It "Use Multi connection for call Get Applicetion License " -Skip:$VersionBefore680 {
             { Get-ArubaCPApplicationLicense -connection $cppm } | Should Not throw
         }
         It "Use Multi connection for call Get CPPM Version" {
@@ -63,7 +63,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Server Version" {
             { Get-ArubaCPServerVersion -connection $cppm } | Should Not throw
         }
-        It "Use Multi connection for call Get Static Host List" {
+        It "Use Multi connection for call Get Static Host List" -Skip:$VersionBefore680 {
             { Get-ArubaCPStaticHostList -connection $cppm } | Should Not throw
         }
         It "Use Multi connection for call Get Endpoint" {
@@ -71,6 +71,9 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         }
         It "Use Multi connection for call Get Api Client" {
             { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+        }
+        It "Use Multi connection for call Get Service" -Skip:$VersionBefore680 {
+            { Get-ArubaCPService -connection $cppm } | Should Not throw
         }
     }
 
