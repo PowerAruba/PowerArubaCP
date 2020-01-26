@@ -15,6 +15,10 @@ With this module (version 0.3.0) you can manage:
 - Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
 - Invoke API using Invoke-ArubaCPRestMethod
 
+There is some extra feature
+- [Invoke API](#Invoke-API)
+- [Filtering](#Filtering)
+
 More functionality will be added later.
 
 Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)
