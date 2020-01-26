@@ -1,7 +1,7 @@
 
 # PowerArubaCP
 
-This is a Powershell module for configure a Aruba ClearPass (CPPM).
+This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
 With this module (version 0.4.0) you can manage:
 
@@ -105,7 +105,7 @@ Click on `Generate Access Token`
 And kept the token (for example : 70680f1d19f86110800d5d5cb4414fbde7be12ae)
 
 
-After connect to a Aruba ClearPass with the command `Connect-ArubaCP` :
+After connect to an Aruba ClearPass with the command `Connect-ArubaCP` :
 
 ```powershell
 # Connect to the Aruba Clearpass using Token
