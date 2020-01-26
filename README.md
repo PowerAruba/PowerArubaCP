@@ -18,6 +18,7 @@ With this module (version 0.3.0) you can manage:
 More functionality will be added later.
 
 Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)
+Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0
 
 # Usage
 
