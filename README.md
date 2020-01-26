@@ -58,7 +58,11 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
 
 ### Connecting to the ClearPass using API
 
-The first thing to do is to get API Client Token
+The first thing to do is to get API Client
+there is two methods to connect, using [client_id/client_secret](#Use-API-client_idclient_secret) or [token](#Use-API-Token) 
+
+#### Use API client_id/client_secret
+
 
 Go on WebGUI of your ClearPass, on Guest Modules
 ![](./Medias/CPPM_Guest_API.PNG)  
@@ -71,7 +75,25 @@ Create a `New API Client`
 - Grant type : Client credentials
 - Access Token Lifetime : You can increment ! (24 hours !)
 
-Click on `Create API Client` (you don't need to store the Client Secet)
+Click on `Create API Client`
+
+```powershell
+# Connect to the Aruba Clearpass using client_id/client_secret
+    Connect-ArubaCP 192.0.2.1 -client_id PowerArubaCP -client_secret QRFttyxOmWX3NopMIYzKysj30wvIMxAwB6kUy7uJc67B
+
+    Name                           Value
+    ----                           -----
+    token                          7aa3de0be5ea230ea92b6de0bafa14d7a76e2305
+    invokeParams                   {DisableKeepAlive, SkipCertificateCheck}
+    server                         192.0.2.1
+    port                           443
+    version                        6.8.4
+
+```
+
+#### Use API Token
+
+Like for client_id/client_secret, generate a API Client but you need to store the Client Secret
 
 On `API Clients List`, select the your client
 ![](./Medias/CPPM_Generate_Access_Token.PNG)  
@@ -85,9 +107,16 @@ And kept the token (for example : 70680f1d19f86110800d5d5cb4414fbde7be12ae)
 After connect to a Aruba ClearPass with the command `Connect-ArubaCP` :
 
 ```powershell
-# Connect to the Aruba Clearpass
+# Connect to the Aruba Clearpass using Token
     Connect-ArubaCP 192.0.2.1 -token 70680f1d19f86110800d5d5cb4414fbde7be12ae
 
+    Name                           Value
+    ----                           -----
+    token                          70680f1d19f86110800d5d5cb4414fbde7be12ae
+    invokeParams                   {DisableKeepAlive, SkipCertificateCheck}
+    server                         192.0.2.1
+    port                           443
+    version                        6.8.4
 ```
 
 ### Invoke API
