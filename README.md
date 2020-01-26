@@ -3,7 +3,7 @@
 
 This is a Powershell module for configure a Aruba ClearPass (CPPM).
 
-With this module (version 0.3.0) you can manage:
+With this module (version 0.4.0) you can manage:
 
 - API Client (Add / Get / Remove)
 - Application License (Add / Get / Remove)
