@@ -1,16 +1,29 @@
 
 # PowerArubaCP
 
-This is a Powershell module for configure a Aruba ClearPass (CPPM).
+This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
-With this module (version 0.3.0) you can manage:
+With this module (version 0.4.0) you can manage:
 
-- Network Device (Add / Get / Set / Remove a NAS)
+- API Client (Add / Get / Remove)
+- Application License (Add / Get / Remove)
+- CPPM (Get Version)
+- Endpoint (Add / Get / Set / Remove)
+- [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
+- Server (Get Configuration, Version)
+- Service (Get / Enable / Disable)
+- Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
 - Invoke API using Invoke-ArubaCPRestMethod
+
+There is some extra feature
+- [Invoke API](#Invoke-API)
+- [Multi Connection](#MultiConnection)
+- [Filtering](#Filtering)
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)
+Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)  
+Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0
 
 # Usage
 
@@ -39,14 +52,18 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
     Get-Command -Module PowerArubaCP
 
 # Get help
-    Get-Help Add-ArubaCPArubaNetwork -Full
+    Get-Help Add-ArubaCPNetworkDevice -Full
 ```
 
 # Examples
 
 ### Connecting to the ClearPass using API
 
-The first thing to do is to get API Client Token
+The first thing to do is to get API Client
+there is two methods to connect, using [client_id/client_secret](#Use-API-client_idclient_secret) or [token](#Use-API-Token) 
+
+#### Use API client_id/client_secret
+
 
 Go on WebGUI of your ClearPass, on Guest Modules
 ![](./Medias/CPPM_Guest_API.PNG)  
@@ -59,7 +76,25 @@ Create a `New API Client`
 - Grant type : Client credentials
 - Access Token Lifetime : You can increment ! (24 hours !)
 
-Click on `Create API Client` (you don't need to store the Client Secet)
+Click on `Create API Client`
+
+```powershell
+# Connect to the Aruba Clearpass using client_id/client_secret
+    Connect-ArubaCP 192.0.2.1 -client_id PowerArubaCP -client_secret QRFttyxOmWX3NopMIYzKysj30wvIMxAwB6kUy7uJc67B
+
+    Name                           Value
+    ----                           -----
+    token                          7aa3de0be5ea230ea92b6de0bafa14d7a76e2305
+    invokeParams                   {DisableKeepAlive, SkipCertificateCheck}
+    server                         192.0.2.1
+    port                           443
+    version                        6.8.4
+
+```
+
+#### Use API Token
+
+Like for client_id/client_secret, generate a API Client but you don't need to store the Client Secret
 
 On `API Clients List`, select the your client
 ![](./Medias/CPPM_Generate_Access_Token.PNG)  
@@ -70,12 +105,19 @@ Click on `Generate Access Token`
 And kept the token (for example : 70680f1d19f86110800d5d5cb4414fbde7be12ae)
 
 
-After connect to a Aruba ClearPass with the command `Connect-ArubaCP` :
+After connect to an Aruba ClearPass with the command `Connect-ArubaCP` :
 
 ```powershell
-# Connect to the Aruba Clearpass
+# Connect to the Aruba Clearpass using Token
     Connect-ArubaCP 192.0.2.1 -token 70680f1d19f86110800d5d5cb4414fbde7be12ae
 
+    Name                           Value
+    ----                           -----
+    token                          70680f1d19f86110800d5d5cb4414fbde7be12ae
+    invokeParams                   {DisableKeepAlive, SkipCertificateCheck}
+    server                         192.0.2.1
+    port                           443
+    version                        6.8.4
 ```
 
 ### Invoke API
@@ -150,6 +192,41 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     $nad = Get-ArubaCPNetworkDevice -name SW1
     $nad | Remove-ArubaCPNetworkDevice -noconfirm
 ```
+
+### MultiConnection
+
+From release 0.4.0, it is possible to connect on same times to multi ClearPass
+You need to use -connection parameter to cmdlet
+
+For example to get Vlan Ports of 2 switchs
+
+```powershell
+# Connect to first ClearPass
+    $cppm1 = Connect-ArubaCP 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+#DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
+
+# Connect to second ClearPass
+    $cppm2 = Connect-ArubaCP 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+
+# Get Static Host List for first ClearPass
+   Get-ArubaCPStaticHostList -connection $cppm1 | Format-Table
+
+  id name                description host_format host_type  value                 _links
+  -- ----                ----------- ----------- ---------  -----                 ------
+3001 SHL-list-IPAddress              list        IPAddress                        @{self=}
+....
+# Get Static Host List for first ClearPass
+   Get-ArubaCPStaticHostList -connection $cppm2 | Format-Table
+
+  id name                description host_format host_type  value                 _links
+  -- ----                ----------- ----------- ---------  -----                 ------
+3001 SHL-list-MACAddress             list        MACAddress                       @{self=}
+...
+
+#Each cmdlet can use -connection parameter
+```
+
 ### Filtering
 For `Invoke-ArubaCPRestMethod`, it is possible to use -filter parameter
 You need to use ClearPass API syntax :
@@ -211,15 +288,43 @@ Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 
 # List of available command
 ```powershell
+Add-ArubaCPApiClient
+Add-ArubaCPApplicationLicense
+Add-ArubaCPEndpoint
 Add-ArubaCPNetworkDevice
+Add-ArubaCPStaticHostList
+Add-ArubaCPStaticHostListMember
+Confirm-ArubaCPApiClient
+Confirm-ArubaCPApplicationLicense
+Confirm-ArubaCPEndpoint
 Confirm-ArubaCPNetworkDevice
+Confirm-ArubaCPService
+Confirm-ArubaCPStaticHostList
 Connect-ArubaCP
+Disable-ArubaCPService
 Disconnect-ArubaCP
+Enable-ArubaCPService
+Format-ArubaCPMacAddress
+Get-ArubaCPApiClient
+Get-ArubaCPApplicationLicense
+Get-ArubaCPCPPMVersion
+Get-ArubaCPEndpoint
 Get-ArubaCPNetworkDevice
+Get-ArubaCPServerConfiguration
+Get-ArubaCPServerVersion
+Get-ArubaCPService
+Get-ArubaCPStaticHostList
 Invoke-ArubaCPRestMethod
+Remove-ArubaCPApiClient
+Remove-ArubaCPApplicationLicense
+Remove-ArubaCPEndpoint
 Remove-ArubaCPNetworkDevice
+Remove-ArubaCPStaticHostList
+Remove-ArubaCPStaticHostListMember
 Set-ArubaCPCipherSSL
+Set-ArubaCPEndpoint
 Set-ArubaCPNetworkDevice
+Set-ArubaCPStaticHostList
 Set-ArubaCPuntrustedSSL
 Show-ArubaCPException
 ```
