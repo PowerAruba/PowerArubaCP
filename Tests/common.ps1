@@ -28,5 +28,6 @@ if ($null -eq $port) {
 Connect-ArubaCP @invokeParams -SkipCertificateCheck
 
 $script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"
+$script:VersionBefore686 = $DefaultArubaCPConnection.Version -lt [version]"6.8.6"
 
 Disconnect-ArubaCP -confirm:$false

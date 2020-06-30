@@ -58,12 +58,12 @@ Describe  "Get Service" {
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
     }
 
-    #Disable because freeze...
-    # It "Search Service by attribute (type equal RADIUS)" {
-    #     $s = Get-ArubaCPService -filter_attribute type -filter_type equal -filter_value RADIUS
-    #     @($s).count | Should -Be 1
-    #     $s.type | Should -Be "RADIUS"
-    # }
+    #Warning freeze because 6.8.6...
+    It "Search Service by attribute (type equal RADIUS)" -Skip:$VersionBefore686 {
+        $s = Get-ArubaCPService -filter_attribute type -filter_type equal -filter_value RADIUS
+        @($s).count | Should -Be 1
+        $s.type | Should -be "RADIUS"
+    }
 
     It "Get Service throw a error when use with CPPM <= 6.8.0" -Skip: ($VersionBefore680 -eq 0) {
         { Get-ArubaCPService } | Should -Throw "Need ClearPass >= 6.8.0 for use this cmdlet"
