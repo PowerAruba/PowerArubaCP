@@ -19,17 +19,17 @@ function Get-ArubaCPClusterCertificates {
 
         Return a list of cluster certificates on ClearPass
 
-                .EXAMPLE
+        .EXAMPLE
         Get-ArubaCPClusterCertificates -service_id 1
 
         Return the cluster certificate for service id 1 (RADIUS)
 
-                .EXAMPLE
+        .EXAMPLE
         Get-ArubaCPClusterCertificates -service_name "HTTPS"
 
         Return the cluster certificate for service name HTTPS
 
-                .EXAMPLE
+        .EXAMPLE
         Get-ArubaCPClusterCertificates -certificate_type "RadSec Server Certificate"
 
         Return the cluster certificate which is a RadSec Server Certificate type
@@ -40,11 +40,11 @@ function Get-ArubaCPClusterCertificates {
     Param(
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
-        [ValidateSet(1,2,21)]
+        [ValidateSet (1,2,21)]
         [int]$service_id,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "name")]
-        [ValidateSet("RADIUS","HTTPS","RadSec")]
+        [ValidateSet ("RADIUS","HTTPS","RadSec")]
         [string]$service_name,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "type")]
@@ -152,7 +152,7 @@ function Get-ArubaCPServerCertificate {
         $server = Get-ArubaCPServerConfiguration
         $server_uuid = $server.server_uuid
 
-        $uri = "api/server-cert/name/       ${server_uuid}/${service_name}"
+        $uri = "api/server-cert/name/${server_uuid}/${service_name}"
 
         $cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
@@ -177,7 +177,7 @@ function Add-ArubaCPServerCertificate {
         .EXAMPLE
         Add-ArubaCPServerCertificate -service_name HTTPS -cert_file <your_certificate>
 
-        Add a certificate on Clearpass for HTTPS Service
+        Add a pfx certificate on Clearpass for HTTPS Service
     #>
 
     Param(
@@ -213,209 +213,6 @@ function Add-ArubaCPServerCertificate {
 
         $cert = Invoke-ArubaCPRestMethod -method "PUT" -body $certificat -uri $uri -connection $connection
         $cert
-    }
-
-    End {
-    }
-}
-
-function Set-ArubaCPNetworkDevice {
-
-    <#
-        .SYNOPSIS
-        Configure a Network Device (NAD) on ClearPass
-
-        .DESCRIPTION
-        Configure a Network Device (NAS) on ClearPass
-
-        .EXAMPLE
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
-
-        Rename Network Device to NAD-PowerArubaCP2
-
-        .EXAMPLE
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
-
-        Change IP Address and radius_secret of NAD-PowerArubaCP
-
-        .EXAMPLE
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
-
-        Set Vendor Name to Cisco and (re)configure TACACS Secret of NAD-PowerArubaCP
-
-        .EXAMPLE
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
-
-        Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
-
-    #>
-
-    Param(
-        [Parameter (Mandatory = $true, ParameterSetName = "id")]
-        [int]$id,
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
-        [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
-        [psobject]$nad,
-        [Parameter (Mandatory = $false)]
-        [string]$description,
-        [Parameter (Mandatory = $false)]
-        [string]$name,
-        [Parameter (Mandatory = $false)]
-        [ipaddress]$ip_address,
-        [Parameter (Mandatory = $false)]
-        [string]$radius_secret,
-        [Parameter (Mandatory = $false)]
-        [string]$tacacs_secret,
-        [Parameter (Mandatory = $false)]
-        [string]$vendor_name,
-        [Parameter (Mandatory = $false)]
-        [switch]$coa_capable,
-        [Parameter (Mandatory = $false)]
-        [int]$coa_port,
-        [Parameter (Mandatory = $false)]
-        [switch]$radsec_enabled,
-        [Parameter (Mandatory = $False)]
-        [ValidateNotNullOrEmpty()]
-        [PSObject]$connection = $DefaultArubaCPConnection
-    )
-
-    Begin {
-    }
-
-    Process {
-
-        #get nad id from nad ps object
-        if ($nad) {
-            $id = $nad.id
-        }
-
-        $uri = "api/network-device/${id}"
-        $_nad = new-Object -TypeName PSObject
-
-        if ( $PsBoundParameters.ContainsKey('id') ) {
-            $_nad | add-member -name "id" -membertype NoteProperty -Value $id
-        }
-
-        if ( $PsBoundParameters.ContainsKey('description') ) {
-            $_nad | add-member -name "description" -membertype NoteProperty -Value $description
-        }
-
-        if ( $PsBoundParameters.ContainsKey('name') ) {
-            $_nad | add-member -name "name" -membertype NoteProperty -Value $name
-        }
-
-        if ( $PsBoundParameters.ContainsKey('ip_address') ) {
-            $_nad | add-member -name "ip_address" -membertype NoteProperty -Value $ip_address.ToString()
-        }
-
-        if ( $PsBoundParameters.ContainsKey('radius_secret') ) {
-            $_nad | add-member -name "radius_secret" -membertype NoteProperty -Value $radius_secret
-        }
-
-        if ( $PsBoundParameters.ContainsKey('tacacs_secret') ) {
-            $_nad | add-member -name "tacacs_secret" -membertype NoteProperty -Value $tacacs_secret
-        }
-
-        if ( $PsBoundParameters.ContainsKey('vendor_name') ) {
-            $_nad | add-member -name "vendor_name" -membertype NoteProperty -Value $vendor_name
-        }
-
-        if ( $PsBoundParameters.ContainsKey('coa_capable') ) {
-            if ( $coa_capable ) {
-                $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $True
-            }
-            else {
-                $_nad | add-member -name "coa_capable" -membertype NoteProperty -Value $false
-            }
-        }
-
-        if ( $PsBoundParameters.ContainsKey('coa_port') ) {
-            $_nad | add-member -name "coa_port" -membertype NoteProperty -Value $coa_port
-        }
-
-        if ( $PsBoundParameters.ContainsKey('radsec_enabled') ) {
-            if ( $radsec_enabled ) {
-                $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $True
-            }
-            else {
-                $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
-            }
-        }
-
-        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
-        $nad
-
-    }
-
-    End {
-    }
-}
-
-function Remove-ArubaCPNetworkDevice {
-
-    <#
-        .SYNOPSIS
-        Remove a Network Device (NAD) on ClearPass
-
-        .DESCRIPTION
-        Remove a Network Device (NAS) on ClearPass
-
-        .EXAMPLE
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Remove-ArubaCPNetworkDevice
-
-        Remove Network Device named NAD-PowerArubaCP
-
-        .EXAMPLE
-        Remove-ArubaCPNetworkDevice -id 3001 -noconfirm
-
-        Remove Network Device id 3001 with no confirmation
-    #>
-
-    Param(
-        [Parameter (Mandatory = $true, ParameterSetName = "id")]
-        [int]$id,
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
-        [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
-        [psobject]$nad,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
-        [Parameter (Mandatory = $False)]
-        [ValidateNotNullOrEmpty()]
-        [PSObject]$connection = $DefaultArubaCPConnection
-    )
-
-    Begin {
-    }
-
-    Process {
-
-        #get nad id from nad ps object
-        if ($nad) {
-            $id = $nad.id
-        }
-
-        $uri = "api/network-device/${id}"
-
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Network Device on ClearPass"
-            $question = "Proceed with removal of Network Device ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Network Device"
-            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Network Device" -completed
-        }
     }
 
     End {
