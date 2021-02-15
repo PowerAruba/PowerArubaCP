@@ -49,7 +49,7 @@ Describe  "Get Static Host List" {
         @($shl).count | Should be 2
     }
 
-    It "Get Static Host List License throw a error when use with CPPM <= 6.8.0" -Skip: ($VersionBefore680 -eq 0) {
+    It "Get Static Host List throw a error when use with CPPM <= 6.8.0" -Skip: ($VersionBefore680 -eq 0) {
         { Get-ArubaCPStaticHostList } | Should throw "Need ClearPass >= 6.8.0 for use this cmdlet"
     }
 
