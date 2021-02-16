@@ -12,7 +12,7 @@ Describe  "Connect to a ClearPass (using Token)" {
     }
     It "Connect to ClearPass (using Token) and check global variable" {
         Connect-ArubaCP $ipaddress -Token $token -port $port -SkipCertificateCheck
-        $DefaultArubaCPConnection | Should -Not BeNullOrEmpty
+        $DefaultArubaCPConnection | Should -Not -BeNullOrEmpty
         $DefaultArubaCPConnection.server | Should -Be $ipaddress
         $DefaultArubaCPConnection.token | Should -Be $token
         $DefaultArubaCPConnection.port | Should -Be $port
@@ -95,7 +95,7 @@ Describe "Connect using client_credentials" {
     It "Connect to a ClearPass (using client_credentials and store on cppm variable)" {
         $script:cppm = Connect-ArubaCP $ipaddress -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $port -DefaultConnection:$false
         $cppm.server | Should -Be $ipaddress
-        $cppm.token | Should -Not be BeNullOrEmpty
+        $cppm.token | Should -Not -BeNullOrEmpty
         $cppm.port | Should -Be $port
     }
 
