@@ -84,6 +84,7 @@ function Get-ArubaCPApplicationLicense {
 
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter")] #False positive see https://github.com/PowerShell/PSScriptAnalyzer/issues/1472
     [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
@@ -105,7 +106,7 @@ function Get-ArubaCPApplicationLicense {
 
     Process {
 
-        if($connection.version -lt [version]"6.8.0"){
+        if ($connection.version -lt [version]"6.8.0") {
             throw "Need ClearPass >= 6.8.0 for use this cmdlet"
         }
 
