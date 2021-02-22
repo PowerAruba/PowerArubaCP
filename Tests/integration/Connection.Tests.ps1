@@ -11,11 +11,11 @@ Describe  "Connect to a ClearPass (using Token)" {
         Disconnect-ArubaCP -noconfirm
     }
     It "Connect to ClearPass (using Token) and check global variable" {
-        Connect-ArubaCP $ipaddress -Token $token -port $port -SkipCertificateCheck
+        Connect-ArubaCP @invokeParams
         $DefaultArubaCPConnection | Should -Not -BeNullOrEmpty
-        $DefaultArubaCPConnection.server | Should -Be $ipaddress
-        $DefaultArubaCPConnection.token | Should -Be $token
-        $DefaultArubaCPConnection.port | Should -Be $port
+        $DefaultArubaCPConnection.server | Should -Be $invokeParams.server
+        $DefaultArubaCPConnection.token | Should -Be $invokeParams.token
+        $DefaultArubaCPConnection.port | Should -Be $invokeParams.port
     }
     It "Disconnect to ClearPass and check global variable" {
         Disconnect-ArubaCP -noconfirm
@@ -26,7 +26,7 @@ Describe  "Connect to a ClearPass (using Token)" {
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will be fail, if there is valid certificate...
     It "Throw when try to use Connect-ArubaCP with don't use -SkipCertificateCheck" -Skip:("Desktop" -eq $PSEdition) {
-        { Connect-ArubaCP $ipaddress -Token $token -port $port } | Should -Throw "Unable to connect (certificate)"
+        { Connect-ArubaCP $invokeParams.server -Token $invokeParams.token -port $invokeParams.port } | Should -Throw "Unable to connect (certificate)"
         Disconnect-ArubaCP -noconfirm
     }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
@@ -39,12 +39,13 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         #Disconnect "default connection"
         Disconnect-ArubaCP -noconfirm
     }
+
     It "Connect to a ClearPass (using token and store on cppm variable)" {
-        $script:cppm = Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port -DefaultConnection:$false
+        $script:cppm = Connect-ArubaCP @invokeParams -DefaultConnection:$false
         $DefaultArubaCPConnection | Should -BeNullOrEmpty
-        $cppm.server | Should -Be $ipaddress
-        $cppm.token | Should -Be $token
-        $cppm.port | Should -Be $port
+        $cppm.server | Should -Be $invokeParams.server
+        $cppm.token | Should -Be $invokeParams.token
+        $cppm.port | Should -Be $invokeParams.port
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
@@ -87,16 +88,16 @@ Describe  "Connect to a ClearPass (using multi connection)" {
 Describe "Connect using client_credentials" {
     BeforeAll {
         #connect...
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
+        Connect-ArubaCP @invokeParams
         #Create a API Client with client credentials
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP -client_secret pester_MySecret  -grant_types "client_credentials" -profile_id 1
     }
 
     It "Connect to a ClearPass (using client_credentials and store on cppm variable)" {
-        $script:cppm = Connect-ArubaCP $ipaddress -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $port -DefaultConnection:$false
-        $cppm.server | Should -Be $ipaddress
+        $script:cppm = Connect-ArubaCP $invokeParams.server -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $invokeParams.port -DefaultConnection:$false
+        $cppm.server | Should -Be $invokeParams.server
         $cppm.token | Should -Not -BeNullOrEmpty
-        $cppm.port | Should -Be $port
+        $cppm.port | Should -Be $invokeParams.port
     }
 
     It "Use Multi connection for call Get (Api Client)" {
@@ -114,7 +115,7 @@ Describe "Connect using client_credentials" {
 Describe  "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
+        Connect-ArubaCP @invokeParams
         #Add 26 Network Device (NAS)
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
         Add-ArubaCPNetworkDevice -name pester_SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba
