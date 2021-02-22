@@ -20,12 +20,12 @@ Describe  "Get API Client" {
     It "Get NetworkDevice Does not throw an error" {
         {
             Get-ArubaCPApiClient
-        } | Should Not -Throw
+        } | Should -Not -Throw
     }
 
     It "Get ALL Api Client" {
         $ac = Get-ArubaCPApiClient
-        $ac.count | Should -Not be $NULL
+        $ac.count | Should -Not -Be $NULL
     }
 
     It "Get Api Client (pester_PowerArubaCP1)" {
