@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Network Device" {
 
     BeforeAll {
@@ -188,4 +192,6 @@ Describe  "Remove Network Device" {
     }
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}

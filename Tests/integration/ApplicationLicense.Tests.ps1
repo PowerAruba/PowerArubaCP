@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Application License" {
 
     It "Get Application License Does not throw an error" -Skip:$VersionBefore680 {
@@ -46,5 +50,6 @@ Describe  "Add and Remove Application License" {
 
 }
 
-
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}

@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Service" {
 
     It "Get Service Does not throw an error" -Skip:$VersionBefore680 {
@@ -83,4 +87,6 @@ Describe  "Enable / Disable Service" {
 
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}

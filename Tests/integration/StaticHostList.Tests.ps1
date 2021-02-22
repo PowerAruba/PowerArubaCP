@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Static Host List" {
 
     BeforeAll {
@@ -310,4 +314,6 @@ Describe  "Remove Static Host List" {
     }
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}

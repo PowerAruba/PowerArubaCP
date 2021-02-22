@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get API Client" {
 
     BeforeAll {
@@ -117,4 +121,6 @@ Describe  "Remove Api Client" {
     }
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}

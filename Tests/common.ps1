@@ -12,13 +12,21 @@ else {
     $script:pester_longint = "long"
 }
 
-if ($port) {
-    $script:port = "443"
+$script:invokeParams = @{
+    server               = $ipaddress;
+    token                = $token;
+    port                 = $port;
+    SkipCertificateCheck = $true;
+}
+
+if ($null -eq $port) {
+    $invokeParams.port = 443
 }
 
 . ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
-
-Connect-ArubaCP -Server $ipaddress -port $port -Token $token -SkipCertificateCheck
+Connect-ArubaCP @invokeParams -SkipCertificateCheck
 
 $script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"
+
+Disconnect-ArubaCP -noconfirm

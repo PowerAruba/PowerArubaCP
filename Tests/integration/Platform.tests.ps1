@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Server Configuration" {
 
     It "Get ServerConfiguration Does not throw an error" {
@@ -66,5 +70,6 @@ Describe  "Get CPPM Version" {
     }
 }
 
-
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}
