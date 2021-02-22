@@ -172,7 +172,7 @@ function Disconnect-ArubaCP {
         if ($decision -eq 0) {
             Write-Progress -activity "Remove Aruba ClearPass connection"
             write-progress -activity "Remove Aruba ClearPass connection" -completed
-            if ( Test-Path variable:global:DefaultArubaCPConnection ) {
+            if ( ($connection -eq $DefaultArubaCPCOnnection) -and (Test-Path variable:global:DefaultArubaCPConnection) ) {
                 Remove-Variable -name DefaultArubaCPConnection -scope global
             }
         }
