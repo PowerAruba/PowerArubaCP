@@ -27,7 +27,7 @@ Describe  "Get Service" {
         $s.id | Should -Be "1"
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
         $s.type | Should -Be "TACACS"
-        $s.template | Should -Be "TACACS_ENFORCEMENT"
+        $s.template | Should -Be "TACACS+ Enforcement"
         $s.enabled | Should -Be "True"
         $s.orderNo | Should -Be "1"
     }
