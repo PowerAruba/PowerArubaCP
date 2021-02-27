@@ -58,8 +58,8 @@ Describe  "Get API Client" {
 
     AfterAll {
         #Remove 2 entries
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -noconfirm
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP2 | Remove-ArubaCPApiClient -noconfirm
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -confirm:$false
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP2 | Remove-ArubaCPApiClient -confirm:$false
     }
 }
 
@@ -87,7 +87,7 @@ Describe  "Add Api Client" {
     }
 
     AfterEach {
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -noconfirm
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -confirm:$false
     }
 }
 
@@ -99,7 +99,7 @@ Describe  "Remove Api Client" {
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
         $ac.client_id | Should -Be "pester_PowerArubaCP1"
         @($ac).count | Should -Be 1
-        Remove-ArubaCPApiClient -id $ac.client_id -noconfirm
+        Remove-ArubaCPApiClient -id $ac.client_id -confirm:$false
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
         $ac | Should -BeNullOrEmpty
         @($ac).count | Should -Be 0
@@ -110,14 +110,14 @@ Describe  "Remove Api Client" {
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
         $ac.client_id | Should -Be "pester_PowerArubaCP1"
         @($ac).count | Should -Be 1
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -noconfirm
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -confirm:$false
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
         $ac | Should -BeNullOrEmpty
         @($ac).count | Should -Be 0
     }
 
     AfterEach {
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -noconfirm
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -confirm:$false
     }
 }
 
