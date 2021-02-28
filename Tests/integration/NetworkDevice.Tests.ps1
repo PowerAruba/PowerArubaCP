@@ -65,8 +65,8 @@ Describe  "Get Network Device" {
 
     AfterAll {
         #Remove 2 entries
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
 
@@ -105,7 +105,7 @@ Describe  "Add Network Device" {
     #}
 
     AfterEach {
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
 
@@ -159,8 +159,8 @@ Describe  "Configure Network Device" {
     #}
 
     AfterAll {
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
 Describe  "Remove Network Device" {
@@ -170,7 +170,7 @@ Describe  "Remove Network Device" {
         $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad.name | Should -Be "pester_SW1"
         @($nad).count | Should -Be 1
-        Remove-ArubaCPNetworkDevice -id $nad.id -noconfirm
+        Remove-ArubaCPNetworkDevice -id $nad.id -confirm:$false
         $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad | Should -BeNullOrEmpty
         @($nad).count | Should -Be 0
@@ -181,14 +181,14 @@ Describe  "Remove Network Device" {
         $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad.name | Should -Be "pester_SW1"
         @($nad).count | Should -Be 1
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad | Should -BeNullOrEmpty
         @($nad).count | Should -Be 0
     }
 
     AfterEach {
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
 
