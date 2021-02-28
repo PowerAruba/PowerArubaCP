@@ -11,26 +11,26 @@ Describe  "Connect to a ClearPass (using Token)" {
         Disconnect-ArubaCP -noconfirm
     }
     It "Connect to ClearPass (using Token) and check global variable" {
-        Connect-ArubaCP $ipaddress -Token $token -port $port -SkipCertificateCheck
-        $DefaultArubaCPConnection | Should Not BeNullOrEmpty
-        $DefaultArubaCPConnection.server | Should be $ipaddress
-        $DefaultArubaCPConnection.token | Should be $token
-        $DefaultArubaCPConnection.port | Should be $port
+        Connect-ArubaCP @invokeParams
+        $DefaultArubaCPConnection | Should -Not -BeNullOrEmpty
+        $DefaultArubaCPConnection.server | Should -Be $invokeParams.server
+        $DefaultArubaCPConnection.token | Should -Be $invokeParams.token
+        $DefaultArubaCPConnection.port | Should -Be $invokeParams.port
     }
     It "Disconnect to ClearPass and check global variable" {
         Disconnect-ArubaCP -noconfirm
-        $DefaultArubaCPConnection | Should be $null
+        $DefaultArubaCPConnection | Should -Be $null
     }
     #TODO: Connect using wrong login/password
 
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
     #This test will be fail, if there is valid certificate...
     It "Throw when try to use Connect-ArubaCP with don't use -SkipCertificateCheck" -Skip:("Desktop" -eq $PSEdition) {
-        { Connect-ArubaCP $ipaddress -Token $token -port $port } | Should throw "Unable to connect (certificate)"
+        { Connect-ArubaCP $invokeParams.server -Token $invokeParams.token -port $invokeParams.port } | Should -Throw "Unable to connect (certificate)"
         Disconnect-ArubaCP -noconfirm
     }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
-        { Invoke-ArubaCPRestMethod -uri "api/cppm-version" } | Should throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
+        { Invoke-ArubaCPRestMethod -uri "api/cppm-version" } | Should -Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
     }
 }
 
@@ -39,47 +39,48 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         #Disconnect "default connection"
         Disconnect-ArubaCP -noconfirm
     }
+
     It "Connect to a ClearPass (using token and store on cppm variable)" {
-        $script:cppm = Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port -DefaultConnection:$false
+        $script:cppm = Connect-ArubaCP @invokeParams -DefaultConnection:$false
         $DefaultArubaCPConnection | Should -BeNullOrEmpty
-        $cppm.server | Should be $ipaddress
-        $cppm.token | Should be $token
-        $cppm.port | Should be $port
+        $cppm.server | Should -Be $invokeParams.server
+        $cppm.token | Should -Be $invokeParams.token
+        $cppm.port | Should -Be $invokeParams.port
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
         It "Use Multi connection for call Get Applicetion License " -Skip:$VersionBefore680 {
-            { Get-ArubaCPApplicationLicense -connection $cppm } | Should Not throw
+            { Get-ArubaCPApplicationLicense -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get CPPM Version" {
-            { Get-ArubaCPCPPMVersion -connection $cppm } | Should Not throw
+            { Get-ArubaCPCPPMVersion -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Network Device" {
-            { Get-ArubaCPNetworkDevice -connection $cppm } | Should Not throw
+            { Get-ArubaCPNetworkDevice -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Server Configuration" {
-            { Get-ArubaCPServerConfiguration -connection $cppm } | Should Not throw
+            { Get-ArubaCPServerConfiguration -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Server Version" {
-            { Get-ArubaCPServerVersion -connection $cppm } | Should Not throw
+            { Get-ArubaCPServerVersion -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Static Host List" -Skip:$VersionBefore680 {
-            { Get-ArubaCPStaticHostList -connection $cppm } | Should Not throw
+            { Get-ArubaCPStaticHostList -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Endpoint" {
-            { Get-ArubaCPEndpoint -connection $cppm } | Should Not throw
+            { Get-ArubaCPEndpoint -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Api Client" {
-            { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+            { Get-ArubaCPApiClient -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Service" -Skip:$VersionBefore680 {
-            { Get-ArubaCPService -connection $cppm } | Should Not throw
+            { Get-ArubaCPService -connection $cppm } | Should -Not -Throw
         }
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
         Disconnect-ArubaCP -connection $cppm -noconfirm
-        $DefaultArubaCPConnection | Should be $null
+        $DefaultArubaCPConnection | Should -Be $null
     }
 
 }
@@ -87,20 +88,20 @@ Describe  "Connect to a ClearPass (using multi connection)" {
 Describe "Connect using client_credentials" {
     BeforeAll {
         #connect...
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
+        Connect-ArubaCP @invokeParams
         #Create a API Client with client credentials
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP -client_secret pester_MySecret  -grant_types "client_credentials" -profile_id 1
     }
 
     It "Connect to a ClearPass (using client_credentials and store on cppm variable)" {
-        $script:cppm = Connect-ArubaCP $ipaddress -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $port -DefaultConnection:$false
-        $cppm.server | Should be $ipaddress
-        $cppm.token | Should not be BeNullOrEmpty
-        $cppm.port | Should be $port
+        $script:cppm = Connect-ArubaCP $invokeParams.server -client_id pester_PowerArubaCP -client_secret pester_MySecret -SkipCertificateCheck -port $invokeParams.port -DefaultConnection:$false
+        $cppm.server | Should -Be $invokeParams.server
+        $cppm.token | Should -Not -BeNullOrEmpty
+        $cppm.port | Should -Be $invokeParams.port
     }
 
     It "Use Multi connection for call Get (Api Client)" {
-        { Get-ArubaCPApiClient -connection $cppm } | Should Not throw
+        { Get-ArubaCPApiClient -connection $cppm } | Should -Not -Throw
     }
 
     AfterAll {
@@ -114,7 +115,7 @@ Describe "Connect using client_credentials" {
 Describe  "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...
-        Connect-ArubaCP $ipaddress -Token $token -SkipCertificateCheck -port $port
+        Connect-ArubaCP @invokeParams
         #Add 26 Network Device (NAS)
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba
         Add-ArubaCPNetworkDevice -name pester_SW2 -ip_address 192.0.2.2 -radius_secret MySecurePassword -vendor Aruba
@@ -154,7 +155,7 @@ Describe  "Invoke ArubaCP RestMethod tests" {
     It "Use Invoke-ArubaCPRestMethod with limit parameter" {
         $response = Invoke-ArubaCPRestMethod -method "GET" -uri "api/network-device" -limit 1000
         $nad = $response._embedded.items | where-object { $_.name -match "pester_" }
-        $nad.count | should be 26
+        $nad.count | Should -Be 26
     }
 
     It "Use Invoke-ArubaCPRestMethod with filter parameter (equal)" {

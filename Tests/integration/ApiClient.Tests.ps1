@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get API Client" {
 
     BeforeAll {
@@ -16,40 +20,40 @@ Describe  "Get API Client" {
     It "Get NetworkDevice Does not throw an error" {
         {
             Get-ArubaCPApiClient
-        } | Should Not Throw
+        } | Should -Not -Throw
     }
 
     It "Get ALL Api Client" {
         $ac = Get-ArubaCPApiClient
-        $ac.count | Should not be $NULL
+        $ac.count | Should -Not -Be $NULL
     }
 
     It "Get Api Client (pester_PowerArubaCP1)" {
         $ac = Get-ArubaCPApiClient | Where-Object { $_.client_id -eq "pester_PowerArubaCP1" }
-        $ac.id | Should not be BeNullOrEmpty
-        $ac.client_id | Should be "pester_PowerArubaCP1"
-        $ac.client_secret | should not be BeNullOrEmpty
-        $ac.client_description | Should be "Add by PowerArubaCP"
-        $ac.grant_types | Should be "client_credentials"
-        $ac.profile_id | Should be "1"
+        $ac.id | Should -Not -BeNullOrEmpty
+        $ac.client_id | Should -Be "pester_PowerArubaCP1"
+        $ac.client_secret | Should -Not -BeNullOrEmpty
+        $ac.client_description | Should -Be "Add by PowerArubaCP"
+        $ac.grant_types | Should -Be "client_credentials"
+        $ac.profile_id | Should -Be "1"
     }
 
     It "Get Api Client (pester_PowerArubaCP2) and confirm (via Confirm-ArubaCPApiClient)" {
         $ac = Get-ArubaCPApiClient | Where-Object { $_.client_id -eq "pester_PowerArubaCP2" }
-        Confirm-ArubaCPApiClient $ac | Should be $true
+        Confirm-ArubaCPApiClient $ac | Should -Be $true
     }
 
     It "Search Api Client by client_id (pester_PowerArubaCP1)" {
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        @($ac).count | Should be 1
-        $ac.id | Should not be BeNullOrEmpty
-        $ac.client_id | Should be "pester_PowerArubaCP1"
-        $ac.client_description | Should be "Add by PowerArubaCP"
+        @($ac).count | Should -Be 1
+        $ac.id | Should -Not -BeNullOrEmpty
+        $ac.client_id | Should -Be "pester_PowerArubaCP1"
+        $ac.client_description | Should -Be "Add by PowerArubaCP"
     }
 
     It "Search Api Client by client_id (contains *pester*)" {
         $ac = Get-ArubaCPApiClient -client_id pester -filter_type contains
-        @($ac).count | Should be 2
+        @($ac).count | Should -Be 2
     }
 
     AfterAll {
@@ -64,22 +68,22 @@ Describe  "Add Api Client" {
     It "Add Api Client with grant types client_credentials and description" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -client_description "Add by PowerArubaCP" -grant_types "client_credentials" -profile_id 1
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac.id | Should not be BeNullOrEmpty
-        $ac.client_id | Should not be BeNullOrEmpty
-        $ac.client_secret | should not be BeNullOrEmpty
-        $ac.client_description | Should be "Add by PowerArubaCP"
-        $ac.grant_types | Should be "client_credentials"
-        $ac.profile_id | Should be "1"
+        $ac.id | Should -Not -BeNullOrEmpty
+        $ac.client_id | Should -Not -BeNullOrEmpty
+        $ac.client_secret | Should -Not -BeNullOrEmpty
+        $ac.client_description | Should -Be "Add by PowerArubaCP"
+        $ac.grant_types | Should -Be "client_credentials"
+        $ac.profile_id | Should -Be "1"
     }
 
     It "Add Api Client with grant type password (refresh_token) and status disabled" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -grant_types password -profile_id 1 -enabled:$false
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac.id | Should not be BeNullOrEmpty
-        $ac.client_id | Should be "pester_PowerArubaCP1"
-        $ac.grant_types | Should be "password refresh_token"
-        $ac.profile_id | Should be "1"
-        $ac.enabled | should be "false"
+        $ac.id | Should -Not -BeNullOrEmpty
+        $ac.client_id | Should -Be "pester_PowerArubaCP1"
+        $ac.grant_types | Should -Be "password refresh_token"
+        $ac.profile_id | Should -Be "1"
+        $ac.enabled | Should -Be "false"
     }
 
     AfterEach {
@@ -93,23 +97,23 @@ Describe  "Remove Api Client" {
     It "Remove Api Client by id" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -grant_types "client_credentials" -profile_id 1
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac.client_id | Should be "pester_PowerArubaCP1"
-        @($ac).count | should be 1
+        $ac.client_id | Should -Be "pester_PowerArubaCP1"
+        @($ac).count | Should -Be 1
         Remove-ArubaCPApiClient -id $ac.client_id -noconfirm
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac | Should BeNullOrEmpty
-        @($ac).count | should be 0
+        $ac | Should -BeNullOrEmpty
+        @($ac).count | Should -Be 0
     }
 
     It "Remove Api Client by client_id (and pipeline)" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -grant_types "client_credentials" -profile_id 1
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac.client_id | Should be "pester_PowerArubaCP1"
-        @($ac).count | should be 1
+        $ac.client_id | Should -Be "pester_PowerArubaCP1"
+        @($ac).count | Should -Be 1
         Get-ArubaCPApiClient -client_id pester_PowerArubaCP1 | Remove-ArubaCPApiClient -noconfirm
         $ac = Get-ArubaCPApiClient -client_id pester_PowerArubaCP1
-        $ac | Should BeNullOrEmpty
-        @($ac).count | should be 0
+        $ac | Should -BeNullOrEmpty
+        @($ac).count | Should -Be 0
     }
 
     AfterEach {
@@ -117,4 +121,6 @@ Describe  "Remove Api Client" {
     }
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -noconfirm
+}
