@@ -59,7 +59,7 @@ function Get-ArubaCPServerConfiguration {
 
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter")] #False positive see https://github.com/PowerShell/PSScriptAnalyzer/issues/1472
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", '')] #False positive see https://github.com/PowerShell/PSScriptAnalyzer/issues/1472
     [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
