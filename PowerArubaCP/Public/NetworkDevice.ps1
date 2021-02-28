@@ -362,7 +362,7 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
-        if ($PSCmdlet.ShouldProcess("$id $old_name", 'Remove Network device')) {
+        if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network device')) {
             $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
             $nad
         }
