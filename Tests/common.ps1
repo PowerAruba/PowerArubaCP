@@ -29,4 +29,4 @@ Connect-ArubaCP @invokeParams -SkipCertificateCheck
 
 $script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"
 
-Disconnect-ArubaCP -noconfirm
+Disconnect-ArubaCP -confirm:$false

@@ -122,5 +122,5 @@ Describe  "Remove Api Client" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

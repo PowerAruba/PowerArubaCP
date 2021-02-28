@@ -51,5 +51,5 @@ Describe  "Add and Remove Application License" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

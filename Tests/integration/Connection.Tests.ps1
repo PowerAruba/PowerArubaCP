@@ -8,7 +8,7 @@
 Describe  "Connect to a ClearPass (using Token)" {
     BeforeAll {
         #Disconnect "default connection"
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
     }
     It "Connect to ClearPass (using Token) and check global variable" {
         Connect-ArubaCP @invokeParams
@@ -18,16 +18,16 @@ Describe  "Connect to a ClearPass (using Token)" {
         $DefaultArubaCPConnection.port | Should -Be $invokeParams.port
     }
     It "Disconnect to ClearPass and check global variable" {
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
         $DefaultArubaCPConnection | Should -Be $null
     }
     #TODO: Connect using wrong login/password
 
     #This test only work with PowerShell 6 / Core (-SkipCertificateCheck don't change global variable but only Invoke-WebRequest/RestMethod)
-    #This test will be fail, if there is valid certificate...
+    #This test will be fail, if there is valid certificate...x
     It "Throw when try to use Connect-ArubaCP with don't use -SkipCertificateCheck" -Skip:("Desktop" -eq $PSEdition) {
         { Connect-ArubaCP $invokeParams.server -Token $invokeParams.token -port $invokeParams.port } | Should -Throw "Unable to connect (certificate)"
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
     }
     It "Throw when try to use Invoke-ArubaCPRestMethod and not connected" {
         { Invoke-ArubaCPRestMethod -uri "api/cppm-version" } | Should -Throw "Not Connected. Connect to the ClearPass with Connect-ArubaCP"
@@ -37,7 +37,7 @@ Describe  "Connect to a ClearPass (using Token)" {
 Describe  "Connect to a ClearPass (using multi connection)" {
     BeforeAll {
         #Disconnect "default connection"
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
     }
 
     It "Connect to a ClearPass (using token and store on cppm variable)" {
@@ -79,7 +79,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
-        Disconnect-ArubaCP -connection $cppm -noconfirm
+        Disconnect-ArubaCP -connection $cppm -confirm:$false
         $DefaultArubaCPConnection | Should -Be $null
     }
 
@@ -108,7 +108,7 @@ Describe "Connect using client_credentials" {
         #Remove API Client
         Get-ArubaCPApiClient -client_id pester_PowerArubaCP | Remove-ArubaCPApiClient -noconfirm
         #And disconnect
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
     }
 }
 
@@ -201,6 +201,6 @@ Describe  "Invoke ArubaCP RestMethod tests" {
         Get-ArubaCPNetworkDevice -name pester_SW25 | Remove-ArubaCPNetworkDevice -noconfirm
         Get-ArubaCPNetworkDevice -name pester_SW26 | Remove-ArubaCPNetworkDevice -noconfirm
         #And disconnect
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
     }
 }

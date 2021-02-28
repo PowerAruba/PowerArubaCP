@@ -172,5 +172,5 @@ Describe  "Remove Endpoint" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

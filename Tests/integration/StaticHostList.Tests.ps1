@@ -315,5 +315,5 @@ Describe  "Remove Static Host List" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

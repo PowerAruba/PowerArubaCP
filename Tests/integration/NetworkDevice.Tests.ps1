@@ -193,5 +193,5 @@ Describe  "Remove Network Device" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }
