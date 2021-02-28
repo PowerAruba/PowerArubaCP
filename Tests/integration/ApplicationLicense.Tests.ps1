@@ -43,7 +43,7 @@ Describe  "Add and Remove Application License" {
     }
 
     It "Remove Application License ($pester_license_type)" -Skip:( -not ($pester_license -ne $null -and $VersionBefore680 -eq 0)) {
-        Get-ArubaCPApplicationLicense -product_name $pester_license_type | Remove-ArubaCPApplicationLicense -noconfirm
+        Get-ArubaCPApplicationLicense -product_name $pester_license_type | Remove-ArubaCPApplicationLicense -confirm:$false
         $al = Get-ArubaCPApplicationLicense -product_name $pester_license_type
         $al | Should -Be $null
     }
