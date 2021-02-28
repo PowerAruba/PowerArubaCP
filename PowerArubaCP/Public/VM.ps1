@@ -164,3 +164,88 @@ function Deploy-ArubaCPVm {
     End {
     }
 }
+
+function Set-ArubaCPVmFirstBoot {
+
+    <#
+        .SYNOPSIS
+        Configure the first boot of Clearpass VM
+
+        .DESCRIPTION
+        Configure the first boot (Appliance Type and encrypt disk) of ClearPass VM
+
+        .EXAMPLE
+        $cppmFirstBootParams = @{
+            name_vm                 = "PowerArubaCP-CPPM"
+            appliance_type          = "CLABV"
+        }
+
+        PS>Set-ArubaCPVmFirstBoot @cppmFirstBootParams
+
+        Configuration of first CPPM Boot (VM Name and Appliance Type CLABV )
+
+        .EXAMPLE
+        Set-ArubaCPVmFirstBoot -name_vm PowerArubaCP-CPPM -appliance_type C3000V -encrypt_disk:$false
+
+        Configuration of first CPPM Boot (VM Name, Appliance Type C3000V and encrypt disk disable )
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [ValidateSet("CLABV", 'C1000V', 'C2000V', 'C3000V')]
+        [string]$appliance_type,
+        [Parameter (Mandatory = $true)]
+        [string]$name_vm,
+        [Parameter (Mandatory = $false)]
+        [switch]$encrypt_disk
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #TODO Check the VM is available and if Set-VMKeyStrokes function is load too
+
+        switch ( $appliance_type ) {
+            "CLABV" {
+                $StringInput = "1"
+            }
+            "C1000V" {
+                $StringInput = "2"
+            }
+            "C2000V" {
+                $StringInput = "3"
+
+            }
+            "C3000V" {
+                $StringInput = "4"
+            }
+        }
+
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true
+
+        #Use secondary disk
+        Set-VMKeystrokes -VMName $name_vm -StringInput y
+
+        #Encrypt all local data
+        if ( $PsBoundParameters.ContainsKey('encrypt_disk') ) {
+            if ( $encrypt_disk ) {
+                $StringInput = "y"
+            }
+            else {
+                $StringInput = "n"
+            }
+        } else {
+            #By Default Encrypt Local data
+            $StringInput = "y"
+        }
+
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput
+
+        #Copy now data and reboot, need to wait 10/15 minutes...
+    }
+
+    End {
+    }
+}
