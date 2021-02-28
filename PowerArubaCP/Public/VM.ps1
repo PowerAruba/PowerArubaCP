@@ -149,7 +149,7 @@ function Deploy-ArubaCPVm {
         }
 
         #Set NetworkAdapter to enable (for both/All...)
-        Get-VM $name_vm | Get-NetworkAdapter | Set-NetworkAdapter -Connected $true -Confirm:$false | Out-Null
+        Get-VM $name_vm | Get-NetworkAdapter | Set-NetworkAdapter -StartConnected $true -Confirm:$false | Out-Null
 
         if ( $StartVM ) {
             Get-VM $name_vm | Start-VM | Out-Null
