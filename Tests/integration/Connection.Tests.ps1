@@ -106,7 +106,7 @@ Describe "Connect using client_credentials" {
 
     AfterAll {
         #Remove API Client
-        Get-ArubaCPApiClient -client_id pester_PowerArubaCP | Remove-ArubaCPApiClient -noconfirm
+        Get-ArubaCPApiClient -client_id pester_PowerArubaCP | Remove-ArubaCPApiClient -confirm:$false
         #And disconnect
         Disconnect-ArubaCP -confirm:$false
     }
@@ -174,32 +174,32 @@ Describe  "Invoke ArubaCP RestMethod tests" {
 
     AfterAll {
         #Remove NAD entries...
-        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW4 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW5 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW6 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW7 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW8 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW9 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW10 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW11 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW12 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW13 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW14 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW15 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW16 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW17 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW18 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW19 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW20 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW21 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW22 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW23 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW24 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW25 | Remove-ArubaCPNetworkDevice -noconfirm
-        Get-ArubaCPNetworkDevice -name pester_SW26 | Remove-ArubaCPNetworkDevice -noconfirm
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW4 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW5 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW6 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW7 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW8 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW9 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW10 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW11 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW12 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW13 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW14 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW15 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW16 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW17 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW18 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW19 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW20 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW21 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW22 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW23 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW24 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW25 | Remove-ArubaCPNetworkDevice -confirm:$false
+        Get-ArubaCPNetworkDevice -name pester_SW26 | Remove-ArubaCPNetworkDevice -confirm:$false
         #And disconnect
         Disconnect-ArubaCP -confirm:$false
     }
