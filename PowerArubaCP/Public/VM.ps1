@@ -249,3 +249,135 @@ function Set-ArubaCPVmFirstBoot {
     End {
     }
 }
+
+
+function Set-ArubaCPVmSetup {
+
+    <#
+        .SYNOPSIS
+        Setup a VM ClearPass
+
+        .DESCRIPTION
+        Setup a VM ClearPass (hostname, management/data ip address, dns, password...).
+
+        .EXAMPLE
+        $cppmsetupParams = @{
+            name_vm                 = "CPPM"
+            hostname                = "CPPM"
+            mgmt_ip                 = "10.200.11.225"
+            mgmt_netmask            = "24"
+            mgmt_gateway            = "10.200.11.254"
+            data_ip                 = "10.200.12.225"
+            data_netmask            = "24"
+            data_gateway            = "10.200.12.254"
+            dns_primary             = "10.200.11.1"
+            dns_secondary           = "10.200.11.200"
+            new_password            = "MyPassword"
+        }
+
+        PS>Set-ArubaCPVmSetup @cppmsetupParams
+
+        Configuration d'un initial d'un ClearPass (Nom, Adresse IP, mot de passe...)
+    #>
+
+    Param(
+        [string]$name_vm,
+        [Parameter (Mandatory = $true)]
+        [string]$hostname,
+        [Parameter (Mandatory = $true)]
+        [ipaddress]$mgmt_ip,
+        [Parameter (Mandatory = $true)]
+        [ValidateRange(0,32)]
+        [int]$mgmt_netmask,
+        [Parameter (Mandatory = $true)]
+        [ipaddress]$mgmt_gateway,
+        [Parameter (Mandatory = $false)]
+        [ipaddress]$data_ip,
+        [ValidateRange(0,32)]
+        [int]$data_netmask,
+        [Parameter (Mandatory = $true)]
+        [ipaddress]$data_gateway,
+        [Parameter (Mandatory = $true)]
+        [ipaddress]$dns_primary,
+        [Parameter (Mandatory = $false)]
+        [ipaddress]$dns_secondary,
+        [Parameter (Mandatory = $true)]
+        [string]$new_password
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #Connection
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Start-Sleep 2
+        Set-VMKeystrokes -VMName $name_vm -StringInput eTIPS123 -ReturnCarriage $true
+
+        Start-Sleep 30
+
+        #Initial Setup
+        #Hostname
+        Set-VMKeystrokes -VMName $name_vm -StringInput $hostname -ReturnCarriage $true
+        Start-Sleep 2
+
+        #Management IPv4
+        $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
+        Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true
+        Start-Sleep 2
+        Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true
+        Start-Sleep 2
+
+        #Management IPv6 (Skip...)
+        Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+        Start-Sleep 2
+
+        #Data Port
+        if ($data_ip -and $data_netmask -and $data_gateway) {
+            $data = $data_ip.ToString() + "/" + $data_netmask
+            Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true
+            Start-Sleep 2
+            Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true
+            Start-Sleep 2
+
+            #IPv6
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+            Start-Sleep 2
+        }
+        else {
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+            Start-Sleep 2
+
+            #IPv6
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+            Start-Sleep 2
+        }
+
+        #DNS
+        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_primary -ReturnCarriage $true
+        Start-Sleep 2
+        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_secondary -ReturnCarriage $true
+        Start-Sleep 2
+
+        #Password
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Start-Sleep 2
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Start-Sleep 2
+
+        #NTP
+        Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+        Start-Sleep 2
+
+        #FIPS
+        Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+        Start-Sleep 2
+
+        #Configuration OK ?
+        Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+    }
+
+    End {
+    }
+}
