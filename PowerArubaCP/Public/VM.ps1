@@ -312,7 +312,9 @@ function Set-ArubaCPVmSetup {
         [Parameter (Mandatory = $false)]
         [ipaddress]$ntp_primary,
         [Parameter (Mandatory = $false)]
-        [ipaddress]$ntp_secondary
+        [ipaddress]$ntp_secondary,
+        [Parameter (Mandatory = $false)]
+        [switch]$fips
     )
 
     Begin {
@@ -429,7 +431,19 @@ function Set-ArubaCPVmSetup {
         }
 
         #FIPS
-        Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+        if ( $PsBoundParameters.ContainsKey('fips') ) {
+            if ( $fips ) {
+                $StringInput = "y"
+            }
+            else {
+                $StringInput = "n"
+            }
+        } else {
+            #By Default FIPS is disable..
+            $StringInput = "n"
+        }
+
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true
         Start-Sleep 1
 
         #Configuration OK ?
