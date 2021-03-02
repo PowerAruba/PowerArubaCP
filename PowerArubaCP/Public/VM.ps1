@@ -325,112 +325,112 @@ function Set-ArubaCPVmSetup {
 
         #Connection
         Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
         Set-VMKeystrokes -VMName $name_vm -StringInput eTIPS123 -ReturnCarriage $true
 
-        Start-Sleep 30
+        Start-Sleep 15
 
         #Initial Setup
         #Hostname
         Set-VMKeystrokes -VMName $name_vm -StringInput $hostname -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
 
         #Management IPv4
         $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
         Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
         Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
 
         #Management IPv6 (Skip...)
         Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-        Start-Sleep 2
+        Start-Sleep 1
 
         #Data Port
         if ($data_ip -and $data_netmask -and $data_gateway) {
             $data = $data_ip.ToString() + "/" + $data_netmask
             Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true
-            Start-Sleep 2
+            Start-Sleep 1
             Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true
-            Start-Sleep 2
+            Start-Sleep 1
 
             #IPv6
             Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-            Start-Sleep 2
+            Start-Sleep 1
         }
         else {
             Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-            Start-Sleep 2
+            Start-Sleep 1
 
             #IPv6
             Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-            Start-Sleep 2
+            Start-Sleep 1
         }
 
         #DNS
         Set-VMKeystrokes -VMName $name_vm -StringInput $dns_primary -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
         Set-VMKeystrokes -VMName $name_vm -StringInput $dns_secondary -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
 
         #Password
         Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
         Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
 
         #NTP
         if($timezone_continent -or $ntp_primary){
             Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
-            Start-Sleep 2
+            Start-Sleep 1
 
             if($ntp_primary) {
                 #Configure NTP Server
                 Set-VMKeystrokes -VMName $name_vm -StringInput 2 -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_primary -ReturnCarriage $true
-                start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondy -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
             } else {
                 #Skip Configure Data and time
 
                 Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
 
                 Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-                Start-Sleep 2
+                Start-Sleep 1
 
                 Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
-                Start-Sleep 2
+                Start-Sleep 1
             }
 
             if($timezone_continent){
                 #Configure timezone (Continent and Country)
                 Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_continent -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_country -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
             } else {
                 #Skip timezone (Continent and Country)
                 Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
-                Start-Sleep 2
+                Start-Sleep 1
             }
         } else {
             #No NTP or Timezone settings, skip
             Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
-            Start-Sleep 2
+            Start-Sleep 1
         }
 
         #FIPS
         Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
-        Start-Sleep 2
+        Start-Sleep 1
 
         #Configuration OK ?
         Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
