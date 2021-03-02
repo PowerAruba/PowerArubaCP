@@ -302,13 +302,26 @@ function Set-ArubaCPVmSetup {
         [Parameter (Mandatory = $false)]
         [ipaddress]$dns_secondary,
         [Parameter (Mandatory = $true)]
-        [string]$new_password
+        [string]$new_password,
+        [Parameter (Mandatory = $false)]
+        [ValidateRange(1,10)]
+        [int]$timezone_continent,
+        [Parameter (Mandatory = $false)]
+        [ValidateRange(1,55)]
+        [int]$timezone_country,
+        [Parameter (Mandatory = $false)]
+        [ipaddress]$ntp_primary,
+        [Parameter (Mandatory = $false)]
+        [ipaddress]$ntp_secondary
     )
 
     Begin {
     }
 
     Process {
+        if ($timezone_continent -xor $timezone_country){
+            Throw "You need to specific Timezone Continent and Country on the sametime"
+        }
 
         #Connection
         Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
@@ -367,8 +380,53 @@ function Set-ArubaCPVmSetup {
         Start-Sleep 2
 
         #NTP
-        Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
-        Start-Sleep 2
+        if($timezone_continent -or $ntp_primary){
+            Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+            Start-Sleep 2
+
+            if($ntp_primary) {
+                #Configure NTP Server
+                Set-VMKeystrokes -VMName $name_vm -StringInput 2 -ReturnCarriage $true
+                Start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_primary -ReturnCarriage $true
+                start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondy -ReturnCarriage $true
+                Start-Sleep 2
+            } else {
+                #Skip Configure Data and time
+
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                Start-Sleep 2
+
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Start-Sleep 2
+
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Start-Sleep 2
+            }
+
+            if($timezone_continent){
+                #Configure timezone (Continent and Country)
+                Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+                Start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_continent -ReturnCarriage $true
+                Start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_country -ReturnCarriage $true
+                Start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                Start-Sleep 2
+            } else {
+                #Skip timezone (Continent and Country)
+                Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+                Start-Sleep 2
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                Start-Sleep 2
+            }
+        } else {
+            #No NTP or Timezone settings, skip
+            Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+            Start-Sleep 2
+        }
 
         #FIPS
         Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
