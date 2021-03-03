@@ -453,3 +453,43 @@ function Set-ArubaCPVmSetup {
     End {
     }
 }
+
+function Set-ArubaCPVmAddLicencePlatform {
+
+    <#
+        .SYNOPSIS
+        Configure Plaform Licence on VM ClearPass
+
+        .DESCRIPTION
+        Configure Plaform Licence Key on VM ClearPass
+
+        .EXAMPLE
+        $cppmLicenceKeyParams = @{
+            mgmt_ip                 = "10.200.11.225"
+            licencekey              = "---BEGIN....."
+        }
+
+        PS>Set-ArubaCPVmAddLicencePlatform @cppmLicenceKeyParams
+
+        Configure initial Platform Licence key on ClearPass
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [ipaddress]$mgmt_ip,
+        [Parameter (Mandatory = $true)]
+        [string]$licencekey
+    )
+
+    Begin {
+    }
+
+    Process {
+        $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
+        #No API available for this... push directly the licence with agreement eula
+        Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body @{ appId = 101 ; agree_eula = "on"; license = $license} -SkipCertificateCheck | Out-Null
+    }
+
+    End {
+    }
+}
