@@ -493,3 +493,59 @@ function Set-ArubaCPVmAddLicencePlatform {
     End {
     }
 }
+
+function Set-ArubaCPVmApiClient {
+
+    <#
+        .SYNOPSIS
+        Configure an API Client (Oauth)
+
+        .DESCRIPTION
+        Configure an API Client (Oauth) using console
+
+        .EXAMPLE
+        $cppmapiclientParams = @{
+            name_vm                 = "CPPM"
+            new_password            = "MyPassword"
+            client_id               = "PowerArubaCP"
+            client_secret           = "MySecret"
+        }
+
+        PS>Set-ArubaCPVmApiClient @cppmapiclientParams
+
+        Configure n API Client (Oauth) with client_id and client_secret
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [string]$name_vm,
+        [Parameter (Mandatory = $true)]
+        [string]$new_password,
+        [Parameter (Mandatory = $true)]
+        [string]$client_id,
+        [Parameter (Mandatory = $true)]
+        [string]$client_secret
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #Connection to CPPM (using console)
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Start-Sleep 1
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Start-Sleep 1
+
+        #Create API Client (oauth)
+        Set-VMKeystrokes -VMName $name_vm -StringInput "system create-api-client $client_id $client_secret" -ReturnCarriage $true
+        Start-Sleep 1
+
+        #Exit !
+        Set-VMKeystrokes -VMName $name_vm -StringInput exit -ReturnCarriage $true
+    }
+
+    End {
+    }
+}
