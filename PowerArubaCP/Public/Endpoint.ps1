@@ -239,6 +239,7 @@ function Set-ArubaCPEndpoint {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -292,8 +293,10 @@ function Set-ArubaCPEndpoint {
             $_ep | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
-        $ep = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ep -uri $uri -connection $connection
-        $ep
+        if ($PSCmdlet.ShouldProcess($id, 'Configure Endpoint')) {
+            $ep = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ep -uri $uri -connection $connection
+            $ep
+        }
 
     }
 
@@ -316,19 +319,18 @@ function Remove-ArubaCPEndpoint {
         Remove Endpoint with MAC Address 00:01:02:03:04:05
 
         .EXAMPLE
-        Remove-ArubaCPEndpoint -id 3001 -noconfirm
+        Remove-ArubaCPEndpoint -id 3001 -confirm:$false
 
         Remove Endpoint with id 3001 and no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ep")]
         [ValidateScript( { Confirm-ArubaCPEndpoint $_ })]
         [psobject]$ep,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -342,27 +344,18 @@ function Remove-ArubaCPEndpoint {
         #get endpoint id from nad ps object
         if ($ep) {
             $id = $ep.id
+            $mac = "(" + $ep.mac_address + ")"
         }
 
         $uri = "api/endpoint/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Endpoint on ClearPass"
-            $question = "Proceed with removal of Endpoint ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Endpoint"
+        if ($PSCmdlet.ShouldProcess("$id + $mac", 'Remove Endpoint')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Endpoint" -completed
         }
+
     }
 
     End {
     }
+
 }

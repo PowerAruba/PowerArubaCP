@@ -88,5 +88,5 @@ Describe  "Enable / Disable Service" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

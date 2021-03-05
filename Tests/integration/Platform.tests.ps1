@@ -71,5 +71,5 @@ Describe  "Get CPPM Version" {
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

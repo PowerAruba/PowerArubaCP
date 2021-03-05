@@ -268,6 +268,7 @@ function Set-ArubaCPNetworkDevice {
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -305,6 +306,7 @@ function Set-ArubaCPNetworkDevice {
         #get nad id from nad ps object
         if ($nad) {
             $id = $nad.id
+            $old_name = "(" + $nad.name + ")"
         }
 
         $uri = "api/network-device/${id}"
@@ -360,8 +362,10 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
-        $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
-        $nad
+        if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network device')) {
+            $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
+            $nad
+        }
 
     }
 
@@ -385,19 +389,18 @@ function Remove-ArubaCPNetworkDevice {
         Remove Network Device named NAD-PowerArubaCP
 
         .EXAMPLE
-        Remove-ArubaCPNetworkDevice -id 3001 -noconfirm
+        Remove-ArubaCPNetworkDevice -id 3001 -confirm:$false
 
         Remove Network Device id 3001 with no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "nad")]
         [ValidateScript( { Confirm-ArubaCPNetworkDevice $_ })]
         [psobject]$nad,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -411,25 +414,15 @@ function Remove-ArubaCPNetworkDevice {
         #get nad id from nad ps object
         if ($nad) {
             $id = $nad.id
+            $name = "(" + $nad.name + ")"
         }
 
         $uri = "api/network-device/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Network Device on ClearPass"
-            $question = "Proceed with removal of Network Device ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Network Device"
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Network device')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Network Device" -completed
         }
+
     }
 
     End {

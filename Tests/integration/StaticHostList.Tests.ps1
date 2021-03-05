@@ -60,8 +60,8 @@ Describe  "Get Static Host List" {
     AfterAll {
         if ($VersionBefore680 -eq 0) {
             #Remove 2 entries
-            Get-ArubaCPStaticHostList -name pester_SHL-list-IPAddress | Remove-ArubaCPStaticHostList -noconfirm
-            Get-ArubaCPStaticHostList -name pester_SHL-list-MACAddress | Remove-ArubaCPStaticHostList -noconfirm
+            Get-ArubaCPStaticHostList -name pester_SHL-list-IPAddress | Remove-ArubaCPStaticHostList -confirm:$false
+            Get-ArubaCPStaticHostList -name pester_SHL-list-MACAddress | Remove-ArubaCPStaticHostList -confirm:$false
         }
     }
 }
@@ -182,7 +182,7 @@ Describe  "Add Static Host List" {
 
     AfterEach {
         if ($VersionBefore680 -eq 0) {
-            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
+            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -confirm:$false
         }
     }
 }
@@ -224,8 +224,8 @@ Describe  "Set Static Host List" {
 
     AfterEach {
         if ($VersionBefore680 -eq 0) {
-            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
-            Get-ArubaCPStaticHostList -name pester_SHL2 | Remove-ArubaCPStaticHostList -noconfirm
+            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -confirm:$false
+            Get-ArubaCPStaticHostList -name pester_SHL2 | Remove-ArubaCPStaticHostList -confirm:$false
         }
     }
 }
@@ -278,7 +278,7 @@ Describe  "Remove Static Host List Member" {
 
     AfterEach {
         if ($VersionBefore680 -eq 0) {
-            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
+            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -confirm:$false
         }
     }
 }
@@ -289,7 +289,7 @@ Describe  "Remove Static Host List" {
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl.name | Should -Be "pester_SHL"
         @($shl).count | Should -Be 1
-        Remove-ArubaCPStaticHostList -id $shl.id -noconfirm
+        Remove-ArubaCPStaticHostList -id $shl.id -confirm:$false
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl | Should -BeNullOrEmpty
         @($shl).count | Should -Be 0
@@ -300,7 +300,7 @@ Describe  "Remove Static Host List" {
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl.name | Should -Be "pester_SHL"
         @($shl).count | Should -Be 1
-        Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
+        Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -confirm:$false
         $shl = Get-ArubaCPStaticHostList -name pester_SHL
         $shl | Should -BeNullOrEmpty
         @($shl).count | Should -Be 0
@@ -308,12 +308,12 @@ Describe  "Remove Static Host List" {
 
     AfterEach {
         if ($VersionBefore680 -eq 0) {
-            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -noconfirm
+            Get-ArubaCPStaticHostList -name pester_SHL | Remove-ArubaCPStaticHostList -confirm:$false
         }
 
     }
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

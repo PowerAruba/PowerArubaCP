@@ -310,6 +310,7 @@ function Set-ArubaCPStaticHostList {
         Change Static Host List with $host_entries
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
@@ -335,6 +336,7 @@ function Set-ArubaCPStaticHostList {
         #get shl id from shl ps object
         if ($shl) {
             $id = $shl.id
+            $old_name = "(" + $shl.name + ")"
         }
 
         $uri = "api/static-host-list/${id}"
@@ -353,8 +355,10 @@ function Set-ArubaCPStaticHostList {
             $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value $host_entries
         }
 
-        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
-        $shl
+        if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Static Host List')) {
+            $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+            $shl
+        }
     }
 
     End {
@@ -377,19 +381,18 @@ function Remove-ArubaCPStaticHostList {
         Remove Network Device named SHL-PowerArubaCP
 
         .EXAMPLE
-        Remove-ArubaCPStaticHostList -id 3001 -noconfirm
+        Remove-ArubaCPStaticHostList -id 3001 -confirm:$false
 
         Remove Static Host List id 3001 with no confirmation
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "shl")]
         [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
         [psobject]$shl,
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -403,24 +406,13 @@ function Remove-ArubaCPStaticHostList {
         #get shl id from shl ps object
         if ($shl) {
             $id = $shl.id
+            $name = "(" + $shl.name + ")"
         }
 
         $uri = "api/static-host-list/${id}"
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Static Host List on ClearPass"
-            $question = "Proceed with removal of Static Host List ${id} ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Static Host List"
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Static Host List')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
-            Write-Progress -activity "Remove Static Host List" -completed
         }
     }
 
@@ -448,6 +440,7 @@ function Remove-ArubaCPStaticHostListMember {
         Remove Static Host List with format list and type MAC Address (00:01:02:03:04:06....)
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
     Param(
         [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateScript( { Confirm-ArubaCPStaticHostList $_ })]
@@ -465,6 +458,7 @@ function Remove-ArubaCPStaticHostListMember {
     Process {
 
         $id = $shl.id
+        $name = "(" + $shl.name + ")"
         $uri = "api/static-host-list/${id}"
 
         $_shl = New-Object -TypeName PSObject
@@ -480,10 +474,11 @@ function Remove-ArubaCPStaticHostListMember {
 
         $_shl | Add-Member -name "host_entries" -MemberType NoteProperty -Value @($host_entries)
 
-        $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
-        $shl
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Static Host List Member')) {
+            $shl = Invoke-ArubaCPRestMethod -method "PATCH" -body $_shl -uri $uri -connection $connection
+            $shl
+        }
     }
-
     End {
     }
 }

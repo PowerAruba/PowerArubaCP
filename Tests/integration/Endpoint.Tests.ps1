@@ -61,8 +61,8 @@ Describe  "Get Endpoint" {
 
     AfterAll {
         #Remove 2 entries
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -noconfirm
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -noconfirm
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
 
@@ -98,7 +98,7 @@ Describe  "Add Endpoint" {
     }
 
     AfterEach {
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -noconfirm
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
 
@@ -138,8 +138,8 @@ Describe  "Configure Endpoint" {
     }
 
     AfterEach {
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -noconfirm
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -noconfirm
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
 Describe  "Remove Endpoint" {
@@ -149,7 +149,7 @@ Describe  "Remove Endpoint" {
         $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
         $ep.mac_address | Should -Be "000102030405"
         @($ep).count | Should -Be 1
-        Remove-ArubaCPEndpoint -id $ep.id -noconfirm
+        Remove-ArubaCPEndpoint -id $ep.id -confirm:$false
         $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
         $ep | Should -BeNullOrEmpty
         @($ep).count | Should -Be 0
@@ -160,17 +160,17 @@ Describe  "Remove Endpoint" {
         $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
         $ep.mac_address | Should -Be "000102030405"
         @($ep).count | Should -Be 1
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -noconfirm
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
         $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
         $ep | Should -BeNullOrEmpty
         @($ep).count | Should -Be 0
     }
 
     AfterEach {
-        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -noconfirm
+        Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
 
 AfterAll {
-    Disconnect-ArubaCP -noconfirm
+    Disconnect-ArubaCP -confirm:$false
 }

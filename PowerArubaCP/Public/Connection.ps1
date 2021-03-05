@@ -140,15 +140,14 @@ function Disconnect-ArubaCP {
         Disconnect the connection
 
         .EXAMPLE
-        Disconnect-ArubaCP -noconfirm
+        Disconnect-ArubaCP -confirm:$false
 
         Disconnect the connection with no confirmation
 
     #>
 
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param(
-        [Parameter(Mandatory = $false)]
-        [switch]$noconfirm,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -159,19 +158,8 @@ function Disconnect-ArubaCP {
 
     Process {
 
-        if ( -not ( $Noconfirm )) {
-            $message = "Remove Aruba ClearPass connection."
-            $question = "Proceed with removal of Aruba ClearPass connection ?"
-            $choices = New-Object Collections.ObjectModel.Collection[Management.Automation.Host.ChoiceDescription]
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&Yes'))
-            $choices.Add((New-Object Management.Automation.Host.ChoiceDescription -ArgumentList '&No'))
-
-            $decision = $Host.UI.PromptForChoice($message, $question, $choices, 1)
-        }
-        else { $decision = 0 }
-        if ($decision -eq 0) {
-            Write-Progress -activity "Remove Aruba ClearPass connection"
-            write-progress -activity "Remove Aruba ClearPass connection" -completed
+        if ($PSCmdlet.ShouldProcess($connection.server, 'Remove ClearPass connection ?')) {
+            #Not really connection on CPPM with token
             if ( ($connection -eq $DefaultArubaCPCOnnection) -and (Test-Path variable:global:DefaultArubaCPConnection) ) {
                 Remove-Variable -name DefaultArubaCPConnection -scope global
             }
