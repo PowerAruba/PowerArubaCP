@@ -549,3 +549,80 @@ function Set-ArubaCPVmApiClient {
     End {
     }
 }
+
+function Set-ArubaCPVmUpdate {
+
+    <#
+        .SYNOPSIS
+        Update CPPM
+
+        .DESCRIPTION
+        Update CPPM (SSH, HTTP(S)) using console
+        Need to wait the time of copy file (> 1,2Giga) and update (10 to 15minutes) and launch restart of CPPM
+
+        .EXAMPLE
+        $cppmUpdateParams = @{
+            name_vm                 = "CPPM"
+            new_password            = "MyPassword"
+            update_link             = "http://1/CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
+        }
+
+        PS>Set-ArubaCPVmUpdate @cppmUpdateParams
+
+        Update CPPM to 6.9.5 using HTTP
+
+        .EXAMPLE
+        $cppmUpdateParams = @{
+            name_vm                 = "CPPM"
+            new_password            = "MyPassword"
+            update_link             = "powerarubacp@10.200.11.60:/CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
+            ssh_password            = "MySSH Password"
+        }
+
+        PS>Set-ArubaCPVmUpdate @cppmUpdateParams
+
+        Update CPPM to 6.9.5 using SSH
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [string]$name_vm,
+        [Parameter (Mandatory = $true)]
+        [string]$new_password,
+        [Parameter (Mandatory = $true)]
+        [string]$update_link,
+        [Parameter (Mandatory = $false)]
+        [string]$ssh_password
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #Connection to CPPM (using console)
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Start-Sleep 1
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Start-Sleep 1
+
+        #Update CPPM
+        Set-VMKeystrokes -VMName $name_vm -StringInput "system update -i $update_link" -ReturnCarriage $true
+        Start-Sleep 1
+
+        #if using SSH, need to specify the SSH password 
+        if($ssh_password){
+
+            #if it is the first ssh connection to this ssh server, need to valid the key fingerprint
+            Set-VMKeystrokes -VMName $name_vm -StringInput "yes" -ReturnCarriage $true
+            Start-Sleep 3
+
+            #SSH Password
+            Set-VMKeystrokes -VMName $name_vm -StringInput $ssh_password -ReturnCarriage $true
+            Start-Sleep 1
+         }
+    }
+
+    End {
+    }
+}
