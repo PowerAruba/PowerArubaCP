@@ -176,6 +176,7 @@ function Set-ArubaCPVmFirstBoot {
 
         .EXAMPLE
         $cppmFirstBootParams = @{
+            version                 = "6.9"
             name_vm                 = "PowerArubaCP-CPPM"
             appliance_type          = "CLABV"
         }
@@ -185,12 +186,15 @@ function Set-ArubaCPVmFirstBoot {
         Configuration of first CPPM Boot (VM Name and Appliance Type CLABV )
 
         .EXAMPLE
-        Set-ArubaCPVmFirstBoot -name_vm PowerArubaCP-CPPM -appliance_type C3000V -encrypt_disk:$false
+        Set-ArubaCPVmFirstBoot -version 6.9 -name_vm PowerArubaCP-CPPM -appliance_type C3000V -encrypt_disk:$false
 
         Configuration of first CPPM Boot (VM Name, Appliance Type C3000V and encrypt disk disable )
     #>
 
     Param(
+        [Parameter (Mandatory = $true)]
+        [ValidateSet("6.8", '6.9')]
+        [string]$version,
         [Parameter (Mandatory = $true)]
         [ValidateSet("CLABV", 'C1000V', 'C2000V', 'C3000V')]
         [string]$appliance_type,
@@ -216,7 +220,7 @@ function Set-ArubaCPVmFirstBoot {
             }
             "C2000V" {
                 $StringInput = "3"
-
+                
             }
             "C3000V" {
                 $StringInput = "4"
@@ -224,6 +228,11 @@ function Set-ArubaCPVmFirstBoot {
         }
 
         Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true
+
+        #With version 6.8 (and before), there is a disk perf check
+        if($version -eq "6.8") {
+            Start-Sleep 20
+        }
 
         #Use secondary disk
         Set-VMKeystrokes -VMName $name_vm -StringInput y
