@@ -16,7 +16,7 @@ function Add-ArubaCPApplicationLicense {
         .EXAMPLE
         Add-ArubaCPApplicationLicense -product_name Access -license_key XXXXXXX
 
-        Add a Application license type Access with license key XXXXXXX
+        Add an Application license type Access with license key XXXXXXX
 
     #>
 
