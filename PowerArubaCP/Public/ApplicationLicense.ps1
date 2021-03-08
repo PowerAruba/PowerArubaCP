@@ -21,10 +21,10 @@ function Add-ArubaCPApplicationLicense {
     #>
 
     Param(
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $true)]
         [ValidateSet('Access', 'Access Upgrade', 'Entry', 'Onboard', 'OnGuard', IgnoreCase = $false)]
         [string]$product_name,
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $true)]
         [string]$license_key,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
