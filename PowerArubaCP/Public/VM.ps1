@@ -136,7 +136,7 @@ function Deploy-ArubaCPVm {
         Import-VApp @vapp_config -OvfConfiguration $ovfConfig | Out-Null
 
         #Add new disk (mininum 80GB )
-        New-HardDisk -VM $name_vm -CapacityGB $capacityGB -Persistence persistent
+        New-HardDisk -VM $name_vm -CapacityGB $capacityGB -Persistence persistent | Out-Null
 
         #Change memory (8 by default)
         if ( $PsBoundParameters.ContainsKey('MemoryGB') ) {
