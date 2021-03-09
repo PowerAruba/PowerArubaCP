@@ -534,8 +534,10 @@ function Set-ArubaCPVmAddLicencePlatform {
 
     Process {
         $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
+        $body = @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey}
+        Write-Verbose ($body | ConvertTo-Json)
         #No API available for this... push directly the licence with agreement eula
-        Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey} -SkipCertificateCheck | Out-Null
+        Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body $body -SkipCertificateCheck | Out-Null
     }
 
     End {
