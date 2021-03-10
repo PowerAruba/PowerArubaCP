@@ -349,7 +349,7 @@ function Remove-ArubaCPEndpoint {
 
         $uri = "api/endpoint/${id}"
 
-        if ($PSCmdlet.ShouldProcess("$id + $mac", 'Remove Endpoint')) {
+        if ($PSCmdlet.ShouldProcess("$id $mac", 'Remove Endpoint')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
         }
 
