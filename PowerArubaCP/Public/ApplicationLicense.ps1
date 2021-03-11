@@ -16,15 +16,15 @@ function Add-ArubaCPApplicationLicense {
         .EXAMPLE
         Add-ArubaCPApplicationLicense -product_name Access -license_key XXXXXXX
 
-        Add a Application license type Access with license key XXXXXXX
+        Add an Application license type Access with license key XXXXXXX
 
     #>
 
     Param(
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $true)]
         [ValidateSet('Access', 'Access Upgrade', 'Entry', 'Onboard', 'OnGuard', IgnoreCase = $false)]
         [string]$product_name,
-        [Parameter (Mandatory = $false)]
+        [Parameter (Mandatory = $true)]
         [string]$license_key,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]

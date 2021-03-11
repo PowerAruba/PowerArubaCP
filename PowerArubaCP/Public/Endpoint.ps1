@@ -11,7 +11,7 @@ function Add-ArubaCPEndpoint {
         Add an Endpoint on ClearPass
 
         .DESCRIPTION
-        Add an Endoint with mac address, description, status, attributes
+        Add an Enpdoint with mac address, description, status, attributes
 
         .EXAMPLE
         Add-ArubaCPEndpoint -mac_address 000102030405 -description "Add by PowerArubaCP" -Status Known
@@ -84,7 +84,7 @@ function Get-ArubaCPEndpoint {
 
     <#
         .SYNOPSIS
-        Get Enpoint info on CPPM
+        Get Endpoint info on CPPM
 
         .DESCRIPTION
         Get Endpoint (Id, MAC Address, Status, Attributes)
@@ -316,12 +316,12 @@ function Remove-ArubaCPEndpoint {
         $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
         PS C:\>$ep | Remove-ArubaCPEndpoint
 
-        Remove Endpoint with MAC Address 00:01:02:03:04:05
+        Remove an Endpoint with MAC Address 00:01:02:03:04:05
 
         .EXAMPLE
         Remove-ArubaCPEndpoint -id 3001 -confirm:$false
 
-        Remove Endpoint with id 3001 and no confirmation
+        Remove an Endpoint with id 3001 and no confirmation
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
@@ -349,7 +349,7 @@ function Remove-ArubaCPEndpoint {
 
         $uri = "api/endpoint/${id}"
 
-        if ($PSCmdlet.ShouldProcess("$id + $mac", 'Remove Endpoint')) {
+        if ($PSCmdlet.ShouldProcess("$id $mac", 'Remove Endpoint')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
         }
 
