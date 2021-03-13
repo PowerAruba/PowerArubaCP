@@ -289,7 +289,7 @@ function Set-ArubaCPVmSetup {
 
         PS>Set-ArubaCPVmSetup @cppmsetupParams
 
-        Configuration d'un initial d'un ClearPass (Nom, Adresse IP, mot de passe...)
+        Initial configuration of ClearPasss (Name, IP Address MGMT/Data, DNS, Password...)
     #>
 
     Param(
