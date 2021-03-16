@@ -341,39 +341,46 @@ function Set-ArubaCPVmSetup {
         }
 
         #Connection
-        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Write-Output "Connection to console using default login/password"
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true 6>> $null
         Start-Sleep 1
-        Set-VMKeystrokes -VMName $name_vm -StringInput eTIPS123 -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput eTIPS123 -ReturnCarriage $true 6>> $null
 
         Start-Sleep 15
 
         #Initial Setup
         #Hostname
-        Set-VMKeystrokes -VMName $name_vm -StringInput $hostname -ReturnCarriage $true
+        Write-Output "Configure hostname: $hostname"
+        Set-VMKeystrokes -VMName $name_vm -StringInput $hostname -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Management IPv4
         if($version -eq "6.8") {
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_ip.ToString() -ReturnCarriage $true
+            Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_ip.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
             #Netmask
-            Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($mgmt_netmask)) -ReturnCarriage $true
+            Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($mgmt_netmask)) -ReturnCarriage $true 6>> $null
             Start-Sleep 1
             #Gateway (Management)
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true
+            Write-Output "Configure Management IPv4 Gateway: $mgmt_gateway"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
         } else {
             #with 6.9.x using CIDR for netmask and add IPv6 support
 
             $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true
+            Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true 6>> $null
             Start-Sleep 1
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true
+            Write-Output "Configure Management IPv4 Gateway: $mgmt_gateway"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
             #Management IPv6 (Skip...)
-            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+            Write-Output "Skip Configure Management IPv6..."
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
             Start-Sleep 1
         }
 
@@ -381,107 +388,124 @@ function Set-ArubaCPVmSetup {
         if($version -eq "6.8") {
             if ($data_ip -and $data_netmask -and $data_gateway) {
                 $data = $data_ip.ToString() + "/" + $data_netmask
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_ip.ToString() -ReturnCarriage $true
+                Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $data_ip.ToString() -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
                 #Netmask
-                Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($data_netmask)) -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($data_netmask)) -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
                 #Gateway (Data)
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true
+                Write-Output "Configure Data IPv4 Gateway: $data_gateway"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
             }
             else {
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Write-Output "Skip Configure Data IPv4"
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
             }
         } else {
              #with 6.9.x using CIDR for netmask and add IPv6 support
             if ($data_ip -and $data_netmask -and $data_gateway) {
                 $data = $data_ip.ToString() + "/" + $data_netmask
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true
+                Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true
+                Write-Output "Configure Data IPv4 Gateway: $data_gateway"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
 
                 #IPv6
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Write-Output "Skip Configure Data IPv6..."
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
             }
             else {
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Write-Output "Skip Configure Data IPv4"
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
 
                 #IPv6
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Write-Output "Skip Configure Data IPv6"
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
             }
         }
 
         #DNS
-        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_primary -ReturnCarriage $true
+        Write-Output "Configure DNS Primary: $dns_primary"
+        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_primary -ReturnCarriage $true 6>> $null
         Start-Sleep 1
-        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_secondary -ReturnCarriage $true
+        Write-Output "Configure DNS Secondary: $dns_secondary"
+        Set-VMKeystrokes -VMName $name_vm -StringInput $dns_secondary -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Password
-        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Write-Output "Configure Password..."
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true 6>> $null
         Start-Sleep 1
-        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #NTP
         if($timezone_continent -or $ntp_primary){
-            Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+            Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
             if($ntp_primary) {
                 #Configure NTP Server
-                Set-VMKeystrokes -VMName $name_vm -StringInput 2 -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput 2 -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_primary -ReturnCarriage $true
+                Write-Output "Configure NTP Primary: $ntp_primary"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_primary -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondy -ReturnCarriage $true
+                Write-Output "Configure NTP Secondary: $ntp_secondary"
+                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondy -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
             } else {
                 #Skip Configure Data and time
-
-                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                Write-Output "Skip Configure NTP ..."
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
 
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
 
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter"
+                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
             }
 
             if($timezone_continent){
+                Write-Output "Configure Timezone (Continent and Country)"
                 #Configure timezone (Continent and Country)
-                Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_continent -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_continent -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_country -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput $timezone_country -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
             } else {
                 #Skip timezone (Continent and Country)
-                Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+                Write-Output "Skip Configure Timezone (Continent and Country) ..."
+                Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
                 if($version -ne "6.8") {
                      #No need to confirm (1) Time Settings before 6.9
-                    Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true
+                    Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
                     Start-Sleep 1
                 }
             }
         } else {
             #No NTP or Timezone settings, skip
-            Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true
+            Write-Output "Skip Configure NTP and Timezone (Continent and Country) ..."
+            Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true 6>> $null
             Start-Sleep 1
         }
 
         #FIPS
+        Write-Output "Configure FIPS $fips"
         if ( $PsBoundParameters.ContainsKey('fips') ) {
             if ( $fips ) {
                 $StringInput = "y"
@@ -494,11 +518,12 @@ function Set-ArubaCPVmSetup {
             $StringInput = "n"
         }
 
-        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Configuration OK ?
-        Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
+        Write-Output "Setup is finish, now CPPM will be configure and reboot (need to wait 7/8 minutes before try to connect)"
     }
 
     End {
