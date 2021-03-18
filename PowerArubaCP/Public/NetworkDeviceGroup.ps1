@@ -4,6 +4,91 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+function Add-ArubaCPNetworkDeviceGroup {
+
+    <#
+        .SYNOPSIS
+        Add a Network Device Group on ClearPass
+
+        .DESCRIPTION
+        Add a Network Device Group with Id, Name, description, subnet, regex, list...
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDeviceGroup -name NDG-subnet -subnet 192.0.2.0/24 -description "Add via PowerArubaCP"
+
+        Add Network Device Group with format subnet and subnet 192.0.2.0/24 and a description
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDeviceGroup -name NDG-list_ip -list_ip 192.0.2.1, 192.0.2.2
+
+        Add Network Device Group with format list and IP 192.0.2.1 and 192.0.2.2
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDeviceGroup -name NDG-regex -regex "^192(.[0-9]*){3}$"
+
+        Add Network Device Group with format regex and regex "^192(.[0-9]*){3}$"
+    #>
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [int]$id,
+        [Parameter (Mandatory = $true)]
+        [string]$name,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $true, ParameterSetName = "subnet")]
+        [string]$subnet,
+        [Parameter (Mandatory = $true, ParameterSetName = "regex")]
+        [string]$regex,
+        [Parameter (Mandatory = $true, ParameterSetName = "list_ip")]
+        [string[]]$list_ip,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = "api/network-device-group"
+
+        $_ndg = New-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('id') ) {
+            $_ndg | Add-Member -name "id" -MemberType NoteProperty -Value $id
+        }
+        $_ndg | Add-Member -name "name" -MemberType NoteProperty -Value $name
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_ndg | Add-Member -name "description" -MemberType NoteProperty -Value $description
+        }
+
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "subnet" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "subnet"
+                $_ndg | add-member -name "value" -membertype NoteProperty -Value $subnet
+            }
+            "regex" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "regex"
+                $_ndg | add-member -name "value" -membertype NoteProperty -Value $regex
+            }
+            "list_ip" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "list"
+                $_ndg | add-member -name "value" -membertype NoteProperty -Value ($list_ip -join ",")
+            }
+            default { }
+        }
+
+        $ndg = Invoke-ArubaCPRestMethod -method "POST" -body $_ndg -uri $uri -connection $connection
+        $ndg
+    }
+
+    End {
+    }
+}
+
 function Get-ArubaCPNetworkDeviceGroup {
 
     <#
