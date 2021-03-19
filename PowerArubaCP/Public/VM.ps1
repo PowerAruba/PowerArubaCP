@@ -645,10 +645,10 @@ function Set-ArubaCPVmUpdate {
 
     <#
         .SYNOPSIS
-        Update CPPM
+        Update CPPM VM
 
         .DESCRIPTION
-        Update CPPM (SSH, HTTP(S)) using console
+        Update CPPM VM (via copy file with SSH or HTTP(S)) using console
         Need to wait the time of copy file (> 1,2Giga) and update (10 to 15minutes) and launch restart of CPPM
 
         .EXAMPLE
@@ -692,24 +692,27 @@ function Set-ArubaCPVmUpdate {
     Process {
 
         #Connection to CPPM (using console)
-        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Write-Output "Connection to console using login/password"
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true 6>> $null
         Start-Sleep 1
-        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Update CPPM
-        Set-VMKeystrokes -VMName $name_vm -StringInput "system update -i $update_link" -ReturnCarriage $true
+        Write-Output "Update CPPM with $update_link"
+        Set-VMKeystrokes -VMName $name_vm -StringInput "system update -i $update_link" -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #if using SSH, need to specify the SSH password 
         if($ssh_password){
 
             #if it is the first ssh connection to this ssh server, need to valid the key fingerprint
-            Set-VMKeystrokes -VMName $name_vm -StringInput "yes" -ReturnCarriage $true
+            Set-VMKeystrokes -VMName $name_vm -StringInput "yes" -ReturnCarriage $true 6>> $null
             Start-Sleep 3
 
             #SSH Password
-            Set-VMKeystrokes -VMName $name_vm -StringInput $ssh_password -ReturnCarriage $true
+            Write-Output "Set SSH Password"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $ssh_password -ReturnCarriage $true 6>> $null
             Start-Sleep 1
          }
     }
