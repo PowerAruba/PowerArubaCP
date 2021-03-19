@@ -227,7 +227,7 @@ function Set-ArubaCPVmFirstBoot {
         }
 
         Write-Output "Configure Appliance type: $appliance_type"
-        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true | Out-Null
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true 6>> $null
 
         #With version 6.8 (and before), there is a disk perf check
         if($version -eq "6.8") {
@@ -235,7 +235,7 @@ function Set-ArubaCPVmFirstBoot {
         }
 
         #Use secondary disk
-        Set-VMKeystrokes -VMName $name_vm -StringInput y | Out-Null
+        Set-VMKeystrokes -VMName $name_vm -StringInput y 6>> $null
 
         #Encrypt all local data
         if ( $PsBoundParameters.ContainsKey('encrypt_disk') ) {
@@ -251,7 +251,7 @@ function Set-ArubaCPVmFirstBoot {
         }
 
         Write-Output "Configure Encrypt disk: $encrypt_disk"
-        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput | Out-Null
+        Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput 6>> $null
 
         Write-Output "First Configuration boot is finish, CPPM copy now data and reboot, it will be available on 10/15 minutes for setup"
         #Copy now data and reboot, need to wait 10/15 minutes...
