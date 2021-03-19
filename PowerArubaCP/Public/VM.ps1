@@ -460,7 +460,7 @@ function Set-ArubaCPVmSetup {
                 Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_primary -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
                 Write-Output "Configure NTP Secondary: $ntp_secondary"
-                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondy -ReturnCarriage $true 6>> $null
+                Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondary -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
             } else {
                 #Skip Configure Data and time
