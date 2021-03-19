@@ -272,24 +272,34 @@ function Set-ArubaCPVmSetup {
         Setup a VM ClearPass (hostname, management/data ip address, dns, password...).
 
         .EXAMPLE
+        Set-ArubaCPVmSetup -name "CPPM" -version 6.9 -hostname "CPPM" -mgmt_ip 192.0.2.225 -mgmt_netmask 24 -mgmt_gateway 192.0.2.254 -dns_primary 192.0.2.1 -new_pasword "MyPassword"
+
+        Initial configuration with minimal settings of ClearPasss (Name, IP Address MGMT, DNS, Password...)
+
+        .EXAMPLE
         $cppmsetupParams = @{
             name_vm                 = "CPPM"
             version                 = "6.9"
             hostname                = "CPPM"
-            mgmt_ip                 = "10.200.11.225"
+            mgmt_ip                 = "192.0.2.225"
             mgmt_netmask            = "24"
-            mgmt_gateway            = "10.200.11.254"
-            data_ip                 = "10.200.12.225"
+            mgmt_gateway            = "192.0.2.254"
+            data_ip                 = "198.0.51.225"
             data_netmask            = "24"
-            data_gateway            = "10.200.12.254"
-            dns_primary             = "10.200.11.1"
-            dns_secondary           = "10.200.11.200"
+            data_gateway            = "198.0.51.254"
+            dns_primary             = "192.0.2.1"
+            dns_secondary           = "198.0.51.200"
             new_password            = "MyPassword"
+            ntp_primary             = "192.0.2.1"
+            ntp_secondary           = "198.0.51.200"
+            timezone_continent      = "8"
+            timezone_country        = "14"
         }
 
         PS>Set-ArubaCPVmSetup @cppmsetupParams
 
-        Initial configuration of ClearPasss (Name, IP Address MGMT/Data, DNS, Password...)
+        Initial configuration of ClearPasss (Name, IP Address MGMT/Data, DNS, Password, NTP, Timezone...)
+        for Timezone, on this example, it is for Europe/France(Paris)
     #>
 
     Param(
