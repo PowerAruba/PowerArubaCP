@@ -230,7 +230,7 @@ function Set-ArubaCPVmFirstBoot {
         Set-VMKeystrokes -VMName $name_vm -StringInput $StringInput -ReturnCarriage $true 6>> $null
 
         #With version 6.8 (and before), there is a disk perf check
-        if($version -eq "6.8") {
+        if ($version -eq "6.8") {
             Start-Sleep 20
         }
 
@@ -245,7 +245,8 @@ function Set-ArubaCPVmFirstBoot {
             else {
                 $StringInput = "n"
             }
-        } else {
+        }
+        else {
             #By Default Encrypt Local data
             $StringInput = "y"
         }
@@ -312,13 +313,13 @@ function Set-ArubaCPVmSetup {
         [Parameter (Mandatory = $true)]
         [ipaddress]$mgmt_ip,
         [Parameter (Mandatory = $true)]
-        [ValidateRange(0,32)]
+        [ValidateRange(0, 32)]
         [int]$mgmt_netmask,
         [Parameter (Mandatory = $true)]
         [ipaddress]$mgmt_gateway,
         [Parameter (Mandatory = $false)]
         [ipaddress]$data_ip,
-        [ValidateRange(0,32)]
+        [ValidateRange(0, 32)]
         [int]$data_netmask,
         [Parameter (Mandatory = $true)]
         [ipaddress]$data_gateway,
@@ -329,10 +330,10 @@ function Set-ArubaCPVmSetup {
         [Parameter (Mandatory = $true)]
         [string]$new_password,
         [Parameter (Mandatory = $false)]
-        [ValidateRange(1,10)]
+        [ValidateRange(1, 10)]
         [int]$timezone_continent,
         [Parameter (Mandatory = $false)]
-        [ValidateRange(1,55)]
+        [ValidateRange(1, 55)]
         [int]$timezone_country,
         [Parameter (Mandatory = $false)]
         [ipaddress]$ntp_primary,
@@ -346,7 +347,7 @@ function Set-ArubaCPVmSetup {
     }
 
     Process {
-        if ($timezone_continent -xor $timezone_country){
+        if ($timezone_continent -xor $timezone_country) {
             Throw "You need to specific Timezone Continent and Country on the sametime"
         }
 
@@ -365,7 +366,7 @@ function Set-ArubaCPVmSetup {
         Start-Sleep 1
 
         #Management IPv4
-        if($version -eq "6.8") {
+        if ($version -eq "6.8") {
             Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
             Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_ip.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
@@ -377,7 +378,8 @@ function Set-ArubaCPVmSetup {
             Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
-        } else {
+        }
+        else {
             #with 6.9.x using CIDR for netmask and add IPv6 support
 
             $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
@@ -395,7 +397,7 @@ function Set-ArubaCPVmSetup {
         }
 
         #Data Port
-        if($version -eq "6.8") {
+        if ($version -eq "6.8") {
             if ($data_ip -and $data_netmask -and $data_gateway) {
                 $data = $data_ip.ToString() + "/" + $data_netmask
                 Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
@@ -414,8 +416,9 @@ function Set-ArubaCPVmSetup {
                 Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
                 Start-Sleep 1
             }
-        } else {
-             #with 6.9.x using CIDR for netmask and add IPv6 support
+        }
+        else {
+            #with 6.9.x using CIDR for netmask and add IPv6 support
             if ($data_ip -and $data_netmask -and $data_gateway) {
                 $data = $data_ip.ToString() + "/" + $data_netmask
                 Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
@@ -458,11 +461,11 @@ function Set-ArubaCPVmSetup {
         Start-Sleep 1
 
         #NTP
-        if($timezone_continent -or $ntp_primary){
+        if ($timezone_continent -or $ntp_primary) {
             Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
-            if($ntp_primary) {
+            if ($ntp_primary) {
                 #Configure NTP Server
                 Set-VMKeystrokes -VMName $name_vm -StringInput 2 -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
@@ -472,7 +475,8 @@ function Set-ArubaCPVmSetup {
                 Write-Output "Configure NTP Secondary: $ntp_secondary"
                 Set-VMKeystrokes -VMName $name_vm -StringInput $ntp_secondary -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-            } else {
+            }
+            else {
                 #Skip Configure Data and time
                 Write-Output "Skip Configure NTP ..."
                 Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
@@ -485,7 +489,7 @@ function Set-ArubaCPVmSetup {
                 Start-Sleep 1
             }
 
-            if($timezone_continent){
+            if ($timezone_continent) {
                 Write-Output "Configure Timezone (Continent and Country)"
                 #Configure timezone (Continent and Country)
                 Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
@@ -496,18 +500,20 @@ function Set-ArubaCPVmSetup {
                 Start-Sleep 1
                 Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-            } else {
+            }
+            else {
                 #Skip timezone (Continent and Country)
                 Write-Output "Skip Configure Timezone (Continent and Country) ..."
                 Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                if($version -ne "6.8") {
-                     #No need to confirm (1) Time Settings before 6.9
+                if ($version -ne "6.8") {
+                    #No need to confirm (1) Time Settings before 6.9
                     Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
                     Start-Sleep 1
                 }
             }
-        } else {
+        }
+        else {
             #No NTP or Timezone settings, skip
             Write-Output "Skip Configure NTP and Timezone (Continent and Country) ..."
             Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true 6>> $null
@@ -523,7 +529,8 @@ function Set-ArubaCPVmSetup {
             else {
                 $StringInput = "n"
             }
-        } else {
+        }
+        else {
             #By Default FIPS is disable..
             $StringInput = "n"
         }
@@ -572,7 +579,7 @@ function Set-ArubaCPVmAddLicencePlatform {
 
     Process {
         $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
-        $body = @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey}
+        $body = @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey }
         Write-Verbose ($body | ConvertTo-Json)
         #No API available for this... push directly the licence with agreement eula
         Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body $body -SkipCertificateCheck | Out-Null
@@ -704,7 +711,7 @@ function Set-ArubaCPVmUpdate {
         Start-Sleep 1
 
         #if using SSH, need to specify the SSH password 
-        if($ssh_password){
+        if ($ssh_password) {
 
             #if it is the first ssh connection to this ssh server, need to valid the key fingerprint
             Set-VMKeystrokes -VMName $name_vm -StringInput "yes" -ReturnCarriage $true 6>> $null
@@ -714,7 +721,7 @@ function Set-ArubaCPVmUpdate {
             Write-Output "Set SSH Password"
             Set-VMKeystrokes -VMName $name_vm -StringInput $ssh_password -ReturnCarriage $true 6>> $null
             Start-Sleep 1
-         }
+        }
     }
 
     End {
