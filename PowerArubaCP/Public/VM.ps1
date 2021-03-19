@@ -601,7 +601,7 @@ function Set-ArubaCPVmApiClient {
 
         PS>Set-ArubaCPVmApiClient @cppmapiclientParams
 
-        Configure n API Client (Oauth) with client_id and client_secret
+        Configure an API Client (Oauth) with client_id and client_secret
     #>
 
     Param(
@@ -621,17 +621,20 @@ function Set-ArubaCPVmApiClient {
     Process {
 
         #Connection to CPPM (using console)
-        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true
+        Write-Output "Connection to console using login/password"
+        Set-VMKeystrokes -VMName $name_vm -StringInput appadmin -ReturnCarriage $true 6>> $null
         Start-Sleep 1
-        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true
+        Set-VMKeystrokes -VMName $name_vm -StringInput $new_password -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Create API Client (oauth)
-        Set-VMKeystrokes -VMName $name_vm -StringInput "system create-api-client $client_id $client_secret" -ReturnCarriage $true
+        Write-Output "Add API client $client_id"
+        Set-VMKeystrokes -VMName $name_vm -StringInput "system create-api-client $client_id $client_secret" -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
         #Exit !
-        Set-VMKeystrokes -VMName $name_vm -StringInput exit -ReturnCarriage $true
+        Write-Output "Exit to console"
+        Set-VMKeystrokes -VMName $name_vm -StringInput exit -ReturnCarriage $true 6>> $null
     }
 
     End {
