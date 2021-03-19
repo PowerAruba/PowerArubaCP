@@ -655,7 +655,7 @@ function Set-ArubaCPVmUpdate {
         $cppmUpdateParams = @{
             name_vm                 = "CPPM"
             new_password            = "MyPassword"
-            update_link             = "http://1/CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
+            update_link             = "http://192.0.2.1/CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
         }
 
         PS>Set-ArubaCPVmUpdate @cppmUpdateParams
@@ -666,7 +666,7 @@ function Set-ArubaCPVmUpdate {
         $cppmUpdateParams = @{
             name_vm                 = "CPPM"
             new_password            = "MyPassword"
-            update_link             = "powerarubacp@10.200.11.60:/CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
+            update_link             = "powerarubacp@192.0.2.1:CPPM-x86_64-20201119-clearpass-6.9-updates-5-aruba-69-patch.signed.tar"
             ssh_password            = "MySSH Password"
         }
 
