@@ -202,3 +202,58 @@ function Get-ArubaCPNetworkDeviceGroup {
     End {
     }
 }
+
+function Remove-ArubaCPNetworkDeviceGroup {
+
+    <#
+        .SYNOPSIS
+        Remove a Network Device Group on ClearPass
+
+        .DESCRIPTION
+        Remove a Network Device Group on ClearPass
+
+        .EXAMPLE
+        $ndg = Get-ArubaCPNetworkDeviceGroup -name NDG-PowerArubaCP
+        PS C:\>$ndg | Remove-ArubaCPNetworkDeviceGroup
+
+        Remove Network Device Group named NDG-PowerArubaCP
+
+        .EXAMPLE
+        Remove-ArubaCPNetworkDeviceGroup -id 3001 -confirm:$false
+
+        Remove Network Device Group id 3001 with no confirmation
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ndg")]
+        [ValidateScript( { Confirm-ArubaCPNetworkDeviceGroup $_ })]
+        [psobject]$ndg,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get ndg id from ndg ps object
+        if ($ndg) {
+            $id = $ndg.id
+            $name = "(" + $ndg.name + ")"
+        }
+
+        $uri = "api/network-device-group/${id}"
+
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Network Device Group')) {
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
+        }
+    }
+
+    End {
+    }
+}
