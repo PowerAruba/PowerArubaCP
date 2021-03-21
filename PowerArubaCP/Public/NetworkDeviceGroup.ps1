@@ -396,3 +396,60 @@ function Remove-ArubaCPNetworkDeviceGroup {
     End {
     }
 }
+
+function Remove-ArubaCPNetworkDeviceGroupMember {
+
+    <#
+        .SYNOPSIS
+        Remove a Network Device Group Member on ClearPass
+
+        .DESCRIPTION
+        Remove a Network Device Group Member list IP
+
+        .EXAMPLE
+        Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Remove-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.2
+
+        Remove Network Device Group Member with IP 192.0.2.2
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-ArubaCPNetworkDeviceGroup $_ })]
+        [psobject]$ndg,
+        [Parameter (Mandatory = $true)]
+        [string[]]$list_ip,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $ndg.id
+        $name = "(" + $ndg.name + ")"
+        $uri = "api/network-device-group/${id}"
+
+        $_ndg = New-Object -TypeName PSObject
+        $value = $ndg.value -split ", "
+        foreach ($ip in $list_ip) {
+            $value = $value | Where-Object { $_ -ne $ip }
+        }
+
+        if ( $value.count -eq 0 ) {
+            Throw "You can't remove all entries. Use Remove-ArubaCPNetworkDeviceGroup to remove Network Device Group"
+        }
+
+        $_ndg | Add-Member -name "value" -MemberType NoteProperty -Value ($value -join ", ")
+
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Network Device Group Member')) {
+            $ndg = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ndg -uri $uri -connection $connection
+            $ndg
+        }
+    }
+    End {
+    }
+}
