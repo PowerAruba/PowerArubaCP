@@ -203,6 +203,97 @@ function Get-ArubaCPNetworkDeviceGroup {
     }
 }
 
+function Set-ArubaCPNetworkDeviceGroup {
+
+    <#
+        .SYNOPSIS
+        Configure a Network Device Group on ClearPass
+
+        .DESCRIPTION
+        Configure a Network Device Group with Id, Name, Description, subnet, regex, list...
+
+        .EXAMPLE
+        Get-ArubaCPNetworkDeviceGroup -name My-NDG-list | Set-ArubaCPNetworkDeviceGroup -name NDG-list-IP -description "Update via PowerArubaCP"
+
+        Change Network Device Group name and description
+
+        .EXAMPLE
+        Get-ArubaCPNetworkDeviceGroup -name My-NDG-list | Set-ArubaCPNetworkDeviceGroup -list 192.0.2.3
+
+        Change Network Device Group (IP) list
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+    Param(
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1)]
+        [ValidateScript( { Confirm-ArubaCPNetworkDeviceGroup $_ })]
+        [psobject]$ndg,
+        [Parameter (Mandatory = $false)]
+        [string]$name,
+        [Parameter (Mandatory = $false)]
+        [string]$description,
+        [Parameter (Mandatory = $true, ParameterSetName = "subnet")]
+        [string]$subnet,
+        [Parameter (Mandatory = $true, ParameterSetName = "regex")]
+        [string]$regex,
+        [Parameter (Mandatory = $true, ParameterSetName = "list_ip")]
+        [string[]]$list_ip,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get ndg id from ndg ps object
+        if ($ndg) {
+            $id = $ndg.id
+            $old_name = "(" + $ndg.name + ")"
+        }
+
+        $uri = "api/network-device-group/${id}"
+
+        $_ndg = New-Object -TypeName PSObject
+
+        if ( $PsBoundParameters.ContainsKey('name') ) {
+            $_ndg | Add-Member -name "name" -MemberType NoteProperty -Value $name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('description') ) {
+            $_ndg | Add-Member -name "description" -MemberType NoteProperty -Value $description
+        }
+
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "subnet" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "subnet"
+                $_ndg | Add-member -name "value" -membertype NoteProperty -Value $subnet
+            }
+            "regex" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "regex"
+                $_ndg | Add-member -name "value" -membertype NoteProperty -Value $regex
+            }
+            "list_ip" {
+                $_ndg | Add-Member -name "group_format" -MemberType NoteProperty -Value "list"
+                $_ndg | Add-member -name "value" -membertype NoteProperty -Value ($list_ip -join ",")
+            }
+            default { }
+        }
+
+        if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network Device Group')) {
+            $ndg = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ndg -uri $uri -connection $connection
+            $ndg
+        }
+    }
+
+    End {
+    }
+}
+
 function Remove-ArubaCPNetworkDeviceGroup {
 
     <#
