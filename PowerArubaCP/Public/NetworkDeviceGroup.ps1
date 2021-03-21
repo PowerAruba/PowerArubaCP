@@ -89,6 +89,54 @@ function Add-ArubaCPNetworkDeviceGroup {
     }
 }
 
+function Add-ArubaCPNetworkDeviceGroupMember {
+
+    <#
+        .SYNOPSIS
+        Add a Network Device Group Member on ClearPass
+
+        .DESCRIPTION
+        Add a Network Device Group Member IP list
+
+        .EXAMPLE
+        Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Add-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.2
+
+        Add Network Device Group with format list and type IP Address (192.0.2.2.)
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true)]
+        [ValidateScript( { Confirm-ArubaCPNetworkDeviceGroup $_ })]
+        [psobject]$ndg,
+        [Parameter (Mandatory = $true)]
+        [string[]]$list_ip,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $id = $ndg.id
+        $uri = "api/network-device-group/${id}"
+
+        $_ndg = New-Object -TypeName PSObject
+
+        #append to actual list
+        $value = $ndg.value + ", " + ($list_ip -join ", ")
+        $_ndg | Add-Member -name "value" -MemberType NoteProperty -Value $value
+
+        $ndg = Invoke-ArubaCPRestMethod -method "PATCH" -body $_ndg -uri $uri -connection $connection
+        $ndg
+    }
+
+    End {
+    }
+}
+
 function Get-ArubaCPNetworkDeviceGroup {
 
     <#
