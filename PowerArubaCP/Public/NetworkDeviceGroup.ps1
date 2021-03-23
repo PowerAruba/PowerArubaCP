@@ -271,8 +271,7 @@ function Set-ArubaCPNetworkDeviceGroup {
         Change Network Device Group (IP) list
     #>
 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
-    [CmdLetBinding(DefaultParameterSetName = "Default")]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium', DefaultParameterSetName = "Default")]
     Param(
         [int]$id,
         [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1)]
