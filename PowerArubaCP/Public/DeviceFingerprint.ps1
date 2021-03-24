@@ -134,6 +134,10 @@ function Get-ArubaCPDeviceFingerprint {
 
     Process {
 
+        if ($connection.version -lt [version]"6.9.0") {
+            throw "Need ClearPass >= 6.9.0 for use this cmdlet"
+        }
+
         $invokeParams = @{ }
 
         $uri = "api/device-profiler/device-fingerprint/"

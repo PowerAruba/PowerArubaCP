@@ -57,6 +57,10 @@ Describe  "Get Device FingerPrint" {
         $dfp.device_family | Should -Not -BeNullOrEmpty
     }
 
+    It "Get Device Fingerprint throw a error when use with CPPM <= 6.9.0" -Skip: ($VersionBefore690 -eq 0) {
+        { Get-ArubaCPDeviceFingerprint -ip_address 192.0.2.2 } | Should -Throw "Need ClearPass >= 6.9.0 for use this cmdlet"
+    }
+
     AfterAll {
         if ($VersionBefore690 -eq 0) {
             #Remove 2 entries
