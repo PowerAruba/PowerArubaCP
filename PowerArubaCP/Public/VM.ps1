@@ -303,6 +303,7 @@ function Set-ArubaCPVmSetup {
         for Timezone, on this example, it is for Europe/France(Paris)
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
     Param(
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
@@ -611,6 +612,7 @@ function Set-ArubaCPVmApiClient {
         Configure an API Client (Oauth) with client_id and client_secret
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
@@ -682,6 +684,7 @@ function Set-ArubaCPVmUpdate {
         Update CPPM to 6.9.5 using SSH
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
