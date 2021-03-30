@@ -351,6 +351,9 @@ function Set-ArubaCPVmSetup {
         if ($timezone_continent -xor $timezone_country) {
             Throw "You need to specific Timezone Continent and Country on the sametime"
         }
+        if (($data_ip -xor $data_netmask) -or ($data_netmask -xor $data_gateway)) {
+            Throw "You need to specific Data IP, netmask and Gateway on the sametime"
+        }
 
         #Connection
         Write-Output "Connection to console using default login/password"
