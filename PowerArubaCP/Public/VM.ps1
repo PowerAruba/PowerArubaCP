@@ -540,7 +540,7 @@ function Set-ArubaCPVmSetup {
 
         #Configuration OK ?
         Set-VMKeystrokes -VMName $name_vm -StringInput y -ReturnCarriage $true 6>> $null
-        Write-Output "Setup is finish, now CPPM will be configure and reboot (need to wait 7/8 minutes before try to connect)"
+        Write-Output "Setup is finish, now CPPM will be configure and restart service (need to wait 7/8 minutes before try to connect)"
     }
 
     End {
