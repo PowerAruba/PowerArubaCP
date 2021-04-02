@@ -721,7 +721,7 @@ function Set-ArubaCPVmUpdate {
         Set-VMKeystrokes -VMName $name_vm -StringInput "system update -i $update_link" -ReturnCarriage $true 6>> $null
         Start-Sleep 1
 
-        #if using SSH, need to specify the SSH password 
+        #if using SSH, need to specify the SSH password
         if ($ssh_password) {
 
             #if it is the first ssh connection to this ssh server, need to valid the key fingerprint
