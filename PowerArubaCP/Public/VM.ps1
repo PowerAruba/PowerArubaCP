@@ -191,6 +191,7 @@ function Set-ArubaCPVmFirstBoot {
         Configuration of first CPPM Boot (VM Name, Appliance Type C3000V and encrypt disk disable )
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [ValidateSet("6.8", '6.9')]
@@ -304,6 +305,7 @@ function Set-ArubaCPVmSetup {
     #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
@@ -571,6 +573,7 @@ function Set-ArubaCPVmAddLicencePlatform {
         Configure initial Platform Licence key on ClearPass
     #>
 
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [ipaddress]$mgmt_ip,
@@ -616,6 +619,7 @@ function Set-ArubaCPVmApiClient {
     #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
@@ -688,6 +692,7 @@ function Set-ArubaCPVmUpdate {
     #>
 
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
