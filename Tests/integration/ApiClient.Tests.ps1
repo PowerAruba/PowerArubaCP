@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get API Client" {
+Describe "Get API Client" {
 
     BeforeAll {
         #Add 2 entries
@@ -63,7 +63,7 @@ Describe  "Get API Client" {
     }
 }
 
-Describe  "Add Api Client" {
+Describe "Add Api Client" {
 
     It "Add Api Client with grant types client_credentials and description" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -client_description "Add by PowerArubaCP" -grant_types "client_credentials" -profile_id 1
@@ -92,7 +92,7 @@ Describe  "Add Api Client" {
 }
 
 
-Describe  "Remove Api Client" {
+Describe "Remove Api Client" {
 
     It "Remove Api Client by id" {
         Add-ArubaCPApiClient -client_id pester_PowerArubaCP1 -grant_types "client_credentials" -profile_id 1

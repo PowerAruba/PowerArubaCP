@@ -5,7 +5,7 @@
 #
 . ../common.ps1
 
-Describe  "Connect to a ClearPass (using Token)" {
+Describe "Connect to a ClearPass (using Token)" {
     BeforeAll {
         #Disconnect "default connection"
         Disconnect-ArubaCP -confirm:$false
@@ -34,7 +34,7 @@ Describe  "Connect to a ClearPass (using Token)" {
     }
 }
 
-Describe  "Connect to a ClearPass (using multi connection)" {
+Describe "Connect to a ClearPass (using multi connection)" {
     BeforeAll {
         #Disconnect "default connection"
         Disconnect-ArubaCP -confirm:$false
@@ -125,7 +125,7 @@ Describe "Connect using client_credentials" {
     }
 }
 
-Describe  "Invoke ArubaCP RestMethod tests" {
+Describe "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...
         Connect-ArubaCP @invokeParams

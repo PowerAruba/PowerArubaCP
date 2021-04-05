@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Service" {
+Describe "Get Service" {
 
     It "Get Service Does not throw an error" -Skip:$VersionBefore680 {
         {
@@ -76,7 +76,7 @@ Describe  "Get Service" {
 
 }
 
-Describe  "Enable / Disable Service" {
+Describe "Enable / Disable Service" {
 
     It "Disable Service (id 1)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -id 1
