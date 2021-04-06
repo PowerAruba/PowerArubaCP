@@ -58,7 +58,7 @@ Describe "Get Network Device Group" {
     }
 }
 
-Describe  "Add Network Device Group" {
+Describe "Add Network Device Group" {
 
     BeforeAll {
         #Add 2 entries
@@ -164,7 +164,7 @@ Describe "Add Firewall Address Group Member" {
 
 }
 
-Describe  "Set Network Device Group" {
+Describe "Set Network Device Group" {
 
     BeforeAll {
         #Add 3 entries
