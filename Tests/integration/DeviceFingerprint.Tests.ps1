@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Device FingerPrint" {
+Describe "Get Device FingerPrint" {
 
     BeforeAll {
         if ($VersionBefore690 -eq 0) {
@@ -70,7 +70,7 @@ Describe  "Get Device FingerPrint" {
     }
 }
 
-Describe  "Add Device Fingerprint" {
+Describe "Add Device Fingerprint" {
 
     It "Add Device Fingerprint with hostname" -Skip:$VersionBefore690 {
         Add-ArubaCPDeviceFingerprint -mac_address 00-01-02-03-04-07 -hostname pester_PowerArubaCP
