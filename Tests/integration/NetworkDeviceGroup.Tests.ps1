@@ -156,7 +156,7 @@ Describe "Add Firewall Address Group Member" {
     }
 
     AfterAll {
-        #Remove 2 entries
+        #Remove 3 entries
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -confirm:$false
@@ -230,7 +230,7 @@ Describe "Set Network Device Group" {
     }
 
     AfterAll {
-        #Remove 2 entries
+        #Remove 3 entries
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -confirm:$false
@@ -302,7 +302,7 @@ Describe "Remove Network Device Group Member" {
     }
 
     AfterAll {
-        #Remove 2 entries
+        #Remove 3 entries
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW3 | Remove-ArubaCPNetworkDevice -confirm:$false
