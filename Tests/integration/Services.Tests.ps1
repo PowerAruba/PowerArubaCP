@@ -37,7 +37,7 @@ Describe "Get Service" {
         }
     }
 
-    It "Get Network Device (id 1) and confirm (via Confirm-ArubaCPService)" -Skip:$VersionBefore680 {
+    It "Get Service (id 1) and confirm (via Confirm-ArubaCPService)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService | Where-Object { $_.id -eq "1" }
         Confirm-ArubaCPService $s | Should -Be $true
     }
@@ -56,7 +56,7 @@ Describe "Get Service" {
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
     }
 
-    It "Search Network Device by name (contains *Policy*)" -Skip:$VersionBefore680 {
+    It "Search Service by name (contains *Policy*)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -name Policy -filter_type contains
         @($s).count | Should -Be 1
         $s.id | Should -Not -BeNullOrEmpty
