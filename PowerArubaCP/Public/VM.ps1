@@ -209,8 +209,10 @@ function Set-ArubaCPVmFirstBoot {
     }
 
     Process {
-
-        #TODO Check the VM is available and if Set-VMKeyStrokes function is load too
+        if (-not (Get-Command -name Set-VMKeystrokes -ErrorAction SilentlyContinue)) {
+            Throw "You need to install/import Set-VMKeystrokes script (Install-Script -Name VMKeystrokes)"
+        }
+        #TODO Check the VM is available
 
         switch ( $appliance_type ) {
             "CLABV" {
@@ -355,6 +357,9 @@ function Set-ArubaCPVmSetup {
         }
         if (($data_ip -xor $data_netmask) -or ($data_netmask -xor $data_gateway)) {
             Throw "You need to specific Data IP, netmask and Gateway on the sametime"
+        }
+        if (-not (Get-Command -name Set-VMKeystrokes -ErrorAction SilentlyContinue)) {
+            Throw "You need to install/import Set-VMKeystrokes script (Install-Script -Name VMKeystrokes)"
         }
 
         #Connection
@@ -635,6 +640,9 @@ function Set-ArubaCPVmApiClient {
     }
 
     Process {
+        if (-not (Get-Command -name Set-VMKeystrokes -ErrorAction SilentlyContinue)) {
+            Throw "You need to install/import Set-VMKeystrokes script (Install-Script -Name VMKeystrokes)"
+        }
 
         #Connection to CPPM (using console)
         Write-Output "Connection to console using login/password"
@@ -708,6 +716,9 @@ function Set-ArubaCPVmUpdate {
     }
 
     Process {
+        if (-not (Get-Command -name Set-VMKeystrokes -ErrorAction SilentlyContinue)) {
+            Throw "You need to install/import Set-VMKeystrokes script (Install-Script -Name VMKeystrokes)"
+        }
 
         #Connection to CPPM (using console)
         Write-Output "Connection to console using login/password"
