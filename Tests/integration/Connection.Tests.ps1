@@ -55,6 +55,9 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Auth(entication) Source" {
             { Get-ArubaCPAuthSource -connection $cppm } | Should -Not -Throw
         }
+        It "Use Multi connection for call Get Auth(entication) Method" {
+            { Get-ArubaCPAuthMethod -connection $cppm } | Should -Not -Throw
+        }
         It "Use Multi connection for call Get CPPM Version" {
             { Get-ArubaCPCPPMVersion -connection $cppm } | Should -Not -Throw
         }
