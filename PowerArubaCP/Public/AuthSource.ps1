@@ -11,12 +11,12 @@ function Get-ArubaCPAuthSource {
         Get Authentication Source on CPPM
 
         .DESCRIPTION
-        Get Service (Id, Name, Type, Host Name, ....)
+        Get Auth Source (Id, Name, Type, Host Name, ....)
 
         .EXAMPLE
         Get-ArubaCPAuthSource
 
-        Get ALL Service on the Clearpass
+        Get ALL Auth Source on the Clearpass
 
         .EXAMPLE
         Get-ArubaCPAuthSource PowerArubaCP
