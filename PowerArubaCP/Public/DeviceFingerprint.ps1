@@ -11,7 +11,7 @@ function Add-ArubaCPDeviceFingerprint {
         Add a Device Fingerprint on ClearPass
 
         .DESCRIPTION
-        Add an Device Fingerprint with mac address, hostname, ip (address) and device info (Category, Name, Familly)
+        Add a Device Fingerprint with mac address, hostname, ip (address) and device info (Category, Name, Family)
 
         .EXAMPLE
         Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -hostname "My PowerArubaCP Device Fingerprint"
