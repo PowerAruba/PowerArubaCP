@@ -117,7 +117,7 @@ Describe "Add Network Device Group" {
     }
 }
 
-Describe "Add Firewall Address Group Member" {
+Describe "Add Network Device Group Member" {
 
     BeforeAll {
         #Add 3 entries
