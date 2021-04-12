@@ -59,6 +59,7 @@ function Add-ArubaCPNetworkDeviceGroup {
         if ( $PsBoundParameters.ContainsKey('id') ) {
             $_ndg | Add-Member -name "id" -MemberType NoteProperty -Value $id
         }
+
         $_ndg | Add-Member -name "name" -MemberType NoteProperty -Value $name
 
         if ( $PsBoundParameters.ContainsKey('description') ) {
