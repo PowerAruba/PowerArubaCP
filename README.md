@@ -10,7 +10,7 @@ This is a Powershell module for configure an Aruba ClearPass (CPPM).
 With this module (version 0.4.0) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
-- Application License (Add / Get / Remove)
+- [Application License](#application-license) (Add / Get / Remove)
 - CPPM (Get Version)
 - Endpoint (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
@@ -249,6 +249,46 @@ You can create a new API Client `Add-ArubaCPApiClient`, retrieve its information
     Confirm
     Are you sure you want to perform this action?
     Performing the operation "Remove API Client" on target "MyAPIClient".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+### Application License
+
+You can create add Application License `Add-ArubaCPApplicationLicense`, retrieve its information `Get-ArubaCPApplicationLicense` or delete it `Remove-ArubaCPApplicationLicense`.
+
+```powershell
+# Add Application License (Onboard)
+    Add-ArubaCPApplicationLicense -product_name Onboard -license_key "-----BEGIN CLEARPASS ONBOARD LICENSE KEY----- .... "
+
+    id                : 3002
+    product_id        : 8
+    product_name      : Onboard
+    license_key       : -----BEGIN CLEARPASS ONBOARD LICENSE KEY-----
+                        .......
+                        -----END CLEARPASS ONBOARD LICENSE KEY-----
+    license_type      : Evaluation
+    user_count        : 100
+    duration          : 90
+    duration_units    : days
+    license_added_on  : 18/04/2021 13:45:27
+    activation_status : False
+    _links            : @{self=}
+
+
+# Get information about Application License
+    Get-ArubaCPApplicationLicense -product_name Onboard | Format-Table
+
+    id product_id product_name license_key
+    -- ---------- ------------ -----------
+    3002          8 Onboard      -----BEGIN CLEARPASS ONBOARD LICENSE KEY-----...
+
+# Remove Application License Onboard
+    $al = Get-ArubaCPApplicationLicense -product_name Onboard
+    $al | Remove-ArubaCPApplicationLicense
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Application License" on target "3002 (Onboard)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
 
