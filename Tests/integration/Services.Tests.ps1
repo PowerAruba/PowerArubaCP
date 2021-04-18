@@ -49,7 +49,7 @@ Describe "Get Service" {
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
     }
 
-    It "Search Service by id ([Policy Manager Admin Network Login Service])" -Skip:$VersionBefore680 {
+    It "Search Service by name ([Policy Manager Admin Network Login Service])" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -name '[Policy Manager Admin Network Login Service]'
         @($s).count | Should -Be 1
         $s.id | Should -Not -BeNullOrEmpty
