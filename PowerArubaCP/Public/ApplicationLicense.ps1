@@ -167,12 +167,12 @@ function Remove-ArubaCPApplicationLicense {
         #get nad id from nad ps object
         if ($al) {
             $id = $al.id
-            $name = "(" + $al.name + ")"
+            $name = "(" + $al.product_name + ")"
         }
 
         $uri = "api/application-license/${id}"
 
-        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove App device')) {
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Application License')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
         }
     }
