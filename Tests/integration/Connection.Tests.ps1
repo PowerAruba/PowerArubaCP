@@ -58,6 +58,9 @@ Describe  "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Network Device" {
             { Get-ArubaCPNetworkDevice -connection $cppm } | Should -Not -Throw
         }
+        It "Use Multi connection for call Get Network Device Group" {
+            { Get-ArubaCPNetworkDeviceGroup -connection $cppm } | Should -Not -Throw
+        }
         It "Use Multi connection for call Get Server Configuration" {
             { Get-ArubaCPServerConfiguration -connection $cppm } | Should -Not -Throw
         }

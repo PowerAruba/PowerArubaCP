@@ -127,6 +127,31 @@ Function Confirm-ArubaCPNetworkDevice {
 
 }
 
+function Confirm-ArubaCPNetworkDeviceGroup {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Network Device Group (NDG) element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain an id property."
+    }
+    if ( -not ( $argument | get-member -name name -Membertype Properties)) {
+        throw "Element specified does not contain a name property."
+    }
+    if ( -not ( $argument | get-member -name group_format -Membertype Properties)) {
+        throw "Element specified does not contain a group_format property."
+    }
+    if ( -not ( $argument | get-member -name value -Membertype Properties)) {
+        throw "Element specified does not contain a value property."
+    }
+    $true
+
+}
+
 Function Confirm-ArubaCPService {
 
     Param (
