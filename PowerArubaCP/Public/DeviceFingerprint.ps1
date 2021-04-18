@@ -56,7 +56,6 @@ function Add-ArubaCPDeviceFingerprint {
 
         $_dfp = new-Object -TypeName PSObject
 
-
         $_dfp | add-member -name "mac" -membertype NoteProperty -Value (Format-ArubaCPMacAddress $mac_address)
 
         if ( $PsBoundParameters.ContainsKey('hostname') ) {
@@ -156,7 +155,6 @@ function Get-ArubaCPDeviceFingerprint {
         }
 
         $dfp = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
-
         $dfp
     }
 
