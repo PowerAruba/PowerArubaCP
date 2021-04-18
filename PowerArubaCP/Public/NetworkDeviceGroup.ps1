@@ -244,7 +244,6 @@ function Get-ArubaCPNetworkDeviceGroup {
         $uri = "api/network-device-group"
 
         $ndg = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection @invokeParams
-
         $ndg._embedded.items
     }
 
@@ -450,6 +449,7 @@ function Remove-ArubaCPNetworkDeviceGroupMember {
             $ndg
         }
     }
+
     End {
     }
 }
