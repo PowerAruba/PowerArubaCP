@@ -197,6 +197,56 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     $nad | Remove-ArubaCPNetworkDevice -noconfirm
 ```
 
+### API Client
+
+You can create a new API Client `Add-ArubaCPApiClient`, retrieve its information `Get-ArubaCPApiClient` or delete it `Remove-ArubaCPApiClient`.
+
+```powershell
+# Create an API Client
+    Add-ArubaCPApiClient -client_id MyAPIClient -grant_types client_credentials -profile_id 1
+
+    client_id                    : MyAPIClient
+    client_secret                : $2y$10$OXRszKzBSH7hP5QwgZ3cCuNZwbGaddb767l0Kx52Ww.RPEhBfbj6u
+    client_description           :
+    grant_types                  : client_credentials
+    redirect_uri                 :
+    operating_scope              :
+    profile_id                   : 1
+    auto_confirm                 : False
+    enabled                      : True
+    scope                        :
+    user_id                      :
+    access_lifetime              : 8 hours
+    refresh_lifetime             : 14 days
+    operating_scope_label        : ClearPass REST API
+    profile_name                 : Super Administrator
+    client_public                : False
+    client_refresh               : False
+    access_token_lifetime        : 8
+    access_token_lifetime_units  : hours
+    refresh_token_lifetime       : 14
+    refresh_token_lifetime_units : days
+    id                           : MyAPIClient
+    _links                       : @{self=}
+
+
+# Get information about API Client
+    Get-ArubaCPApiClient -client_id MyAPIClient | Format-Table
+
+    client_id   client_secret      client_description grant_types        redirect_uri operating_scope profile_id auto_confirm enabled scope
+    ---------   -------------      ------------------ -----------        ------------ --------------- ---------- ------------ ------- -----
+    MyAPIClient $2y$10$OXRszKzB...                    client_credentials                              1                 False    True
+
+# Remove an API Client
+    $ac = Get-ArubaCPApiClient -client_id MyAPIClient
+    $ac | Remove-ArubaCPApiClient
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove API Client" on target "MyAPIClient".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
