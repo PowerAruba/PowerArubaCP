@@ -45,7 +45,6 @@ function Add-ArubaCPApplicationLicense {
         $_al | Add-Member -name "license_key" -MemberType NoteProperty -Value $license_key
 
         $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $uri -connection $connection
-
         $al
     }
 
