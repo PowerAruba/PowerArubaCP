@@ -110,7 +110,6 @@ function Get-ArubaCPAuthSource {
         $uri = "api/auth-source"
 
         $as = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
-
         $as._embedded.items
     }
 
