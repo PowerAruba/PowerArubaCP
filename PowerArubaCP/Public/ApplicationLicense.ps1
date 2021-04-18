@@ -11,7 +11,7 @@ function Add-ArubaCPApplicationLicense {
         Add Application License info on CPPM
 
         .DESCRIPTION
-        Add Application License (Id, Name, Type, user Count...)
+        Add Application License (Name/Type and Key)
 
         .EXAMPLE
         Add-ArubaCPApplicationLicense -product_name Access -license_key XXXXXXX
