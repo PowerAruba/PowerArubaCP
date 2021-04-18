@@ -16,7 +16,7 @@ function Get-ArubaCPAuthMethod {
         .EXAMPLE
         Get-ArubaCPAuthMethod
 
-        Get ALL Authentication Method on the Clearpass
+        Get ALL Authentication Methods on the Clearpass
 
         .EXAMPLE
         Get-ArubaCPAuthMethod [PAP]

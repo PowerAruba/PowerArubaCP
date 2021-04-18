@@ -16,7 +16,7 @@ function Get-ArubaCPAuthSource {
         .EXAMPLE
         Get-ArubaCPAuthSource
 
-        Get ALL Auth Source on the Clearpass
+        Get ALL Auth Sources on the Clearpass
 
         .EXAMPLE
         Get-ArubaCPAuthSource PowerArubaCP
