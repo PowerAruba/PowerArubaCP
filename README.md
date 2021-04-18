@@ -194,7 +194,12 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
 
 # Remove a NAS
     $nad = Get-ArubaCPNetworkDevice -name SW1
-    $nad | Remove-ArubaCPNetworkDevice -noconfirm
+    $nad | Remove-ArubaCPNetworkDevice
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Network device" on target "3344 (SW1)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
 
 ### API Client
