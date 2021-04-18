@@ -43,7 +43,7 @@ Describe "Get Auth Source" {
         $as.name | Should -Be "[Local User Repository]"
     }
 
-    It "Search Auth Source by id ([Local User Repository])" {
+    It "Search Auth Source by name ([Local User Repository])" {
         $as = Get-ArubaCPAuthSource -name '[Local User Repository]'
         @($as).count | Should -Be 1
         $as.id | Should -Not -BeNullOrEmpty

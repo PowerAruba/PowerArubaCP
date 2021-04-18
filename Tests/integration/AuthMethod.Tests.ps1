@@ -44,7 +44,7 @@ Describe "Get Auth Method" {
         $am.name | Should -Be "[PAP]"
     }
 
-    It "Search Auth Method by id ([PAP])" {
+    It "Search Auth Method by name ([PAP])" {
         $am = Get-ArubaCPAuthMethod -name '[PAP]'
         @($am).count | Should -Be 1
         $am.id | Should -Not -BeNullOrEmpty
