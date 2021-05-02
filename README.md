@@ -12,7 +12,7 @@ With this module (version 0.4.0) you can manage:
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
 - [CPPM](#clearpass-version) (Get Version)
-- Endpoint (Add / Get / Set / Remove)
+- [Endpoint](eEndpoint) (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
 - Server (Get Configuration, Version)
 - Service (Get / Enable / Disable)
@@ -309,6 +309,52 @@ You can retrieve its information `Get-ArubaCPCPPMVersion`.
     cc_enabled          : False
     eval_license        : True
     cloud_mode          : False
+```
+
+### Endpoint
+
+You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaCPEndpoint`, modify its properties `Set-ArubaCPEndpoint` or delete it `Remove-ArubaCPEndpoint`.
+
+```powershell
+# Add Endpoint (Known)
+    Add-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 -status Known
+
+    id          : 3179
+    mac_address : 000102030405
+    status      : Known
+    attributes  :
+    _links      : @{self=}
+
+# Get information about Endpoint
+    Get-ArubaCPEndpoint | Format-table
+
+    id mac_address  status  attributes _links
+    -- -----------  ------  ---------- ------
+    3004 00505690da3e Unknown            @{self=}
+    3173 00155d27ec00 Unknown            @{self=}
+    3003 0050569041da Unknown            @{self=}
+    3002 005056afddbb Unknown            @{self=}
+    3005 005056af007b Unknown            @{self=}
+    3030 00505680fb94 Unknown            @{self=}
+
+# Modified information (status and description) about Endpoint
+    Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPEndpoint -status "Unknown" -description "Change by PowerArubaCP"
+ 
+    id          : 3179
+    mac_address : 000102030405
+    description : Change by PowerArubaCP
+    status      : Unknown
+    attributes  :
+    _links      : @{self=}
+
+# Remove Endpoint
+    $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+    $ep | Remove-ArubaCPEndpoint
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Endpoint" on target "3174 (000102030405)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
 ```
 
 ### MultiConnection
