@@ -11,7 +11,7 @@ With this module (version 0.4.0) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
-- CPPM (Get Version)
+- [CPPM](#clearpass-version) (Get Version)
 - Endpoint (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
 - Server (Get Configuration, Version)
@@ -290,6 +290,25 @@ You can create add Application License `Add-ArubaCPApplicationLicense`, retrieve
     Are you sure you want to perform this action?
     Performing the operation "Remove Application License" on target "3002 (Onboard)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+### ClearPass Version
+
+You can retrieve its information `Get-ArubaCPCPPMVersion`.
+
+```powershell
+# Get ClearPass Version information 
+    Get-ArubaCPCPPMVersion
+
+    app_major_version   : 6
+    app_minor_version   : 9
+    app_service_release : 5
+    app_build_number    : 131053
+    hardware_version    : CLABV
+    fips_enabled        : False
+    cc_enabled          : False
+    eval_license        : True
+    cloud_mode          : False
 ```
 
 ### MultiConnection
