@@ -176,9 +176,10 @@ Function Confirm-ArubaCPService {
     if ( -not ( $argument | get-member -name enabled -Membertype Properties)) {
         throw "Element specified does not contain a enabled property."
     }
-    if ( -not ( $argument | get-member -name orderNo -Membertype Properties)) {
-        throw "Element specified does not contain a orderNo property."
-    }
+    # orderNo is now order_no with CPPM 6.10.x
+    #if ( -not ( $argument | get-member -name orderNo -Membertype Properties)) {
+    #    throw "Element specified does not contain a orderNo property."
+    #}
     $true
 
 }
