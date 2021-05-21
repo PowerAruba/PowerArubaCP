@@ -55,7 +55,10 @@ Describe  "Get Server Version" {
         $sv = Get-ArubaCPServerVersion
         $sv.cppm_version | Should -Not -Be $NULL
         $sv.guest_version | Should -Not -Be $NULL
-        $sv.installed_patches | Should -Not -Be $NULL
+        #No installed patches when it is the first build... (6.10.0...)
+        if ($DefaultArubaCPConnection.version.build -ne "0") {
+            $sv.installed_patches | Should -Not -Be $NULL
+        }
     }
 }
 
