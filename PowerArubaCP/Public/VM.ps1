@@ -195,7 +195,7 @@ function Set-ArubaCPVmFirstBoot {
     Param(
         [Parameter (Mandatory = $true)]
         [ValidateSet("6.8", '6.9', '6.10')]
-        [string]$version,
+        [version]$version,
         [Parameter (Mandatory = $true)]
         [ValidateSet("CLABV", 'C1000V', 'C2000V', 'C3000V')]
         [string]$appliance_type,
@@ -312,7 +312,7 @@ function Set-ArubaCPVmSetup {
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
         [ValidateSet("6.8", '6.9', '6.10')]
-        [string]$version,
+        [version]$version,
         [Parameter (Mandatory = $true)]
         [string]$hostname,
         [Parameter (Mandatory = $true)]
