@@ -194,10 +194,10 @@ function Set-ArubaCPVmFirstBoot {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
-        [ValidateSet("6.8", '6.9', '6.10')]
+        [ValidateSet("6.8", "6.9", "6.10")]
         [version]$version,
         [Parameter (Mandatory = $true)]
-        [ValidateSet("CLABV", 'C1000V', 'C2000V', 'C3000V')]
+        [ValidateSet("CLABV", "C1000V", "C2000V", "C3000V")]
         [string]$appliance_type,
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
@@ -311,7 +311,7 @@ function Set-ArubaCPVmSetup {
     Param(
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
-        [ValidateSet("6.8", '6.9', '6.10')]
+        [ValidateSet("6.8", "6.9", "6.10")]
         [version]$version,
         [Parameter (Mandatory = $true)]
         [string]$hostname,
