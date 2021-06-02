@@ -17,7 +17,7 @@ Describe "Get Service" {
         } | Should -Not -Throw
     }
 
-    It "Get Service " -Skip:$VersionBefore680 {
+    It "Get Service" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService
         $s.count | Should -Not -Be $NULL
     }
