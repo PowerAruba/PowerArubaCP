@@ -19,7 +19,7 @@ Describe "Get Application License" {
 
     It "Get ALL Application License" -Skip:$VersionBefore680 {
         $al = Get-ArubaCPApplicationLicense
-        $al.count | Should -Not -Be $NULL
+        @($al).count | Should -Not -Be $NULL
     }
 
     It "Get Application License and confirm" -Skip:$VersionBefore680 {
