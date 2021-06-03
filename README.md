@@ -398,7 +398,7 @@ You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `G
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
 You need to use -connection parameter to cmdlet
 
-For example to get Vlan Ports of 2 switchs
+For example to get Static Host List of 2 CPPM
 
 ```powershell
 # Connect to first ClearPass
