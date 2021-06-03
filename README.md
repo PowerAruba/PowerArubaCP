@@ -357,6 +357,42 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaC
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
 ```
 
+### Server
+
+You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `Get-ArubaCPServerVersion`.
+
+
+```powershell
+# Get Server Configuration
+    Get-ArubaCPServerConfiguration
+
+    name                       : CPPM
+    local_server               : True
+    server_uuid                : 443c73db-aab3-49e4-a701-c21ef6945776
+    server_dns_name            : CPPM
+    fqdn                       :
+    server_ip                  :
+    management_ip              : 10.200.11.159
+    ipv6_server_ip             :
+    ipv6_management_ip         :
+    is_publisher               : True
+    extras                     :
+    is_insight_enabled         : True
+    is_insight_primary         : True
+    is_perfmon_enabled         : t
+    replication_status         : ENABLED
+    last_replication_timestamp :
+    is_profiler_enabled        : True
+    _links                     : @{self=}
+
+# Get Server Version
+    Get-ArubaCPServerVersion
+
+    cppm_version  guest_version installed_patches
+    ------------  ------------- -----------------
+    6.10.0.180076 6.10.0.180076 {}
+```
+
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
