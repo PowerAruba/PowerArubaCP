@@ -393,6 +393,48 @@ You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `G
     6.10.0.180076 6.10.0.180076 {}
 ```
 
+### Service
+
+You can retrieve information about Service `Get-ArubaCPService`, Enable `Enable-ArubaCPService`, or disable it `Disable-Enable`.
+
+```powershell
+
+#Get List of Service
+    Get-ArubaCPService | Format-Table
+
+    id name                                         type        template                         enabled order_no _links
+    -- ----                                         ----        --------                         ------- -------- ------
+    10 [Aruba Device Access Service]                TACACS      TACACS+ Enforcement                 True        3 @{self=}
+    1  [Policy Manager Admin Network Login Service] TACACS      TACACS+ Enforcement                 True        1 @{self=}
+    2  [AirGroup Authorization Service]             RADIUS      RADIUS Enforcement ( Generic )      True        2 @{self=}
+    11 [Guest Operator Logins]                      Application Aruba Application Authentication    True        4 @{self=}
+    13 [Device Registration Disconnect]             WEBAUTH     Web-based Authentication            True        6 @{self=}
+    12 [Insight Operator Logins]                    Application Aruba Application Authentication    True        5 @{self=}
+
+#Enable service on Guest Operator Logins
+    Get-ArubaCPService -Name "[Guest Operator Logins]" | Enable-ArubaCPService
+
+    id       : 11
+    name     : [Guest Operator Logins]
+    type     : Application
+    template : Aruba Application Authentication
+    enabled  : True
+    order_no : 4
+    _links   : @{self=}
+
+#Disable service on Guest Operator Logins (id)
+    Get-ArubaCPService -id 11 | Disable-ArubaCPService
+
+    id       : 11
+    name     : [Guest Operator Logins]
+    type     : Application
+    template : Aruba Application Authentication
+    enabled  : False
+    order_no : 4
+    _links   : @{self=}
+
+```
+
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
