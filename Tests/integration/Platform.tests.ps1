@@ -24,9 +24,19 @@ Describe  "Get Server Configuration" {
         $sc.server_uuid | Should -Not -Be $NULL
         $sc.server_dns_name | Should -Not -Be $NULL
         $sc.management_ip | Should -Not -Be $NULL
-        $sc.is_master | Should -Not -Be $NULL
+        if ($DefaultArubaCPConnection.version -ge "6.10.0") {
+            $sc.is_publisher | Should -Not -Be $NULL
+        }
+        else {
+            $sc.is_master | Should -Not -Be $NULL
+        }
         $sc.is_insight_enabled | Should -Not -Be $NULL
-        $sc.is_insight_master | Should -Not -Be $NULL
+        if ($DefaultArubaCPConnection.version -ge "6.10.0") {
+            $sc.is_insight_primary | Should -Not -Be $NULL
+        }
+        else {
+            $sc.is_insight_master | Should -Not -Be $NULL
+        }
         $sc.replication_status | Should -Not -Be $NULL
         $sc.is_profiler_enabled | Should -Not -Be $NULL
     }
@@ -45,7 +55,10 @@ Describe  "Get Server Version" {
         $sv = Get-ArubaCPServerVersion
         $sv.cppm_version | Should -Not -Be $NULL
         $sv.guest_version | Should -Not -Be $NULL
-        $sv.installed_patches | Should -Not -Be $NULL
+        #No installed patches when it is the first build... (6.10.0...)
+        if ($DefaultArubaCPConnection.version.build -ne "0") {
+            $sv.installed_patches | Should -Not -Be $NULL
+        }
     }
 }
 
@@ -60,7 +73,7 @@ Describe  "Get CPPM Version" {
     It "Get CPPM Version (Major, Minor, service, hardware...)" {
         $cv = Get-ArubaCPCPPMVersion
         $cv.app_major_version | Should -Be "6"
-        $cv.app_minor_version | Should -BeIn (7..9)
+        $cv.app_minor_version | Should -BeIn (8..10)
         $cv.app_service_release | Should -BeIn (0..15)
         $cv.app_build_number | Should -Not -Be $NULL
         $cv.hardware_version | Should -Not -Be $NULL
