@@ -12,7 +12,7 @@ With this module (version 0.4.0) you can manage:
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
 - [CPPM](#clearpass-version) (Get Version)
-- [Endpoint](eEndpoint) (Add / Get / Set / Remove)
+- [Endpoint](#endpoint) (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
 - Server (Get Configuration, Version)
 - Service (Get / Enable / Disable)
@@ -339,7 +339,7 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaC
 
 # Modified information (status and description) about Endpoint
     Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPEndpoint -status "Unknown" -description "Change by PowerArubaCP"
- 
+
     id          : 3179
     mac_address : 000102030405
     description : Change by PowerArubaCP
