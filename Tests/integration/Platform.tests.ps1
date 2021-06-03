@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Server Configuration" {
+Describe "Get Server Configuration" {
 
     It "Get ServerConfiguration Does not throw an error" {
         {
@@ -43,7 +43,7 @@ Describe  "Get Server Configuration" {
 }
 
 
-Describe  "Get Server Version" {
+Describe "Get Server Version" {
 
     It "Get ServerVersion Does not throw an error" {
         {
@@ -62,7 +62,7 @@ Describe  "Get Server Version" {
     }
 }
 
-Describe  "Get CPPM Version" {
+Describe "Get CPPM Version" {
 
     It "Get CPPMVersion Does not throw an error" {
         {

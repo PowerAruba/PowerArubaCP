@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Endpoint" {
+Describe "Get Endpoint" {
 
     BeforeAll {
         #Add 2 entries
@@ -66,7 +66,7 @@ Describe  "Get Endpoint" {
     }
 }
 
-Describe  "Add Endpoint" {
+Describe "Add Endpoint" {
 
     It "Add Endpoint with Known Status" {
         Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known
@@ -102,7 +102,7 @@ Describe  "Add Endpoint" {
     }
 }
 
-Describe  "Configure Endpoint" {
+Describe "Configure Endpoint" {
     BeforeEach {
         #Add 1 entry
         Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known
@@ -142,7 +142,7 @@ Describe  "Configure Endpoint" {
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
-Describe  "Remove Endpoint" {
+Describe "Remove Endpoint" {
 
     It "Remove Endpoint by id" {
         Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Unknown

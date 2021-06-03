@@ -11,7 +11,7 @@ function Add-ArubaCPApplicationLicense {
         Add Application License info on CPPM
 
         .DESCRIPTION
-        Add Application License (Id, Name, Type, user Count...)
+        Add Application License (Name/Type and Key)
 
         .EXAMPLE
         Add-ArubaCPApplicationLicense -product_name Access -license_key XXXXXXX
@@ -45,7 +45,6 @@ function Add-ArubaCPApplicationLicense {
         $_al | Add-Member -name "license_key" -MemberType NoteProperty -Value $license_key
 
         $al = Invoke-ArubaCPRestMethod -method "POST" -body $_al -uri $uri -connection $connection
-
         $al
     }
 
@@ -167,12 +166,12 @@ function Remove-ArubaCPApplicationLicense {
         #get nad id from nad ps object
         if ($al) {
             $id = $al.id
-            $name = "(" + $al.name + ")"
+            $name = "(" + $al.product_name + ")"
         }
 
         $uri = "api/application-license/${id}"
 
-        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove App device')) {
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Application License')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
         }
     }

@@ -5,7 +5,7 @@
 #
 . ../common.ps1
 
-Describe  "Connect to a ClearPass (using Token)" {
+Describe "Connect to a ClearPass (using Token)" {
     BeforeAll {
         #Disconnect "default connection"
         Disconnect-ArubaCP -confirm:$false
@@ -34,7 +34,7 @@ Describe  "Connect to a ClearPass (using Token)" {
     }
 }
 
-Describe  "Connect to a ClearPass (using multi connection)" {
+Describe "Connect to a ClearPass (using multi connection)" {
     BeforeAll {
         #Disconnect "default connection"
         Disconnect-ArubaCP -confirm:$false
@@ -49,7 +49,7 @@ Describe  "Connect to a ClearPass (using multi connection)" {
     }
 
     Context "Use Multi connection for call some (Get) cmdlet (Application Licence, Version, NAS, SHL...)" {
-        It "Use Multi connection for call Get Applicetion License " -Skip:$VersionBefore680 {
+        It "Use Multi connection for call Get Application License" -Skip:$VersionBefore680 {
             { Get-ArubaCPApplicationLicense -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Auth(entication) Source" {
@@ -125,7 +125,7 @@ Describe "Connect using client_credentials" {
     }
 }
 
-Describe  "Invoke ArubaCP RestMethod tests" {
+Describe "Invoke ArubaCP RestMethod tests" {
     BeforeAll {
         #connect...
         Connect-ArubaCP @invokeParams

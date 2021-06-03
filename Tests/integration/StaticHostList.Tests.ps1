@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Static Host List" {
+Describe "Get Static Host List" {
 
     BeforeAll {
         if ($VersionBefore680 -eq 0) {
@@ -188,7 +188,7 @@ Describe  "Add Static Host List" {
 }
 
 
-Describe  "Set Static Host List" {
+Describe "Set Static Host List" {
     BeforeEach {
         if ($VersionBefore680 -eq 0) {
             Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type MACAddress -host_entries_address 00-01-02-03-04-05 -host_entries_description "Add via PowerArubaCP"
@@ -229,7 +229,7 @@ Describe  "Set Static Host List" {
         }
     }
 }
-Describe  "Remove Static Host List Member" {
+Describe "Remove Static Host List Member" {
 
     It "Remove an entry of Static Host List with format list and type IPAddress " -Skip:$VersionBefore680 {
         $shl = Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1, 192.0.2.2
@@ -282,7 +282,7 @@ Describe  "Remove Static Host List Member" {
         }
     }
 }
-Describe  "Remove Static Host List" {
+Describe "Remove Static Host List" {
 
     It "Remove Static Host List by id" -Skip:$VersionBefore680 {
         Add-ArubaCPStaticHostList -name pester_SHL -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"

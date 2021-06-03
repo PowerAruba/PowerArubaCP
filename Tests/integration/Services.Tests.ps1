@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Service" {
+Describe "Get Service" {
 
     It "Get Service Does not throw an error" -Skip:$VersionBefore680 {
         {
@@ -17,7 +17,7 @@ Describe  "Get Service" {
         } | Should -Not -Throw
     }
 
-    It "Get Service " -Skip:$VersionBefore680 {
+    It "Get Service" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService
         $s.count | Should -Not -Be $NULL
     }
@@ -37,7 +37,7 @@ Describe  "Get Service" {
         }
     }
 
-    It "Get Network Device (id 1) and confirm (via Confirm-ArubaCPService)" -Skip:$VersionBefore680 {
+    It "Get Service (id 1) and confirm (via Confirm-ArubaCPService)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService | Where-Object { $_.id -eq "1" }
         Confirm-ArubaCPService $s | Should -Be $true
     }
@@ -49,14 +49,14 @@ Describe  "Get Service" {
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
     }
 
-    It "Search Service by id ([Policy Manager Admin Network Login Service])" -Skip:$VersionBefore680 {
+    It "Search Service by name ([Policy Manager Admin Network Login Service])" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -name '[Policy Manager Admin Network Login Service]'
         @($s).count | Should -Be 1
         $s.id | Should -Not -BeNullOrEmpty
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
     }
 
-    It "Search Network Device by name (contains *Policy*)" -Skip:$VersionBefore680 {
+    It "Search Service by name (contains *Policy*)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -name Policy -filter_type contains
         @($s).count | Should -Be 1
         $s.id | Should -Not -BeNullOrEmpty
@@ -76,7 +76,7 @@ Describe  "Get Service" {
 
 }
 
-Describe  "Enable / Disable Service" {
+Describe "Enable / Disable Service" {
 
     It "Disable Service (id 1)" -Skip:$VersionBefore680 {
         $s = Get-ArubaCPService -id 1

@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Network Device" {
+Describe "Get Network Device" {
 
     BeforeAll {
         #Add 2 entries
@@ -70,7 +70,7 @@ Describe  "Get Network Device" {
     }
 }
 
-Describe  "Add Network Device" {
+Describe "Add Network Device" {
 
     It "Add Network Device with Coa Enable and Change Port" {
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -coa_capable -coa_port 5000
@@ -109,7 +109,7 @@ Describe  "Add Network Device" {
     }
 }
 
-Describe  "Configure Network Device" {
+Describe "Configure Network Device" {
     BeforeAll {
         #Add 1 entry
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
@@ -163,7 +163,7 @@ Describe  "Configure Network Device" {
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
-Describe  "Remove Network Device" {
+Describe "Remove Network Device" {
 
     It "Remove Network Device by id" {
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba

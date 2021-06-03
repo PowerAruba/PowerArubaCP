@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Application License" {
+Describe "Get Application License" {
 
     It "Get Application License Does not throw an error" -Skip:$VersionBefore680 {
         {
@@ -19,7 +19,7 @@ Describe  "Get Application License" {
 
     It "Get ALL Application License" -Skip:$VersionBefore680 {
         $al = Get-ArubaCPApplicationLicense
-        $al.count | Should -Not -Be $NULL
+        @($al).count | Should -Not -Be $NULL
     }
 
     It "Get Application License and confirm" -Skip:$VersionBefore680 {
@@ -33,7 +33,7 @@ Describe  "Get Application License" {
 
 }
 
-Describe  "Add and Remove Application License" {
+Describe "Add and Remove Application License" {
 
     It "Add Application License ($pester_license_type)" -Skip:( -not ($pester_license -ne $null -and $VersionBefore680 -eq 0) ) {
         Add-ArubaCPApplicationLicense -product_name $pester_license_type -license_key $pester_license

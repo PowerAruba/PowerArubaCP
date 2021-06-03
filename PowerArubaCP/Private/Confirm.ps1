@@ -17,7 +17,7 @@ Function Confirm-ArubaCPApiClient {
         throw "Element specified does not contain a client_id property."
     }
     if ( -not ( $argument | get-member -name client_secret -Membertype Properties)) {
-        throw "Element specified does not contain an client_secret property."
+        throw "Element specified does not contain a client_secret property."
     }
     if ( -not ( $argument | get-member -name grant_types -Membertype Properties)) {
         throw "Element specified does not contain a grant_types property."
@@ -38,10 +38,10 @@ Function Confirm-ArubaCPApplicationLicense {
     #Check if it looks like an Application License element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name product_id -Membertype Properties)) {
-        throw "Element specified does not contain an product_id property."
+        throw "Element specified does not contain a product_id property."
     }
     if ( -not ( $argument | get-member -name product_name -Membertype Properties)) {
         throw "Element specified does not contain a product_name property."
@@ -53,13 +53,13 @@ Function Confirm-ArubaCPApplicationLicense {
         throw "Element specified does not contain a license_type property."
     }
     if ( -not ( $argument | get-member -name user_count -Membertype Properties)) {
-        throw "Element specified does not contain a user_count property."
+        throw "Element specified does not contain an user_count property."
     }
     if ( -not ( $argument | get-member -name license_added_on -Membertype Properties)) {
         throw "Element specified does not contain a license_added_on property."
     }
     if ( -not ( $argument | get-member -name activation_status -Membertype Properties)) {
-        throw "Element specified does not contain a activation_status property."
+        throw "Element specified does not contain an activation_status property."
     }
     $true
 
@@ -75,16 +75,16 @@ Function Confirm-ArubaCPEndpoint {
     #Check if it looks like an EndPoint element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name mac_address -Membertype Properties)) {
-        throw "Element specified does not contain an product_id property."
+        throw "Element specified does not contain a product_id property."
     }
     if ( -not ( $argument | get-member -name status -Membertype Properties)) {
         throw "Element specified does not contain a status property."
     }
     if ( -not ( $argument | get-member -name attributes -Membertype Properties)) {
-        throw "Element specified does not contain a attributes property."
+        throw "Element specified does not contain an attributes property."
     }
     $true
 
@@ -100,13 +100,13 @@ Function Confirm-ArubaCPNetworkDevice {
     #Check if it looks like an Network Device (NAS) element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name name -Membertype Properties)) {
-        throw "Element specified does not contain an name property."
+        throw "Element specified does not contain a name property."
     }
     if ( -not ( $argument | get-member -name ip_address -Membertype Properties)) {
-        throw "Element specified does not contain a ip_address property."
+        throw "Element specified does not contain an ip_address property."
     }
     if ( -not ( $argument | get-member -name radius_secret -Membertype Properties)) {
         throw "Element specified does not contain a radius_secret property."
@@ -162,10 +162,10 @@ Function Confirm-ArubaCPService {
     #Check if it looks like an Service element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name name -Membertype Properties)) {
-        throw "Element specified does not contain an name property."
+        throw "Element specified does not contain a name property."
     }
     if ( -not ( $argument | get-member -name type -Membertype Properties)) {
         throw "Element specified does not contain a type property."
@@ -174,11 +174,11 @@ Function Confirm-ArubaCPService {
         throw "Element specified does not contain a template property."
     }
     if ( -not ( $argument | get-member -name enabled -Membertype Properties)) {
-        throw "Element specified does not contain a enabled property."
+        throw "Element specified does not contain an enabled property."
     }
     # orderNo is now order_no with CPPM 6.10.x
     #if ( -not ( $argument | get-member -name orderNo -Membertype Properties)) {
-    #    throw "Element specified does not contain a orderNo property."
+    #    throw "Element specified does not contain an orderNo property."
     #}
     $true
 
@@ -194,10 +194,10 @@ Function Confirm-ArubaCPStaticHostList {
     #Check if it looks like an Static Host List element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
-        throw "Element specified does not contain a id property."
+        throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name name -Membertype Properties)) {
-        throw "Element specified does not contain an name property."
+        throw "Element specified does not contain a name property."
     }
     if ( -not ( $argument | get-member -name host_format -Membertype Properties)) {
         throw "Element specified does not contain a host_format property."

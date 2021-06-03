@@ -25,7 +25,7 @@ if ($null -eq $port) {
 
 . ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
-Connect-ArubaCP @invokeParams -SkipCertificateCheck
+Connect-ArubaCP @invokeParams
 
 $script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"
 $script:VersionBefore686 = $DefaultArubaCPConnection.Version -lt [version]"6.8.6"
