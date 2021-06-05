@@ -314,6 +314,47 @@ You can retrieve its information `Get-ArubaCPCPPMVersion`.
     cloud_mode          : False
 ```
 
+### Device Fingerprint
+
+You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its information `Get-DeviceFingerprint`.
+
+```powershell
+# Add Device Fingerprint (Device category, Family and name)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -device_category Server -device_family ClearPass -device_name ClearPass VM
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Add Device Fingerprint (IP Address)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -ip 192.2.0.1
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Add Device Fingerprint (hostname)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -hostname 192.2.0.1
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Get information about Device Fingerprint
+    Get-ArubaCPEndpoint -mac 000102030405 | Get-ArubaCPDeviceFingerprint
+
+    ip              : 192.0.2.1
+    hostname        : CPPM
+    updated_at      : 1622904104
+    device_category : Server
+    device_name     : ClearPass
+    device_family   : ClearPass
+    mac             : 000102030405
+    added_at        : 1622903816
+    _links          : @{self=}
+
+```
+
 ### Endpoint
 
 You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaCPEndpoint`, modify its properties `Set-ArubaCPEndpoint` or delete it `Remove-ArubaCPEndpoint`.
