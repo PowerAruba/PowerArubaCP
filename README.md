@@ -15,7 +15,7 @@ With this module (version 0.4.0) you can manage:
 - [CPPM](#clearpass-version) (Get Version)
 - [Device FingerPrint](#device-fingerpint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
-- [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
+- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Devie)
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
@@ -152,59 +152,6 @@ to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
 
 And choice a service (for example Platform)
 ![](./Medias/CPPM_API_Docs_platform.PNG)  
-
-### NAS Management
-
-You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetworkDevice`.
-
-```powershell
-# Create a NAS
-    Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
-
-    id            : 3004
-    name          : SW1
-    description   : Add by PowerArubaCP
-    ip_address    : 192.0.2.1
-    radius_secret :
-    tacacs_secret :
-    vendor_name   : Aruba
-    coa_capable   : False
-    coa_port      : 3799
-    attributes    :
-    _links        : @{self=}
-
-
-# Get information about NAS
-    Get-ArubaCPNetworkDevice -name SW1 | Format-Table
-
-    id   name description         ip_address radius_secret tacacs_secret vendor_name coa_capable coa_port attributes
-    --   ---- -----------         ---------- ------------- ------------- ----------- ----------- -------- ----------
-    3004 SW1  Add by PowerArubaCP 192.0.2.1                              Aruba       False       3799
-
-# (Re)Configure NAS
-    Get-ArubaCPNetworkDevice -name SW1 | Set-ArubaCPNetworkDevice  -ip_address 192.0.2.2 -vendor_name Hewlett-Packard-Enterprise
-
-    id            : 3004
-    name          : SW1
-    description   :
-    ip_address    : 192.0.2.2
-    radius_secret :
-    tacacs_secret :
-    vendor_name   : Hewlett-Packard-Enterprise
-    coa_capable   : True
-    coa_port      : 3799
-    attributes    :
-    _links        : @{self=}
-
-# Remove a NAS
-    $nad = Get-ArubaCPNetworkDevice -name SW1
-    $nad | Remove-ArubaCPNetworkDevice
-
-    Confirm
-    Are you sure you want to perform this action?
-    Performing the operation "Remove Network device" on target "3344 (SW1)".
-    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
-```
 
 ### API Client
 
@@ -359,6 +306,59 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaC
     Are you sure you want to perform this action?
     Performing the operation "Remove Endpoint" on target "3174 (000102030405)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
+```
+
+### Network Device
+
+You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve its information `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetworkDevice`.
+
+```powershell
+# Create a Network Device (NAS)
+    Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
+
+    id            : 3004
+    name          : SW1
+    description   : Add by PowerArubaCP
+    ip_address    : 192.0.2.1
+    radius_secret :
+    tacacs_secret :
+    vendor_name   : Aruba
+    coa_capable   : False
+    coa_port      : 3799
+    attributes    :
+    _links        : @{self=}
+
+
+# Get information about Network Device (NAS)
+    Get-ArubaCPNetworkDevice -name SW1 | Format-Table
+
+    id   name description         ip_address radius_secret tacacs_secret vendor_name coa_capable coa_port attributes
+    --   ---- -----------         ---------- ------------- ------------- ----------- ----------- -------- ----------
+    3004 SW1  Add by PowerArubaCP 192.0.2.1                              Aruba       False       3799
+
+# (Re)Configure Network Device (NAS)
+    Get-ArubaCPNetworkDevice -name SW1 | Set-ArubaCPNetworkDevice  -ip_address 192.0.2.2 -vendor_name Hewlett-Packard-Enterprise
+
+    id            : 3004
+    name          : SW1
+    description   :
+    ip_address    : 192.0.2.2
+    radius_secret :
+    tacacs_secret :
+    vendor_name   : Hewlett-Packard-Enterprise
+    coa_capable   : True
+    coa_port      : 3799
+    attributes    :
+    _links        : @{self=}
+
+# Remove a Network Device (NAS)
+    $nad = Get-ArubaCPNetworkDevice -name SW1
+    $nad | Remove-ArubaCPNetworkDevice
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Network device" on target "3344 (SW1)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
 
 ### Server
