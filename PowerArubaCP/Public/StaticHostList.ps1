@@ -435,7 +435,7 @@ function Remove-ArubaCPStaticHostListMember {
         Remove Static Host List with format list and type IP Address (192.0.2.2....)
 
         .EXAMPLE
-        Get-ArubaCPStaticHostLis -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
+        Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
 
         Remove Static Host List with format list and type MAC Address (00:01:02:03:04:06....)
     #>
