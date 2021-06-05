@@ -11,13 +11,16 @@ With this module (version 0.4.0) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
+- [Auth](#Auth) (Get Auth Source and Method)
 - [CPPM](#clearpass-version) (Get Version)
+- [Device FingerPrint](#device-fingerpint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
+- [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
-- [Static Host List](#static-host-list) ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
-- Invoke API using Invoke-ArubaCPRestMethod
+- [Static Host List](#static-host-list) (Add / Get / Set / Remove a Static Host List and Add/Remove Member)
+- [VM](#vm) (Deploy and Configure ClearPass VM (for initial setup)
 
 There is some extra feature
 - [Invoke API](#Invoke-API)
