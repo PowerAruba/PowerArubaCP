@@ -11,7 +11,7 @@ With this module (version 0.4.0) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
-- [Auth](#Auth) (Get Auth Source and Method)
+- [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device FingerPrint](#device-fingerpint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
@@ -241,6 +241,58 @@ You can create add Application License `Add-ArubaCPApplicationLicense`, retrieve
     Are you sure you want to perform this action?
     Performing the operation "Remove Application License" on target "3002 (Onboard)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+### Authentication Method and Source
+
+You can retrieve its Authentication information of Method (EAP, PAP...) `Get-ArubaCPAuthMethod` or Source (LDAP, HTTP...) `Get-ArubaCPAuthSource`
+
+```powershell
+# Get Auth Method information
+    Get-ArubaCPAuthMethod
+
+    id            : 1
+    name          : [PAP]
+    description   : Default settings for PAP
+    method_type   : PAP
+    details       : @{encryption_scheme=auto}
+    inner_methods : {}
+    _links        : @{self=}
+
+    id            : 2
+    name          : [MSCHAP]
+    description   : Default settings for MSCHAP
+    method_type   : MSCHAP
+    details       :
+    inner_methods : {}
+    _links        : @{self=}
+
+    id            : 3
+    name          : [EAP TLS]
+    description   : Default settings for EAP-TLS
+    method_type   : EAP-TLS
+    details       : @{override_cert_url=false; ocsp_enable=none; session_cache_enable=true; autz_required=true; certificate_comparison=none; 
+                    session_timeout=6}
+    inner_methods : {}
+    _links        : @{self=}
+    ...
+
+# Get Auth Source information
+    Get-ArubaCPAuthSource | Format-List
+
+    id name                         description                                                                        type  use_for_authorization
+    -- ----                         -----------                                                                        ----  ---------------------
+    1 [Local User Repository]      Authenticate users against Policy Manager local user database                      Local                  True
+    2 [Guest User Repository]      Authenticate guest users against Policy Manager local database                     Local                  True
+    3 [Guest Device Repository]    Authenticate guest devices against Policy Manager local database                   Local                  True
+    4 [Endpoints Repository]       Authenticate endpoints against Policy Manager local database                       Local                  True
+    5 [Onboard Devices Repository] Authenticate Onboard devices against Policy Manager local database                 Local                  True
+    6 [Admin User Repository]      Authenticate users against Policy Manager admin user database                      Local                  True
+    7 [Denylist User Repository]   Denylist database with users who have exceeded bandwidth or session related limits Local                  True
+    9 [Time Source]                Authorization source for implementing various time functions                       Local                  True
+   10 [Social Login Repository]    Authenticate users against Policy Manager social login database                    Local                  True
+  100 [Zone Cache Repository]      Access attributes cached by Context Server Actions in previous sessions            HTTP                   True
+    8 [Insight Repository]         Insight database with session information for users and devices                    Local                  True
 ```
 
 ### ClearPass Version
