@@ -16,7 +16,7 @@ With this module (version 0.4.0) you can manage:
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
-- Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
+- [Static Host List](#static-host-list) ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
 - Invoke API using Invoke-ArubaCPRestMethod
 
 There is some extra feature
@@ -435,6 +435,84 @@ You can retrieve information about Service `Get-ArubaCPService`, Enable `Enable-
 
 ```
 
+### Static Host List
+
+You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its information `Get-ArubaCPStaticHostList`, modify its properties `Set-ArubaCPStaticHostList` or delete it `Remove-ArubaCPStaticHostList`, you can also add `Add-ArubaCPStaticHostListMember` and Remove `Remove-ArubaCPStaticHostListMember` Member (MAC or IPAddress).
+
+```powershell
+
+#Add Static Host List (with IPAddress)
+    Add-ArubaCPStaticHostList -name SHL-list-IPAddress -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3040
+    name         : SHL-list-IPAddress
+    host_format  : list
+    host_type    : IPAddress
+    host_entries : {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Add Static Host List (with MACAddress)
+    Add-ArubaCPStaticHostList -name SHL-list-MACAddress -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Get list of Static Host List
+    Get-ArubaCPStaticHostList | Format-Table
+
+    id name                host_format host_type  host_entries                                                                _links
+    -- ----                ----------- ---------  ------------                                                                ------
+    3040 SHL-list-IPAddress  list        IPAddress  {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}         @{self=}
+    3041 SHL-list-MACAddress list        MACAddress {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}} @{self=}
+
+#(Re)Configure a Static Host List
+    Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Set-ArubaCPStaticHostList -description "My SHL IP Address"
+
+    id           : 3040
+    name         : SHL-list-IPAddress
+    description  : My SHL IP Address
+    host_format  : list
+    host_type    : IPAddress
+    host_entries : {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+
+#Add Member on the Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}, @{host_address=00-01-02-03-04-06; 
+                host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+
+#Remove Member on the Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}, @{host_address=00-01-02-03-04-06; 
+                host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Remove Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostList
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Static Host List" on target "3041 (SHL-list-MACAddress)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+
+```
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
