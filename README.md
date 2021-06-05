@@ -454,6 +454,76 @@ You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve i
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
 
+### Network Device Group
+
+You can create a new Network Device Group `Add-ArubaCPNetworkDeviceGroup`, retrieve its information `Get-ArubaCPNetworkDeviceGroup`, modify its properties `Set-ArubaCPNetworkDeviceGroup`, or delete it `Remove-ArubaCPNetworkDeviceGroup` you can also add `Add-ArubaCPNetworkDeviceGroupMember` and Remove `Remove-ArubaCPNetworkDeviceGroupMeMber` Member.
+
+```powershell
+# Create a Network Device Group (list IP)
+    Add-ArubaCPNetworkDeviceGroup -name NDG-list_ip -list_ip 192.0.2.1, 192.0.2.2
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.1, 192.0.2.2
+    _links       : @{self=}
+
+# Create a Network Device Group (subnet)
+    Add-ArubaCPNetworkDeviceGroup -name NDG-subnet -subnet 192.0.2.0/24 -description "Add via PowerArubaCP"
+
+    id           : 3043
+    name         : NDG-subnet
+    description  : Add via PowerArubaCP
+    group_format : subnet
+    value        : 192.0.2.0/24
+    _links       : @{self=}
+
+# Get information about Network Device Group
+    Get-ArubaCPNetworkDeviceGroup | Format-Table
+
+    id name        group_format value                _links
+    -- ----        ------------ -----                ------
+    3037 NDG-list_ip list         192.0.2.1, 192.0.2.2 @{self=}
+    3043 NDG-subnet  subnet       192.0.2.0/24         @{self=}
+
+
+# (Re)Configure Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-subnet | Set-ArubaCPNetworkDeviceGroup -description "Modified via PowerArubaCP"
+
+    id           : 3043
+    name         : NDG-subnet
+    description  : Modified via PowerArubaCP
+    group_format : subnet
+    value        : 192.0.2.0/24
+    _links       : @{self=}
+
+#Add Member on the Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Add-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.3
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.1, 192.0.2.2, 192.0.2.3
+    _links       : @{self=}
+
+#Remove Member on the Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Remove-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.1
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.2, 192.0.2.3
+    _links       : @{self=}
+
+# Remove a Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-subnet | Remove-ArubaCPNetworkDeviceGroup
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Network Device Group" on target "3043 (NDG-subnet)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+```
+
 ### Server
 
 You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `Get-ArubaCPServerVersion`.
