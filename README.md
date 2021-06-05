@@ -14,8 +14,8 @@ With this module (version 0.4.0) you can manage:
 - [CPPM](#clearpass-version) (Get Version)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
 - [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
-- Server (Get Configuration, Version)
-- Service (Get / Enable / Disable)
+- [Server](#server) (Get Configuration, Version)
+- [Service](#service) (Get / Enable / Disable)
 - Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
 - Invoke API using Invoke-ArubaCPRestMethod
 
