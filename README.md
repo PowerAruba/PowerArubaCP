@@ -29,8 +29,9 @@ There is some extra feature
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)  
+Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.0)
 Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0
+Device Fingerprint are not supported on Clearpass < 6.9.0
 
 # Usage
 
@@ -44,7 +45,7 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
 # Requirements
 
 - Powershell 5 or 6.x/7.x (Core) (If possible get the latest version)
-- A ClearPass (with release >= 6.7.x) and API Client enable
+- A ClearPass (with release >= 6.8.x) and API Client enable
 
 # Instructions
 ### Install the module
