@@ -680,6 +680,22 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
 
 ```
+
+### VM
+
+You can use PowerArubaCP for help to deploy ClearPass on VMware ESXi (Wwth a Vcenter)
+You need to have [VMware.PowerCLI](https://developer.vmware.com/powercli) and [Set-VMKeystrokes](https://www.powershellgallery.com/packages/VMKeystrokes/1.0.0) from [William Lam](https://williamlam.com/2017/09/automating-vm-keystrokes-using-the-vsphere-api-powercli.html)
+
+You can use the following cmdlet (on this order)
+
+- `Deploy-ArubaCPVm` Deploy CPPM OVA with add hard disk
+- `Set-ArubaCPVmFirstBoot` Configure first boot (Model, encrypt...)
+- `Set-ArubaCPVmSetup` Configure hostname, IP Address, NTP...
+- `Set-ArubaCPVmAddLicencePlatform` Add Licence Platform
+- `Set-ArubaCPVmUpdate` Update CPPM (using HTTP(S) or SSH)
+
+a video will be online to see an example of auto deployement
+
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
