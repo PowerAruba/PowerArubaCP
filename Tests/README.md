@@ -45,7 +45,7 @@ Invoke-Pester NetworkDevice.Tests.ps1
 if you only launch a sub test (Describe on pester file), you can use for example to 'Add Network Device' part
 
 ```powershell
-Invoke-Pester NetworkDevice.Tests.ps1 -g 'Add Network Device'
+Invoke-Pester NetworkDevice.Tests.ps1 -Testname 'Add Network Device'
 ```
 
 ## Known Issues

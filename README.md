@@ -9,15 +9,18 @@ This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
 With this module (version 0.4.0) you can manage:
 
-- API Client (Add / Get / Remove)
-- Application License (Add / Get / Remove)
-- CPPM (Get Version)
-- Endpoint (Add / Get / Set / Remove)
-- [Network Device](#NAS-Management) (Add / Get / Set / Remove a NAS)
-- Server (Get Configuration, Version)
-- Service (Get / Enable / Disable)
-- Static Host List ( Add / Get / Set / Remove a Static Host List and Add/Remove Member)
-- Invoke API using Invoke-ArubaCPRestMethod
+- [API Client](#api-client) (Add / Get / Remove)
+- [Application License](#application-license) (Add / Get / Remove)
+- [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
+- [CPPM](#clearpass-version) (Get Version)
+- [Device Fingerrint](#device-fingerprint) (Add /Get)
+- [Endpoint](#endpoint) (Add / Get / Set / Remove)
+- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
+- [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
+- [Server](#server) (Get Configuration, Version)
+- [Service](#service) (Get / Enable / Disable)
+- [Static Host List](#static-host-list) (Add / Get / Set / Remove a Static Host List and Add/Remove Member)
+- [VM](#vm) (Deploy and Configure ClearPass VM (for initial setup)
 
 There is some extra feature
 - [Invoke API](#Invoke-API)
@@ -26,8 +29,9 @@ There is some extra feature
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.7.x and 6.8.x)  
+Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.0)
 Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0
+Device Fingerprint are not supported on Clearpass < 6.9.0
 
 # Usage
 
@@ -40,8 +44,8 @@ For example, you can manage NAS (NetworkDevice) with the following commands:
 
 # Requirements
 
-- Powershell 5 or 6 (Core) (If possible get the latest version)
-- A ClearPass (with release >= 6.7.x) and API Client enable
+- Powershell 5 or 6.x/7.x (Core) (If possible get the latest version)
+- A ClearPass (with release >= 6.8.x) and API Client enable
 
 # Instructions
 ### Install the module
@@ -146,15 +150,263 @@ if you get a warning about `Unable to connect` Look [Issue](#Issue)
 to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
 ![](./Medias/CPPM_API_Docs.PNG)  
 
-And choice a service (for example Platform)
+And chooce a service (for example Platform)
 ![](./Medias/CPPM_API_Docs_platform.PNG)  
 
-### NAS Management
+### API Client
 
-You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetwork`.
+You can create a new API Client `Add-ArubaCPApiClient`, retrieve its informations `Get-ArubaCPApiClient` or delete it `Remove-ArubaCPApiClient`.
 
 ```powershell
-# Create a NAS
+# Create an API Client
+    Add-ArubaCPApiClient -client_id MyAPIClient -grant_types client_credentials -profile_id 1
+
+    client_id                    : MyAPIClient
+    client_secret                : $2y$10$OXRszKzBSH7hP5QwgZ3cCuNZwbGaddb767l0Kx52Ww.RPEhBfbj6u
+    client_description           :
+    grant_types                  : client_credentials
+    redirect_uri                 :
+    operating_scope              :
+    profile_id                   : 1
+    auto_confirm                 : False
+    enabled                      : True
+    scope                        :
+    user_id                      :
+    access_lifetime              : 8 hours
+    refresh_lifetime             : 14 days
+    operating_scope_label        : ClearPass REST API
+    profile_name                 : Super Administrator
+    client_public                : False
+    client_refresh               : False
+    access_token_lifetime        : 8
+    access_token_lifetime_units  : hours
+    refresh_token_lifetime       : 14
+    refresh_token_lifetime_units : days
+    id                           : MyAPIClient
+    _links                       : @{self=}
+
+
+# Get information about API Client
+    Get-ArubaCPApiClient -client_id MyAPIClient | Format-Table
+
+    client_id   client_secret      client_description grant_types        redirect_uri operating_scope profile_id auto_confirm enabled scope
+    ---------   -------------      ------------------ -----------        ------------ --------------- ---------- ------------ ------- -----
+    MyAPIClient $2y$10$OXRszKzB...                    client_credentials                              1                 False    True
+
+# Remove an API Client
+    $ac = Get-ArubaCPApiClient -client_id MyAPIClient
+    $ac | Remove-ArubaCPApiClient
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove API Client" on target "MyAPIClient".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+### Application License
+
+You can create add Application License `Add-ArubaCPApplicationLicense`, retrieve its information `Get-ArubaCPApplicationLicense` or delete it `Remove-ArubaCPApplicationLicense`.
+
+```powershell
+# Add Application License (Onboard)
+    Add-ArubaCPApplicationLicense -product_name Onboard -license_key "-----BEGIN CLEARPASS ONBOARD LICENSE KEY----- .... "
+
+    id                : 3002
+    product_id        : 8
+    product_name      : Onboard
+    license_key       : -----BEGIN CLEARPASS ONBOARD LICENSE KEY-----
+                        .......
+                        -----END CLEARPASS ONBOARD LICENSE KEY-----
+    license_type      : Evaluation
+    user_count        : 100
+    duration          : 90
+    duration_units    : days
+    license_added_on  : 18/04/2021 13:45:27
+    activation_status : False
+    _links            : @{self=}
+
+
+# Get information about Application License
+    Get-ArubaCPApplicationLicense -product_name Onboard | Format-Table
+
+    id product_id product_name license_key
+    -- ---------- ------------ -----------
+    3002          8 Onboard      -----BEGIN CLEARPASS ONBOARD LICENSE KEY-----...
+
+# Remove Application License Onboard
+    $al = Get-ArubaCPApplicationLicense -product_name Onboard
+    $al | Remove-ArubaCPApplicationLicense
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Application License" on target "3002 (Onboard)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
+```
+
+### Authentication Method and Source
+
+You can retrieve its Authentication information of Method (EAP, PAP...) `Get-ArubaCPAuthMethod` or Source (LDAP, HTTP...) `Get-ArubaCPAuthSource`
+
+```powershell
+# Get Auth Method information
+    Get-ArubaCPAuthMethod
+
+    id            : 1
+    name          : [PAP]
+    description   : Default settings for PAP
+    method_type   : PAP
+    details       : @{encryption_scheme=auto}
+    inner_methods : {}
+    _links        : @{self=}
+
+    id            : 2
+    name          : [MSCHAP]
+    description   : Default settings for MSCHAP
+    method_type   : MSCHAP
+    details       :
+    inner_methods : {}
+    _links        : @{self=}
+
+    id            : 3
+    name          : [EAP TLS]
+    description   : Default settings for EAP-TLS
+    method_type   : EAP-TLS
+    details       : @{override_cert_url=false; ocsp_enable=none; session_cache_enable=true; autz_required=true; certificate_comparison=none; 
+                    session_timeout=6}
+    inner_methods : {}
+    _links        : @{self=}
+    ...
+
+# Get Auth Source information
+    Get-ArubaCPAuthSource | Format-List
+
+    id name                         description                                                                        type  use_for_authorization
+    -- ----                         -----------                                                                        ----  ---------------------
+    1 [Local User Repository]      Authenticate users against Policy Manager local user database                      Local                  True
+    2 [Guest User Repository]      Authenticate guest users against Policy Manager local database                     Local                  True
+    3 [Guest Device Repository]    Authenticate guest devices against Policy Manager local database                   Local                  True
+    4 [Endpoints Repository]       Authenticate endpoints against Policy Manager local database                       Local                  True
+    5 [Onboard Devices Repository] Authenticate Onboard devices against Policy Manager local database                 Local                  True
+    6 [Admin User Repository]      Authenticate users against Policy Manager admin user database                      Local                  True
+    7 [Denylist User Repository]   Denylist database with users who have exceeded bandwidth or session related limits Local                  True
+    9 [Time Source]                Authorization source for implementing various time functions                       Local                  True
+   10 [Social Login Repository]    Authenticate users against Policy Manager social login database                    Local                  True
+  100 [Zone Cache Repository]      Access attributes cached by Context Server Actions in previous sessions            HTTP                   True
+    8 [Insight Repository]         Insight database with session information for users and devices                    Local                  True
+```
+
+### ClearPass Version
+
+You can retrieve its informations `Get-ArubaCPCPPMVersion`.
+
+```powershell
+# Get ClearPass Version information 
+    Get-ArubaCPCPPMVersion
+
+    app_major_version   : 6
+    app_minor_version   : 9
+    app_service_release : 5
+    app_build_number    : 131053
+    hardware_version    : CLABV
+    fips_enabled        : False
+    cc_enabled          : False
+    eval_license        : True
+    cloud_mode          : False
+```
+
+### Device Fingerprint
+
+You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its informations `Get-DeviceFingerprint`.
+
+```powershell
+# Add Device Fingerprint (Device category, Family and name)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -device_category Server -device_family ClearPass -device_name ClearPass VM
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Add Device Fingerprint (IP Address)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -ip 192.2.0.1
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Add Device Fingerprint (hostname)
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -hostname 192.2.0.1
+
+    SUCCESS                                            _links
+    -------                                            ------
+    Successfully posted device fingerprint to profiler @{self=}
+
+# Get information about Device Fingerprint
+    Get-ArubaCPEndpoint -mac 000102030405 | Get-ArubaCPDeviceFingerprint
+
+    ip              : 192.0.2.1
+    hostname        : CPPM
+    updated_at      : 1622904104
+    device_category : Server
+    device_name     : ClearPass
+    device_family   : ClearPass
+    mac             : 000102030405
+    added_at        : 1622903816
+    _links          : @{self=}
+
+```
+
+### Endpoint
+
+You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its informations `Get-ArubaCPEndpoint`, modify its properties `Set-ArubaCPEndpoint` or delete it `Remove-ArubaCPEndpoint`.
+
+```powershell
+# Add Endpoint (Known)
+    Add-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 -status Known
+
+    id          : 3179
+    mac_address : 000102030405
+    status      : Known
+    attributes  :
+    _links      : @{self=}
+
+# Get information about Endpoint
+    Get-ArubaCPEndpoint | Format-table
+
+    id mac_address  status  attributes _links
+    -- -----------  ------  ---------- ------
+    3004 00505690da3e Unknown            @{self=}
+    3173 00155d27ec00 Unknown            @{self=}
+    3003 0050569041da Unknown            @{self=}
+    3002 005056afddbb Unknown            @{self=}
+    3005 005056af007b Unknown            @{self=}
+    3030 00505680fb94 Unknown            @{self=}
+
+# Modified information (status and description) about Endpoint
+    Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPEndpoint -status "Unknown" -description "Change by PowerArubaCP"
+
+    id          : 3179
+    mac_address : 000102030405
+    description : Change by PowerArubaCP
+    status      : Unknown
+    attributes  :
+    _links      : @{self=}
+
+# Remove Endpoint
+    $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
+    $ep | Remove-ArubaCPEndpoint
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Endpoint" on target "3174 (000102030405)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
+```
+
+### Network Device
+
+You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve its informations `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetworkDevice`.
+
+```powershell
+# Create a Network Device (NAS)
     Add-ArubaCPNetworkDevice -name SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
 
     id            : 3004
@@ -170,14 +422,14 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     _links        : @{self=}
 
 
-# Get information about NAS
+# Get information about Network Device (NAS)
     Get-ArubaCPNetworkDevice -name SW1 | Format-Table
 
     id   name description         ip_address radius_secret tacacs_secret vendor_name coa_capable coa_port attributes
     --   ---- -----------         ---------- ------------- ------------- ----------- ----------- -------- ----------
     3004 SW1  Add by PowerArubaCP 192.0.2.1                              Aruba       False       3799
 
-# (Re)Configure NAS
+# (Re)Configure Network Device (NAS)
     Get-ArubaCPNetworkDevice -name SW1 | Set-ArubaCPNetworkDevice  -ip_address 192.0.2.2 -vendor_name Hewlett-Packard-Enterprise
 
     id            : 3004
@@ -192,17 +444,264 @@ You can create a new NAS `Add-ArubaCPNetworkDevice`, retrieve its information `G
     attributes    :
     _links        : @{self=}
 
-# Remove a NAS
+# Remove a Network Device (NAS)
     $nad = Get-ArubaCPNetworkDevice -name SW1
-    $nad | Remove-ArubaCPNetworkDevice -noconfirm
+    $nad | Remove-ArubaCPNetworkDevice
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Network device" on target "3344 (SW1)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
+
+### Network Device Group
+
+You can create a new Network Device Group `Add-ArubaCPNetworkDeviceGroup`, retrieve its informations `Get-ArubaCPNetworkDeviceGroup`, modify its properties `Set-ArubaCPNetworkDeviceGroup`, or delete it `Remove-ArubaCPNetworkDeviceGroup` you can also add `Add-ArubaCPNetworkDeviceGroupMember` and remove `Remove-ArubaCPNetworkDeviceGroupMeMber` Member.
+
+```powershell
+# Create a Network Device Group (list IP)
+    Add-ArubaCPNetworkDeviceGroup -name NDG-list_ip -list_ip 192.0.2.1, 192.0.2.2
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.1, 192.0.2.2
+    _links       : @{self=}
+
+# Create a Network Device Group (subnet)
+    Add-ArubaCPNetworkDeviceGroup -name NDG-subnet -subnet 192.0.2.0/24 -description "Add via PowerArubaCP"
+
+    id           : 3043
+    name         : NDG-subnet
+    description  : Add via PowerArubaCP
+    group_format : subnet
+    value        : 192.0.2.0/24
+    _links       : @{self=}
+
+# Get information about Network Device Group
+    Get-ArubaCPNetworkDeviceGroup | Format-Table
+
+    id name        group_format value                _links
+    -- ----        ------------ -----                ------
+    3037 NDG-list_ip list         192.0.2.1, 192.0.2.2 @{self=}
+    3043 NDG-subnet  subnet       192.0.2.0/24         @{self=}
+
+
+# (Re)Configure Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-subnet | Set-ArubaCPNetworkDeviceGroup -description "Modified via PowerArubaCP"
+
+    id           : 3043
+    name         : NDG-subnet
+    description  : Modified via PowerArubaCP
+    group_format : subnet
+    value        : 192.0.2.0/24
+    _links       : @{self=}
+
+#Add Member on the Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Add-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.3
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.1, 192.0.2.2, 192.0.2.3
+    _links       : @{self=}
+
+#Remove Member on the Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-list_ip | Remove-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.1
+
+    id           : 3037
+    name         : NDG-list_ip
+    group_format : list
+    value        : 192.0.2.2, 192.0.2.3
+    _links       : @{self=}
+
+# Remove a Network Device Group
+    Get-ArubaCPNetworkDeviceGroup -name NDG-subnet | Remove-ArubaCPNetworkDeviceGroup
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Network Device Group" on target "3043 (NDG-subnet)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+```
+
+### Server
+
+You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `Get-ArubaCPServerVersion`.
+
+
+```powershell
+# Get Server Configuration
+    Get-ArubaCPServerConfiguration
+
+    name                       : CPPM
+    local_server               : True
+    server_uuid                : 443c73db-aab3-49e4-a701-c21ef6945776
+    server_dns_name            : CPPM
+    fqdn                       :
+    server_ip                  :
+    management_ip              : 10.200.11.159
+    ipv6_server_ip             :
+    ipv6_management_ip         :
+    is_publisher               : True
+    extras                     :
+    is_insight_enabled         : True
+    is_insight_primary         : True
+    is_perfmon_enabled         : t
+    replication_status         : ENABLED
+    last_replication_timestamp :
+    is_profiler_enabled        : True
+    _links                     : @{self=}
+
+# Get Server Version
+    Get-ArubaCPServerVersion
+
+    cppm_version  guest_version installed_patches
+    ------------  ------------- -----------------
+    6.10.0.180076 6.10.0.180076 {}
+```
+
+### Service
+
+You can retrieve information about Service `Get-ArubaCPService`, enable it `Enable-ArubaCPService`, or disable it `Disable-Enable`.
+
+```powershell
+
+#Get List of Service
+    Get-ArubaCPService | Format-Table
+
+    id name                                         type        template                         enabled order_no _links
+    -- ----                                         ----        --------                         ------- -------- ------
+    10 [Aruba Device Access Service]                TACACS      TACACS+ Enforcement                 True        3 @{self=}
+    1  [Policy Manager Admin Network Login Service] TACACS      TACACS+ Enforcement                 True        1 @{self=}
+    2  [AirGroup Authorization Service]             RADIUS      RADIUS Enforcement ( Generic )      True        2 @{self=}
+    11 [Guest Operator Logins]                      Application Aruba Application Authentication    True        4 @{self=}
+    13 [Device Registration Disconnect]             WEBAUTH     Web-based Authentication            True        6 @{self=}
+    12 [Insight Operator Logins]                    Application Aruba Application Authentication    True        5 @{self=}
+
+#Enable service on Guest Operator Logins
+    Get-ArubaCPService -Name "[Guest Operator Logins]" | Enable-ArubaCPService
+
+    id       : 11
+    name     : [Guest Operator Logins]
+    type     : Application
+    template : Aruba Application Authentication
+    enabled  : True
+    order_no : 4
+    _links   : @{self=}
+
+#Disable service on Guest Operator Logins (id)
+    Get-ArubaCPService -id 11 | Disable-ArubaCPService
+
+    id       : 11
+    name     : [Guest Operator Logins]
+    type     : Application
+    template : Aruba Application Authentication
+    enabled  : False
+    order_no : 4
+    _links   : @{self=}
+
+```
+
+### Static Host List
+
+You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informations `Get-ArubaCPStaticHostList`, modify its properties `Set-ArubaCPStaticHostList` or delete it `Remove-ArubaCPStaticHostList`, you can also add `Add-ArubaCPStaticHostListMember` and Remove `Remove-ArubaCPStaticHostListMember` Member (MAC or IPAddress).
+
+```powershell
+
+#Add Static Host List (with IPAddress)
+    Add-ArubaCPStaticHostList -name SHL-list-IPAddress -host_format list -host_type IPAddress -host_entries_address 192.0.2.1 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3040
+    name         : SHL-list-IPAddress
+    host_format  : list
+    host_type    : IPAddress
+    host_entries : {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Add Static Host List (with MACAddress)
+    Add-ArubaCPStaticHostList -name SHL-list-MACAddress -host_format list -host_type MACAddress -host_entries_address 00:01:02:03:04:05 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Get list of Static Host List
+    Get-ArubaCPStaticHostList | Format-Table
+
+    id name                host_format host_type  host_entries                                                                _links
+    -- ----                ----------- ---------  ------------                                                                ------
+    3040 SHL-list-IPAddress  list        IPAddress  {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}         @{self=}
+    3041 SHL-list-MACAddress list        MACAddress {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}} @{self=}
+
+#(Re)Configure a Static Host List
+    Get-ArubaCPStaticHostList -name SHL-list-IPAddress | Set-ArubaCPStaticHostList -description "My SHL IP Address"
+
+    id           : 3040
+    name         : SHL-list-IPAddress
+    description  : My SHL IP Address
+    host_format  : list
+    host_type    : IPAddress
+    host_entries : {@{host_address=192.0.2.1; host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+
+#Add Member on the Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}, @{host_address=00-01-02-03-04-06; 
+                host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+
+#Remove Member on the Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
+
+    id           : 3041
+    name         : SHL-list-MACAddress
+    host_format  : list
+    host_type    : MACAddress
+    host_entries : {@{host_address=00-01-02-03-04-05; host_address_desc=Add via PowerArubaCP}, @{host_address=00-01-02-03-04-06; 
+                host_address_desc=Add via PowerArubaCP}}
+    _links       : @{self=}
+
+#Remove Static Host List
+    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostList
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Static Host List" on target "3041 (SHL-list-MACAddress)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+
+```
+
+### VM
+
+You can use PowerArubaCP for help to deploy ClearPass on VMware ESXi (Wwth a Vcenter)
+You need to have [VMware.PowerCLI](https://developer.vmware.com/powercli) and [Set-VMKeystrokes](https://www.powershellgallery.com/packages/VMKeystrokes/1.0.0) from [William Lam](https://williamlam.com/2017/09/automating-vm-keystrokes-using-the-vsphere-api-powercli.html)
+
+You can use the following cmdlet (on this order)
+
+- `Deploy-ArubaCPVm` Deploy CPPM OVA with add hard disk
+- `Set-ArubaCPVmFirstBoot` Configure first boot (Model, encrypt...)
+- `Set-ArubaCPVmSetup` Configure hostname, IP Address, NTP...
+- `Set-ArubaCPVmAddLicencePlatform` Add Licence Platform
+- `Set-ArubaCPVmUpdate` Update CPPM (using HTTP(S) or SSH)
+
+a video will be online to see an example of auto deployement
 
 ### MultiConnection
 
 From release 0.4.0, it is possible to connect on same times to multi ClearPass
 You need to use -connection parameter to cmdlet
 
-For example to get Vlan Ports of 2 switchs
+For example to get Static Host List of 2 CPPM
 
 ```powershell
 # Connect to first ClearPass
@@ -290,30 +789,53 @@ The issue coming from use Self-Signed or Expired Certificate for switch manageme
 
 Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 
+# How to contribute
+
+Contribution and feature requests are more than welcome. Please use the following methods:
+
+  * For bugs and [issues](https://github.com/PowerAruba/PowerArubaCX/issues), please use the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) register with details of the problem.
+  * For Feature Requests, please use the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) register with details of what's required.
+  * For code contribution (bug fixes, or feature request), please request fork PowerFGT, create a feature/fix branch, add tests if needed then submit a pull request.
+
+# Contact
+
+Currently, [@alagoutte](#author) started this project and will keep maintaining it. Reach out to me via [Twitter](#author), Email (see top of file) or the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+
+
 # List of available command
 ```powershell
 Add-ArubaCPApiClient
 Add-ArubaCPApplicationLicense
+Add-ArubaCPDeviceFingerprint
 Add-ArubaCPEndpoint
 Add-ArubaCPNetworkDevice
+Add-ArubaCPNetworkDeviceGroup
+Add-ArubaCPNetworkDeviceGroupMember
 Add-ArubaCPStaticHostList
 Add-ArubaCPStaticHostListMember
 Confirm-ArubaCPApiClient
 Confirm-ArubaCPApplicationLicense
 Confirm-ArubaCPEndpoint
 Confirm-ArubaCPNetworkDevice
+Confirm-ArubaCPNetworkDeviceGroup
 Confirm-ArubaCPService
 Confirm-ArubaCPStaticHostList
 Connect-ArubaCP
+Convert-ArubaCPCIDR2Mask
+Deploy-ArubaCPVm
 Disable-ArubaCPService
 Disconnect-ArubaCP
 Enable-ArubaCPService
 Format-ArubaCPMacAddress
 Get-ArubaCPApiClient
 Get-ArubaCPApplicationLicense
+Get-ArubaCPAuthMethod
+Get-ArubaCPAuthSource
 Get-ArubaCPCPPMVersion
+Get-ArubaCPDeviceFingerprint
 Get-ArubaCPEndpoint
 Get-ArubaCPNetworkDevice
+Get-ArubaCPNetworkDeviceGroup
 Get-ArubaCPServerConfiguration
 Get-ArubaCPServerVersion
 Get-ArubaCPService
@@ -323,13 +845,21 @@ Remove-ArubaCPApiClient
 Remove-ArubaCPApplicationLicense
 Remove-ArubaCPEndpoint
 Remove-ArubaCPNetworkDevice
+Remove-ArubaCPNetworkDeviceGroup
+Remove-ArubaCPNetworkDeviceGroupMember
 Remove-ArubaCPStaticHostList
 Remove-ArubaCPStaticHostListMember
 Set-ArubaCPCipherSSL
 Set-ArubaCPEndpoint
 Set-ArubaCPNetworkDevice
+Set-ArubaCPNetworkDeviceGroup
 Set-ArubaCPStaticHostList
 Set-ArubaCPuntrustedSSL
+Set-ArubaCPVmAddLicencePlatform
+Set-ArubaCPVmApiClient
+Set-ArubaCPVmFirstBoot
+Set-ArubaCPVmSetup
+Set-ArubaCPVmUpdate
 Show-ArubaCPException
 ```
 
