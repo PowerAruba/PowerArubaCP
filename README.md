@@ -13,9 +13,9 @@ With this module (version 0.4.0) you can manage:
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [CPPM](#clearpass-version) (Get Version)
-- [Device FingerPrint](#device-fingerpint) (Add /Get)
+- [Device Fingerrint](#device-fingerprint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
-- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Devie)
+- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
@@ -150,12 +150,12 @@ if you get a warning about `Unable to connect` Look [Issue](#Issue)
 to get API uri, go to ClearPass Swagger (https://CPPM-IP/api-docs)
 ![](./Medias/CPPM_API_Docs.PNG)  
 
-And choice a service (for example Platform)
+And chooce a service (for example Platform)
 ![](./Medias/CPPM_API_Docs_platform.PNG)  
 
 ### API Client
 
-You can create a new API Client `Add-ArubaCPApiClient`, retrieve its information `Get-ArubaCPApiClient` or delete it `Remove-ArubaCPApiClient`.
+You can create a new API Client `Add-ArubaCPApiClient`, retrieve its informations `Get-ArubaCPApiClient` or delete it `Remove-ArubaCPApiClient`.
 
 ```powershell
 # Create an API Client
@@ -297,7 +297,7 @@ You can retrieve its Authentication information of Method (EAP, PAP...) `Get-Aru
 
 ### ClearPass Version
 
-You can retrieve its information `Get-ArubaCPCPPMVersion`.
+You can retrieve its informations `Get-ArubaCPCPPMVersion`.
 
 ```powershell
 # Get ClearPass Version information 
@@ -316,7 +316,7 @@ You can retrieve its information `Get-ArubaCPCPPMVersion`.
 
 ### Device Fingerprint
 
-You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its information `Get-DeviceFingerprint`.
+You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its informations `Get-DeviceFingerprint`.
 
 ```powershell
 # Add Device Fingerprint (Device category, Family and name)
@@ -357,7 +357,7 @@ You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its information
 
 ### Endpoint
 
-You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaCPEndpoint`, modify its properties `Set-ArubaCPEndpoint` or delete it `Remove-ArubaCPEndpoint`.
+You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its informations `Get-ArubaCPEndpoint`, modify its properties `Set-ArubaCPEndpoint` or delete it `Remove-ArubaCPEndpoint`.
 
 ```powershell
 # Add Endpoint (Known)
@@ -403,7 +403,7 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its information `Get-ArubaC
 
 ### Network Device
 
-You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve its information `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetworkDevice`.
+You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve its informations `Get-ArubaCPNetworkDevice`, modify its properties `Set-ArubaCPNetworkDevice`, or delete it `Remove-ArubaCPNetworkDevice`.
 
 ```powershell
 # Create a Network Device (NAS)
@@ -456,7 +456,7 @@ You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve i
 
 ### Network Device Group
 
-You can create a new Network Device Group `Add-ArubaCPNetworkDeviceGroup`, retrieve its information `Get-ArubaCPNetworkDeviceGroup`, modify its properties `Set-ArubaCPNetworkDeviceGroup`, or delete it `Remove-ArubaCPNetworkDeviceGroup` you can also add `Add-ArubaCPNetworkDeviceGroupMember` and Remove `Remove-ArubaCPNetworkDeviceGroupMeMber` Member.
+You can create a new Network Device Group `Add-ArubaCPNetworkDeviceGroup`, retrieve its informations `Get-ArubaCPNetworkDeviceGroup`, modify its properties `Set-ArubaCPNetworkDeviceGroup`, or delete it `Remove-ArubaCPNetworkDeviceGroup` you can also add `Add-ArubaCPNetworkDeviceGroupMember` and remove `Remove-ArubaCPNetworkDeviceGroupMeMber` Member.
 
 ```powershell
 # Create a Network Device Group (list IP)
@@ -562,7 +562,7 @@ You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `G
 
 ### Service
 
-You can retrieve information about Service `Get-ArubaCPService`, Enable `Enable-ArubaCPService`, or disable it `Disable-Enable`.
+You can retrieve information about Service `Get-ArubaCPService`, enable it `Enable-ArubaCPService`, or disable it `Disable-Enable`.
 
 ```powershell
 
@@ -604,7 +604,7 @@ You can retrieve information about Service `Get-ArubaCPService`, Enable `Enable-
 
 ### Static Host List
 
-You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its information `Get-ArubaCPStaticHostList`, modify its properties `Set-ArubaCPStaticHostList` or delete it `Remove-ArubaCPStaticHostList`, you can also add `Add-ArubaCPStaticHostListMember` and Remove `Remove-ArubaCPStaticHostListMember` Member (MAC or IPAddress).
+You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informations `Get-ArubaCPStaticHostList`, modify its properties `Set-ArubaCPStaticHostList` or delete it `Remove-ArubaCPStaticHostList`, you can also add `Add-ArubaCPStaticHostListMember` and Remove `Remove-ArubaCPStaticHostListMember` Member (MAC or IPAddress).
 
 ```powershell
 
