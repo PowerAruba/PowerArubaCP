@@ -789,6 +789,19 @@ The issue coming from use Self-Signed or Expired Certificate for switch manageme
 
 Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 
+# How to contribute
+
+Contribution and feature requests are more than welcome. Please use the following methods:
+
+  * For bugs and [issues](https://github.com/PowerAruba/PowerArubaCX/issues), please use the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) register with details of the problem.
+  * For Feature Requests, please use the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) register with details of what's required.
+  * For code contribution (bug fixes, or feature request), please request fork PowerFGT, create a feature/fix branch, add tests if needed then submit a pull request.
+
+# Contact
+
+Currently, [@alagoutte](#author) started this project and will keep maintaining it. Reach out to me via [Twitter](#author), Email (see top of file) or the [issues](https://github.com/PowerAruba/PowerArubaCX/issues) Page here on GitHub. If you want to contribute, also get in touch with me.
+
+
 # List of available command
 ```powershell
 Add-ArubaCPApiClient
