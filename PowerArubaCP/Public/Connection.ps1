@@ -129,7 +129,7 @@ function Disconnect-ArubaCP {
 
     <#
         .SYNOPSIS
-        Disconnect to a ArubaCP Switches
+        Disconnect to an Aruba ClearPass
 
         .DESCRIPTION
         Disconnect the connection on Aruba ClearPass
