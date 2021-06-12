@@ -160,7 +160,7 @@ function Disconnect-ArubaCP {
 
         if ($PSCmdlet.ShouldProcess($connection.server, 'Remove ClearPass connection ?')) {
             #Not really connection on CPPM with token
-            if ( ($connection -eq $DefaultArubaCPCOnnection) -and (Test-Path variable:global:DefaultArubaCPConnection) ) {
+            if ( ($connection -eq $DefaultArubaCPConnection) -and (Test-Path variable:global:DefaultArubaCPConnection) ) {
                 Remove-Variable -name DefaultArubaCPConnection -scope global
             }
         }
