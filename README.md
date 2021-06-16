@@ -562,7 +562,7 @@ You can get Server Configuration `Get-ArubaCPServerConfiguration`, or version `G
 
 ### Service
 
-You can retrieve information about Service `Get-ArubaCPService`, enable it `Enable-ArubaCPService`, or disable it `Disable-Enable`.
+You can retrieve information about Service `Get-ArubaCPService`, enable it `Enable-ArubaCPService`, or disable it `Disable-ArubaCPService`.
 
 ```powershell
 
