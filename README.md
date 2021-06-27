@@ -719,7 +719,8 @@ For example to get Static Host List of 2 CPPM
   -- ----                ----------- ----------- ---------  -----                 ------
 3001 SHL-list-IPAddress              list        IPAddress                        @{self=}
 ....
-# Get Static Host List for first ClearPass
+
+# Get Static Host List for second ClearPass
    Get-ArubaCPStaticHostList -connection $cppm2 | Format-Table
 
   id name                description host_format host_type  value                 _links
