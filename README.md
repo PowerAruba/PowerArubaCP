@@ -334,7 +334,7 @@ You can add Device Fingerprint `Add-DeviceFingerprint`, retrieve its information
     Successfully posted device fingerprint to profiler @{self=}
 
 # Add Device Fingerprint (hostname)
-    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -hostname 192.2.0.1
+    Add-ArubaCPDeviceFingerprint -mac_address 000102030405 -hostname CPPM
 
     SUCCESS                                            _links
     -------                                            ------
