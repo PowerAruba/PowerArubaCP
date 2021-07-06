@@ -13,7 +13,7 @@ With this module (version 0.5.0) you can manage:
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [CPPM](#clearpass-version) (Get Version)
-- [Device Fingerrint](#device-fingerprint) (Add /Get)
+- [Device Fingerprint](#device-fingerprint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
 - [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
