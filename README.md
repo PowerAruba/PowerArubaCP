@@ -29,9 +29,9 @@ There is some extra feature
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.0)
-Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0
-Device Fingerprint are not supported on Clearpass < 6.9.0
+Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.0)  
+Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0  
+Device Fingerprint are not supported on Clearpass < 6.9.0  
 
 # Usage
 
