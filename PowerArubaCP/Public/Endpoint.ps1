@@ -11,7 +11,7 @@ function Add-ArubaCPEndpoint {
         Add an Endpoint on ClearPass
 
         .DESCRIPTION
-        Add an Enpdoint with mac address, description, status, attributes
+        Add an Endpoint with mac address, description, status, attributes
 
         .EXAMPLE
         Add-ArubaCPEndpoint -mac_address 000102030405 -description "Add by PowerArubaCP" -Status Known
