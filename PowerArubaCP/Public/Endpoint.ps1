@@ -16,7 +16,7 @@ function Add-ArubaCPEndpoint {
         .EXAMPLE
         Add-ArubaCPEndpoint -mac_address 000102030405 -description "Add by PowerArubaCP" -Status Known
 
-        Add an Endpoint with MAC Address 000102030405 with Known Sattus and a description
+        Add an Endpoint with MAC Address 000102030405 with Known Status and a description
 
         .EXAMPLE
         Add-ArubaCPEndpoint -mac_address 00:01:02:03:04:06 -status Unknown
