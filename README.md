@@ -710,7 +710,7 @@ For example to get Static Host List of 2 CPPM
 #DefaultConnection set to false is not mandatory but only don't set the connection info on global variable
 
 # Connect to second ClearPass
-    $cppm2 = Connect-ArubaCP 192.0.2.1 -SkipCertificateCheck -DefaultConnection:$false
+    $cppm2 = Connect-ArubaCP 192.0.2.2 -SkipCertificateCheck -DefaultConnection:$false
 
 # Get Static Host List for first ClearPass
    Get-ArubaCPStaticHostList -connection $cppm1 | Format-Table
