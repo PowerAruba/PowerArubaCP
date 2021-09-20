@@ -430,7 +430,7 @@ You can create a new Network Device (NAS) `Add-ArubaCPNetworkDevice`, retrieve i
     3004 SW1  Add by PowerArubaCP 192.0.2.1                              Aruba       False       3799
 
 # (Re)Configure Network Device (NAS)
-    Get-ArubaCPNetworkDevice -name SW1 | Set-ArubaCPNetworkDevice  -ip_address 192.0.2.2 -vendor_name Hewlett-Packard-Enterprise
+    Get-ArubaCPNetworkDevice -name SW1 | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -vendor_name Hewlett-Packard-Enterprise
 
     id            : 3004
     name          : SW1
@@ -649,7 +649,7 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
 
 
 #Add Member on the Static Host List
-    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
+    Get-ArubaCPStaticHostList -name SHL-list-MACAddress | Add-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06 -host_entries_description "Add via PowerArubaCP"
 
     id           : 3041
     name         : SHL-list-MACAddress
@@ -661,7 +661,7 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
 
 
 #Remove Member on the Static Host List
-    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
+    Get-ArubaCPStaticHostList -name SHL-list-MACAddress | Remove-ArubaCPStaticHostListMember -host_entries_address 00:01:02:03:04:06
 
     id           : 3041
     name         : SHL-list-MACAddress
@@ -672,7 +672,7 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
     _links       : @{self=}
 
 #Remove Static Host List
-    Get-ArubaCPStaticHostList -name  SHL-list-MACAddress | Remove-ArubaCPStaticHostList
+    Get-ArubaCPStaticHostList -name SHL-list-MACAddress | Remove-ArubaCPStaticHostList
 
     Confirm
     Are you sure you want to perform this action?
