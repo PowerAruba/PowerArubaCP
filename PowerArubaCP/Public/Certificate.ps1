@@ -36,7 +36,7 @@ function Get-ArubaCPClusterCertificates {
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSReviewUnusedParameter", "")]
     Param(
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
