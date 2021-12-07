@@ -40,11 +40,11 @@ function Get-ArubaCPClusterCertificates {
     Param(
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
-        [ValidateSet (1,2,21)]
+        [ValidateSet (1,2,7,21,106)]
         [int]$service_id,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "name")]
-        [ValidateSet ("RADIUS","HTTPS","RadSec")]
+        [ValidateSet ("RADIUS","HTTPS(RSA)","HTTPS(ECC)","RadSec")]
         [string]$service_name,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "type")]
@@ -75,50 +75,6 @@ function Get-ArubaCPClusterCertificates {
     }
 }
 
-function Get-ArubaCPClusterCertificate {
-
-    <#
-        .SYNOPSIS
-        Get a cluster certificate on ClearPass
-
-        .DESCRIPTION
-        Get a cluster certificate on ClearPass (HTTPS, RADIUS, etc ...)
-
-        .EXAMPLE
-        Get-ArubaCPClusterCertificate -service_id 1
-
-        Return the RADIUS certificates
-    #>
-
-    [CmdLetBinding(DefaultParameterSetName = "Default")]
-
-    Param(
-        [Parameter (Mandatory = $true)]
-        [ValidateSet(1,2,21)]
-        [int]$service_id,
-        [Parameter (Mandatory = $False)]
-        [ValidateNotNullOrEmpty()]
-        [PSObject]$connection = $DefaultArubaCPConnection
-    )
-
-    Begin {
-    }
-
-    Process {
-
-        $uri = "api/server-cert/${service_id}"
-
-        $cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
-
-        $cert
-
-    }
-
-
-    End {
-    }
-}
-
 function Get-ArubaCPServerCertificate {
 
     <#
@@ -138,7 +94,7 @@ function Get-ArubaCPServerCertificate {
 
     Param(
         [Parameter (Mandatory = $true)]
-        [ValidateSet("RADIUS","HTTPS","RadSec")]
+        [ValidateSet("RADIUS","HTTPS(RSA)","HTTPS(ECC)","RadSec")]
         [string]$service_name,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]

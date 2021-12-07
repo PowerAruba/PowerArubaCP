@@ -181,6 +181,54 @@ function Confirm-ArubaCPNetworkDeviceGroup {
 
 }
 
+Function Confirm-ArubaCPServerCertificate {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Server Certificate element
+
+    if ( -not ( $argument | get-member -name service_id -Membertype Properties)) {
+        throw "Element specified does not contain a service_id property."
+    }
+    if ( -not ( $argument | get-member -name service_name -Membertype Properties)) {
+        throw "Element specified does not contain a service_name property."
+    }
+    if ( -not ( $argument | get-member -name certificate_type -Membertype Properties)) {
+        throw "Element specified does not contain a certificate_type property."
+    }
+    if ( -not ( $argument | get-member -name subject -Membertype Properties)) {
+        throw "Element specified does not contain a subject property."
+    }
+    if ( -not ( $argument | get-member -name expiry_date -Membertype Properties)) {
+        throw "Element specified does not contain an expiry_date property."
+    }
+    if ( -not ( $argument | get-member -name issue_date -Membertype Properties)) {
+        throw "Element specified does not contain an issue_date property."
+    }
+    if ( -not ( $argument | get-member -name issued_by -Membertype Properties)) {
+        throw "Element specified does not contain an issued_by property."
+    }
+    if ( -not ( $argument | get-member -name validity -Membertype Properties)) {
+        throw "Element specified does not contain a validity property."
+    }
+    if ( -not ( $argument | get-member -name root_ca_cert -Membertype Properties)) {
+        throw "Element specified does not contain a root_ca_cert property."
+    }
+    if ( -not ( $argument | get-member -name intermediate_ca_cert -Membertype Properties)) {
+        throw "Element specified does not contain an intermediate_ca_cert property."
+    }
+    if ( -not ( $argument | get-member -name cert_file -Membertype Properties)) {
+        throw "Element specified does not contain a cert_file property."
+    }
+    if ( -not ( $argument | get-member -name enabled -Membertype Properties)) {
+        throw "Element specified does not contain a enabled property."
+    }
+    $true
+
+}
 Function Confirm-ArubaCPRole {
 
     Param (
