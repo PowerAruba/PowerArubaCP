@@ -58,7 +58,6 @@ function Get-ArubaCPClusterCertificates {
     }
 
     Process {
-
         $uri = "api/server-cert"
 
         $cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
@@ -113,9 +112,7 @@ function Get-ArubaCPServerCertificate {
         $cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
 
         $cert
-
     }
-
 
     End {
     }
@@ -143,7 +140,7 @@ function Add-ArubaCPServerCertificate {
         [string]$cert_url,
         [Parameter (Mandatory = $true, Position = 3)]
         [string]$cert_pass,
-        [Parameter (Mandatory = $false, Position = 4)]
+        [Parameter (Mandatory = $true, Position = 4)]
         [string]$cert_file,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
@@ -154,7 +151,6 @@ function Add-ArubaCPServerCertificate {
     }
 
     Process {
-
         $server = Get-ArubaCPServerConfiguration
         $server_uuid = $server.server_uuid
 
