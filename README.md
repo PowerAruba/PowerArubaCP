@@ -20,7 +20,7 @@ With this module (version 0.5.0) you can manage:
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
 - [Static Host List](#static-host-list) (Add / Get / Set / Remove a Static Host List and Add/Remove Member)
-- [VM](#vm) (Deploy and Configure ClearPass VM (for initial setup)
+- [VM](#vm) (Deploy and Configure ClearPass VM (for initial setup))
 
 There is some extra feature
 - [Invoke API](#Invoke-API)
@@ -683,7 +683,7 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
 
 ### VM
 
-You can use PowerArubaCP for help to deploy ClearPass on VMware ESXi (Wwth a Vcenter)
+You can use PowerArubaCP for help to deploy ClearPass on VMware ESXi (With a vCenter)
 You need to have [VMware.PowerCLI](https://developer.vmware.com/powercli) and [Set-VMKeystrokes](https://www.powershellgallery.com/packages/VMKeystrokes/1.0.0) from [William Lam](https://williamlam.com/2017/09/automating-vm-keystrokes-using-the-vsphere-api-powercli.html)
 
 You can use the following cmdlet (on this order)
