@@ -326,7 +326,7 @@ function Set-ArubaCPVmSetup {
         [ipaddress]$data_ip,
         [ValidateRange(0, 32)]
         [int]$data_netmask,
-        [Parameter (Mandatory = $true)]
+        [Parameter (Mandatory = $false)]
         [ipaddress]$data_gateway,
         [Parameter (Mandatory = $true)]
         [ipaddress]$dns_primary,
