@@ -94,6 +94,10 @@ function Invoke-ArubaCPRestMethod {
         if ($filter) {
             $fullurl += "&filter=$($filter | ConvertTo-Json -Compress)"
         }
+
+        #Display (Full)url when verbose (not longer available with PS 7.2.x...)
+        Write-Verbose $fullurl
+
         #When headers, We need to have Accept set to application/json...
         $headers = @{ Authorization = "Bearer " + $connection.token; Accept = "application/json" }
 
