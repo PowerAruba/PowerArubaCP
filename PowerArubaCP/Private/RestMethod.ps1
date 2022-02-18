@@ -106,7 +106,7 @@ function Invoke-ArubaCPRestMethod {
 
                 Write-Verbose ($body | ConvertTo-Json -depth 10)
 
-                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json -depth 10) -Headers $headers @invokeParams
+                $response = Invoke-RestMethod $fullurl -Method $method -body ($body | ConvertTo-Json -depth 10 -Compress) -Headers $headers @invokeParams
             }
             else {
                 $response = Invoke-RestMethod $fullurl -Method $method -Headers $headers @invokeParams
