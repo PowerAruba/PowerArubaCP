@@ -69,7 +69,8 @@ function Add-ArubaCPLocaluser {
 
         if ( $PsBoundParameters.ContainsKey('username') ) {
             $_lu | add-member -name "username" -membertype NoteProperty -Value $username
-        } else {
+        }
+        else {
             #if don't define username use the user_id
             $_lu | add-member -name "username" -membertype NoteProperty -Value $user_id
         }
@@ -79,17 +80,19 @@ function Add-ArubaCPLocaluser {
         $_lu | add-member -name "role_name" -membertype NoteProperty -Value $role_name
 
         if ( $PsBoundParameters.ContainsKey('enabled') ) {
-            if($enabled) {
+            if ($enabled) {
                 $_lu | add-member -name "enabled" -membertype NoteProperty -Value $true
-            } else {
+            }
+            else {
                 $_lu | add-member -name "enabled" -membertype NoteProperty -Value $false
             }
         }
 
         if ( $PsBoundParameters.ContainsKey('change_pwd_next_login') ) {
-            if($change_pwd_next_login) {
+            if ($change_pwd_next_login) {
                 $_lu | add-member -name "change_pwd_next_login" -membertype NoteProperty -Value $true
-            } else {
+            }
+            else {
                 $_lu | add-member -name "change_pwd_next_login" -membertype NoteProperty -Value $false
             }
         }
@@ -113,7 +116,7 @@ function Get-ArubaCPLocaluser {
         Get Local user info on CPPM
 
         .DESCRIPTION
-        Get Local User (Id, MAC Address, Status, Attributes)
+        Get Local User (user_id, username, password, roles)
 
         .EXAMPLE
         Get-ArubaCPLocalUser
@@ -121,9 +124,9 @@ function Get-ArubaCPLocaluser {
         Get ALL Local User on the Clearpass
 
         .EXAMPLE
-        Get-ArubaCPLocalUser 000102030405
+        Get-ArubaCPLocalUser MyPowerArubaCP_userid
 
-        Get info about Local User 000102030405 Aruba on the ClearPass
+        Get info about Local UserID MyPowerArubaCP_userid on the ClearPass
 
         .EXAMPLE
         Get-ArubaCPLocalUser -id 23
@@ -131,14 +134,14 @@ function Get-ArubaCPLocaluser {
         Get info about Local User id 23 on the ClearPass
 
         .EXAMPLE
-        Get-ArubaCPLocalUser 000102030405 -filter_type contains
+        Get-ArubaCPLocalUser -username MyPowerArubaCP -filter_type contains
 
-        Get info about Local User where name contains 000102
+        Get info about Local User username where name contains MyPowerArubaCP
 
        .EXAMPLE
-        Get-ArubaCPLocalUser -filter_attribute attribute -filter_type contains -filter_value 192.0.2.1
+        Get-ArubaCPLocalUser -filter_attribute role -filter_type contains -filter_value Employee
 
-        Get info about Local User where attribute contains 192.0.2.1
+        Get info about Local User where role contains Employee
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
@@ -148,19 +151,18 @@ function Get-ArubaCPLocaluser {
         [Parameter (ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $false, Position = 1)]
-        [Parameter (ParameterSetName = "mac_address")]
-        [string]$mac_address,
-        [Parameter (Mandatory = $false, Position = 1)]
-        [Parameter (ParameterSetName = "status")]
-        [ValidateSet('Known', 'Unknown', 'Disabled')]
-        [string]$status,
+        [Parameter (ParameterSetName = "user_id")]
+        [string]$user_id,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "username")]
+        [string]$username,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "filter")]
         [string]$filter_attribute,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
-        [Parameter (ParameterSetName = "mac_address")]
-        [Parameter (ParameterSetName = "status")]
+        [Parameter (ParameterSetName = "user_id")]
+        [Parameter (ParameterSetName = "username")]
         [Parameter (ParameterSetName = "filter")]
         [ValidateSet('equal', 'contains')]
         [string]$filter_type,
@@ -189,13 +191,13 @@ function Get-ArubaCPLocaluser {
                 $filter_value = $id
                 $filter_attribute = "id"
             }
-            "mac_address" {
-                $filter_value = Format-ArubaCPMACAddress $mac_address
-                $filter_attribute = "mac_address"
+            "user_id" {
+                $filter_value = $user_id
+                $filter_attribute = "user_id"
             }
-            "status" {
-                $filter_value = $status
-                $filter_attribute = "status"
+            "username" {
+                $filter_value = $username
+                $filter_attribute = "username"
             }
             default { }
         }
