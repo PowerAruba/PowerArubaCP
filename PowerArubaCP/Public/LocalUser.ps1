@@ -341,10 +341,10 @@ function Remove-ArubaCPLocalUser {
         Remove a Local User on ClearPass
 
         .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -mac_address 00:01:02:03:04:05
+        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP_username
         PS C:\>$lu | Remove-ArubaCPLocalUser
 
-        Remove a Local User with MAC Address 00:01:02:03:04:05
+        Remove a Local User with user name MyPowerArubaCP_username
 
         .EXAMPLE
         Remove-ArubaCPLocalUser -id 3001 -confirm:$false
