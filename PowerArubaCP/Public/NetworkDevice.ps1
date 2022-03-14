@@ -32,6 +32,13 @@ function Add-ArubaCPNetworkDevice {
         Add-ArubaCPNetworkDevice -name SW4 -ip_address 192.0.2.4 -radius_secret MySecurePassword -vendor Hewlett-Packard-Enterprise -radsec_enabled
 
         Add Network Device SW4 with RadSec from vendor HPE
+
+        .EXAMPLE
+        $attributes = @{ "Location" = "PowerArubaCP" }
+        PS > Add-ArubaCPNetworkDevice -name SW5 -ip_address 192.0.2.5 -radius_secret MySecurePassword -vendor Aruba -attributes $attributes
+
+        Add Network Device SW5 with hashtable attribute (Location) from vendor Aruba
+
     #>
 
     Param(
@@ -55,6 +62,8 @@ function Add-ArubaCPNetworkDevice {
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
         [switch]$radsec_enabled,
+        [Parameter (Mandatory = $false)]
+        [hashtable]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -109,6 +118,10 @@ function Add-ArubaCPNetworkDevice {
             else {
                 $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
             }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
         $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $uri -connection $connection
