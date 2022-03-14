@@ -241,29 +241,29 @@ function Set-ArubaCPLocalUser {
         Configure a Local User on ClearPass
 
         .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -mac_address 00:01:02:03:04:05
-        PS C:\>$lu | Set-ArubaCPLocalUser -status Disabled
+        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
+        PS C:\>$lu | Set-ArubaCPLocalUser -username MyPowerArubaCP2
 
-        Set Status Disabled for MAC Address 00:01:02:03:04:05
-
-        .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -mac_address 00:01:02:03:04:05
-        PS C:\>$lu | Set-ArubaCPLocalUser -description "Change by PowerAruba"
-
-        Change Description for MAC Address 00:01:02:03:04:05
+        Change username for user(name) MyPowerArubaCP
 
         .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -mac_address 00:01:02:03:04:05
-        PS C:\>$attributes = @{"Disabled by"= "PowerArubaCP"}
-        PS C:\>$lu | Set-ArubaCPLocalUser -attributes $attributes
+        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
+        PS C:\>$lu | Set-ArubaCPLocalUser -password MyNewPassword
 
-        Change attributes for MAC Address 00:01:02:03:04:05
+        Change Password for user(name) MyPowerArubaCP
 
         .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -mac_address 00:01:02:03:04:05
-        PS C:\>$lu | Set-ArubaCPLocalUser -mac_address 00:01:02:03:04:06
+        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
+        PS C:\>$lu | Set-ArubaCPLocalUser -role "[Guest]"
 
-        Change MAC Address 00:01:02:03:04:05 => 00:01:02:03:04:06
+        Change Role (Guest) for user(name) MyPowerArubaCP
+
+        .EXAMPLE
+        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
+        PS >$attributes = @{ "Sponsor" = "PowerArubaCP" }
+        PS >$lu | Set-ArubaCPLocalUser -attributes $attributes
+
+        Change attributes (Sponsor) for user(name) MyPowerArubaCP
 
     #>
 
@@ -275,15 +275,20 @@ function Set-ArubaCPLocalUser {
         [ValidateScript( { Confirm-ArubaCPLocalUser $_ })]
         [psobject]$lu,
         [Parameter (Mandatory = $false)]
-        [string]$mac_address,
+        [string]$user_id,
         [Parameter (Mandatory = $false)]
-        [string]$description,
+        [string]$username,
         [Parameter (Mandatory = $false)]
-        [ValidateSet('Known', 'Unknown', 'Disabled', IgnoreCase = $false)]
-        [string]$status,
+        [string]$password,
+        [Parameter (Mandatory = $false)]
+        [string]$role_name,
+        [Parameter (Mandatory = $false)]
+        [switch]$enabled,
+        [Parameter (Mandatory = $false)]
+        [switch]$change_pwd_next_login,
         [Parameter (Mandatory = $false)]
         [psobject]$attributes,
-        [Parameter (Mandatory = $False)]
+        [Parameter (Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
     )
@@ -301,20 +306,38 @@ function Set-ArubaCPLocalUser {
         $uri = "api/local-user/${id}"
         $_lu = new-Object -TypeName PSObject
 
-        if ( $PsBoundParameters.ContainsKey('id') ) {
-            $_lu | add-member -name "id" -membertype NoteProperty -Value $id
+        if ( $PsBoundParameters.ContainsKey('user_id') ) {
+            $_lu | add-member -name "user_id" -membertype NoteProperty -Value $user_id
         }
 
-        if ( $PsBoundParameters.ContainsKey('mac_address') ) {
-            $_lu | add-member -name "mac_address" -membertype NoteProperty -Value $mac_address
+        if ( $PsBoundParameters.ContainsKey('username') ) {
+            $_lu | add-member -name "username" -membertype NoteProperty -Value $username
         }
 
-        if ( $PsBoundParameters.ContainsKey('description') ) {
-            $_lu | add-member -name "description" -membertype NoteProperty -Value $description
+        if ( $PsBoundParameters.ContainsKey('password') ) {
+            $_lu | add-member -name "password" -membertype NoteProperty -Value $password
         }
 
-        if ( $PsBoundParameters.ContainsKey('status') ) {
-            $_lu | add-member -name "status" -membertype NoteProperty -Value $status
+        if ( $PsBoundParameters.ContainsKey('role_name') ) {
+            $_lu | add-member -name "role_name" -membertype NoteProperty -Value $role_name
+        }
+
+        if ( $PsBoundParameters.ContainsKey('enabled') ) {
+            if ( $enabled ) {
+                $_lu | add-member -name "enabled" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_lu | add-member -name "enabled" -membertype NoteProperty -Value $false
+            }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('change_pwd_next_login') ) {
+            if ( $change_pwd_next_login ) {
+                $_lu | add-member -name "change_pwd_next_login" -membertype NoteProperty -Value $True
+            }
+            else {
+                $_lu | add-member -name "change_pwd_next_login" -membertype NoteProperty -Value $false
+            }
         }
 
         if ( $PsBoundParameters.ContainsKey('attributes') ) {
