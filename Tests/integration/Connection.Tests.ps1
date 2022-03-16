@@ -89,6 +89,9 @@ Describe "Connect to a ClearPass (using multi connection)" {
             $ip = (Get-ArubaCPServerConfiguration -connection $cppm).management_ip
             { Get-ArubaCPDeviceFingerprint -ip_address $ip -connection $cppm } | Should -Not -Throw
         }
+        It "Use Multi connection for call Get Local User" {
+            { Get-ArubaCPLocalUser -connection $cppm } | Should -Not -Throw
+        }
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
