@@ -395,12 +395,12 @@ function Remove-ArubaCPLocalUser {
         #get Local User id from lp ps object
         if ($lu) {
             $id = $lu.id
-            $mac = "(" + $lu.mac_address + ")"
+            $user_id = "(" + $lu.user_id + ")"
         }
 
         $uri = "api/local-user/${id}"
 
-        if ($PSCmdlet.ShouldProcess("$id $mac", 'Remove Local User')) {
+        if ($PSCmdlet.ShouldProcess("$id $user_id", 'Remove Local User')) {
             Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
         }
 
