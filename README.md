@@ -15,6 +15,7 @@ With this module (version 0.5.0) you can manage:
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove)
+- [Local User](#local-user) (Add / Get / Set / Remove)
 - [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
 - [Server](#server) (Get Configuration, Version)
@@ -399,6 +400,52 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its informations `Get-Aruba
     Are you sure you want to perform this action?
     Performing the operation "Remove Endpoint" on target "3174 (000102030405)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
+```
+
+### Local User
+
+You can add Endpoint `Add-ArubaCPLocalUser`, retrieve its informations `Get-ArubaCPLocalUser`, modify its properties `Set-ArubaCPLocalUser` or delete it `Remove-ArubaCPLocalUser`.
+
+```powershell
+# Add Local User
+    Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password MyPassword -role_name "[Employee]"
+
+    id                    : 3085
+    user_id               : MyPowerArubaCP_userid
+    username              : MyPowerArubaCP_userid
+    role_name             : [Employee]
+    enabled               : True
+    change_pwd_next_login : False
+    attributes            :
+    _links                : @{self=}
+
+# Get information about Local User
+    Get-ArubaCPLocaluser | Format-Table
+
+    id user_id               username              role_name  enabled change_pwd_next_login attributes _links
+    -- -------               --------              ---------  ------- --------------------- ---------- ------
+    3085 MyPowerArubaCP_userid MyPowerArubaCP_userid [Employee]    True                 False            @{self=}
+
+# Modified information (username and and role) about Local User
+    Get-ArubaCPLocaluser -user_id MyPowerArubaCP_userid | Set-ArubaCPLocaluser -username MyPowerArubaCP_username -role [Guest]
+
+    id                    : 3085
+    user_id               : MyPowerArubaCP_userid
+    username              : MyPowerArubaCP_username
+    role_name             : [Guest]
+    enabled               : True
+    change_pwd_next_login : False
+    attributes            :
+    _links                : @{self=}
+
+# Remove Endpoint
+    $lu = Get-ArubaCPLocaluser -user_id MyPowerArubaCP_userid
+    $lu | Remove-ArubaCPLocaluser
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Local User" on target "3085 (MyPowerArubaCP_userid)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
 ```
 
 ### Network Device
