@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: lint
-        uses:   docker://devblackops/github-action-psscriptanalyzer:2.3.0
+        uses:   docker://devblackops/github-action-psscriptanalyzer:2.4.0
         with:
           settingsPath: .vscode/PSScriptAnalyzerSettings.psd1
           sendComment: false
