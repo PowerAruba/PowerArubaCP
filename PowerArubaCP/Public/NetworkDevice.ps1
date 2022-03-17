@@ -279,6 +279,13 @@ function Set-ArubaCPNetworkDevice {
 
         Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
 
+        .EXAMPLE
+        $attributes = @{ "Location" = "PowerArubaCP" }
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS C:\>$nad | Set-ArubaCPNetworkDevice -attributes $attributes
+
+        Set Attributes Location to PowerArubaCP of NAD-PowerArubaCP
+
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
@@ -306,6 +313,8 @@ function Set-ArubaCPNetworkDevice {
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
         [switch]$radsec_enabled,
+        [Parameter (Mandatory = $false)]
+        [hashtable]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -373,6 +382,10 @@ function Set-ArubaCPNetworkDevice {
             else {
                 $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
             }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
         if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network device')) {

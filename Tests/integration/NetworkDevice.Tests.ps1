@@ -182,6 +182,34 @@ Describe "Configure Network Device" {
     #    $nad.radsec_enabled | Should -Be true
     #}
 
+    It "Change Attribute Network Device (Set 1 Attribute)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+    }
+
+    It "Change Attribute Network Device (Set 2 Attributes)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" ; "syslocation" = "Pester" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+        $nad.attributes.syslocation | Should -Be "Pester"
+    }
+
+    It "Change Attribute Network Device (Set 1 Attribute with 1 Attribute before)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" }
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "syslocation" = "Pester" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        #Should Be Replace ? and not add ??
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+        $nad.attributes.syslocation | Should -Be "Pester"
+    }
+
     AfterEach {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
