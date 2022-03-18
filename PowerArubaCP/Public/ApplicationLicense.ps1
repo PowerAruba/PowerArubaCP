@@ -163,7 +163,7 @@ function Remove-ArubaCPApplicationLicense {
 
     Process {
 
-        #get nad id from nad ps object
+        #get Application License id from al ps object
         if ($al) {
             $id = $al.id
             $name = "(" + $al.product_name + ")"
