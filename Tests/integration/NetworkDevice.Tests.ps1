@@ -111,7 +111,7 @@ Describe "Add Network Device" {
         $nad.name | Should -Be "pester_SW1"
         $nad.ip_address | Should -Be "192.0.2.1"
         $nad.vendor_name | Should -Be "Aruba"
-        @($nad.attributes).count | Should -Be "1"
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
         @($nad.attributes).Location | Should -Be "PowerArubaCP"
     }
 
@@ -122,7 +122,7 @@ Describe "Add Network Device" {
         $nad.name | Should -Be "pester_SW1"
         $nad.ip_address | Should -Be "192.0.2.1"
         $nad.vendor_name | Should -Be "Aruba"
-        # @($nad.attributes).count | Should -Be "2"
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
         @($nad.attributes).Location | Should -Be "PowerArubaCP"
         @($nad.attributes).syslocation | Should -Be "PowerArubaCP"
     }
