@@ -181,6 +181,28 @@ function Confirm-ArubaCPNetworkDeviceGroup {
 
 }
 
+Function Confirm-ArubaCPRole {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like a Role element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain an id property."
+    }
+    if ( -not ( $argument | get-member -name name -Membertype Properties)) {
+        throw "Element specified does not contain a name property."
+    }
+    #if ( -not ( $argument | get-member -name description -Membertype Properties)) {
+    #    throw "Element specified does not contain a description property."
+    #}
+    $true
+
+}
+
 Function Confirm-ArubaCPService {
 
     Param (
