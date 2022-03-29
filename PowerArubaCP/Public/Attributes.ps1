@@ -154,7 +154,7 @@ function Set-ArubaCPAttributesMember {
                 #Skip if there is already an attribute with this name...
                 continue
             }
-            $attributes | Add-Member -name $n -MemberType NoteProperty -Value ""
+            $attributes | Add-Member -name $n -MemberType NoteProperty -Value "--For-Delete--"
         }
 
         $_att | Add-Member -name "attributes" -MemberType NoteProperty -Value $attributes
@@ -215,7 +215,7 @@ function Remove-ArubaCPAttributesMember {
         $attributes = New-Object -TypeName PSObject
 
         foreach ($n in $name) {
-            $attributes | Add-Member -name $n -MemberType NoteProperty -Value ""
+            $attributes | Add-Member -name $n -MemberType NoteProperty -Value "--For-Delete--"
         }
 
         $_att | Add-Member -name "attributes" -MemberType NoteProperty -Value $attributes
