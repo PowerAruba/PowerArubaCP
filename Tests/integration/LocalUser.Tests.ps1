@@ -300,7 +300,7 @@ Describe "Remove Local User" {
     }
 
     AfterEach {
-        Get-ArubaCPLocalUser  -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
+        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
     }
 }
 
