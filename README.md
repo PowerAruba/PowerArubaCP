@@ -408,7 +408,8 @@ You can add Endpoint `Add-ArubaCPLocalUser`, retrieve its informations `Get-Arub
 
 ```powershell
 # Add Local User
-    Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password MyPassword -role_name "[Employee]"
+    $mysecurepassword = ConvertTo-SecureString MyPassword -AsPlainText -Force
+    Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password $mysecurepassword -role_name "[Employee]"
 
     id                    : 3085
     user_id               : MyPowerArubaCP_userid
