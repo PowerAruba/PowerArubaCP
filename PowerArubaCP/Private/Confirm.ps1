@@ -90,6 +90,35 @@ Function Confirm-ArubaCPEndpoint {
 
 }
 
+
+function Confirm-ArubaCPLocalUser {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like a Local User (lu) element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain an id property."
+    }
+    if ( -not ( $argument | get-member -name user_id -Membertype Properties)) {
+        throw "Element specified does not contain an user_id property."
+    }
+    if ( -not ( $argument | get-member -name username -Membertype Properties)) {
+        throw "Element specified does not contain an username property."
+    }
+    if ( -not ( $argument | get-member -name role_name -Membertype Properties)) {
+        throw "Element specified does not contain a role_name property."
+    }
+    if ( -not ( $argument | get-member -name change_pwd_next_login -Membertype Properties)) {
+        throw "Element specified does not contain a change_pwd_next_login property."
+    }
+    $true
+
+}
+
 Function Confirm-ArubaCPNetworkDevice {
 
     Param (
