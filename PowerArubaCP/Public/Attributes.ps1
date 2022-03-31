@@ -57,7 +57,6 @@ function Add-ArubaCPAttributesMember {
             if (@($name).count -ne @($value).count) {
                 Throw "You need to have the same number of name and value parameters"
             }
-            $_att = New-Object -TypeName PSObject
 
             $attributes = New-Object -TypeName PSObject
             $i = 0
@@ -66,6 +65,8 @@ function Add-ArubaCPAttributesMember {
                 $i++
             }
         }
+
+        $_att = New-Object -TypeName PSObject
 
         $_att | Add-Member -name "attributes" -MemberType NoteProperty -Value $attributes
 
