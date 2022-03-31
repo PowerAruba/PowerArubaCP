@@ -14,7 +14,7 @@ Describe "Get Local User" {
     BeforeAll {
         #Add 2 Local User...
         Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password MyPassword -role_name "[Guest]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password MyPassword -role_name "[Guest]" -username "pester_PowerArubaCP_username"
     }
 
     It "Get Local User Does not throw an error" {
@@ -41,21 +41,33 @@ Describe "Get Local User" {
         Confirm-ArubaCPLocalUser $lu | Should -Be $true
     }
 
-    It "Search Local User by user_id (pester_PowerArubaCP_2)" {
-        $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_2
-        @($lu).count | Should -Be 1
-        $lu.id | Should -Not -BeNullOrEmpty
-        $lu.user_id | Should -Be "pester_PowerArubaCP_2"
-    }
+    Context "Search " {
 
-    It "Search Local User by user_id (contains *pester*)" {
-        $lu = Get-ArubaCPLocalUser -user_id pester -filter_type contains
-        @($lu).count | Should -Be 2
-    }
+        It "Search Local User by user_id (pester_PowerArubaCP_2)" {
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_2
+            @($lu).count | Should -Be 1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_2"
+        }
 
-    It "Search Local User by attribute (user_id contains PowerArubaCP_2)" {
-        $lu = Get-ArubaCPLocalUser -filter_attribute user_id -filter_type contains -filter_value PowerArubaCP_2
-        @($lu).count | Should -Be 1
+        It "Search Local User by username (pester_PowerArubaCP_username)" {
+            $lu = Get-ArubaCPLocalUser -username pester_PowerArubaCP_username
+            @($lu).count | Should -Be 1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_2"
+            $lu.username | Should -Be "pester_PowerArubaCP_username"
+        }
+
+        It "Search Local User by user_id (contains *pester*)" {
+            $lu = Get-ArubaCPLocalUser -user_id pester -filter_type contains
+            @($lu).count | Should -Be 2
+        }
+
+        It "Search Local User by attribute (user_id contains PowerArubaCP_2)" {
+            $lu = Get-ArubaCPLocalUser -filter_attribute user_id -filter_type contains -filter_value PowerArubaCP_2
+            @($lu).count | Should -Be 1
+        }
+
     }
 
     AfterAll {
@@ -63,6 +75,7 @@ Describe "Get Local User" {
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 | Remove-ArubaCPLocalUser -confirm:$false
     }
+
 }
 
 Describe "Add Local User" {
@@ -145,6 +158,7 @@ Describe "Add Local User" {
     AfterEach {
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
     }
+
 }
 
 Describe "Configure Local User" {
@@ -273,6 +287,7 @@ Describe "Configure Local User" {
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 | Remove-ArubaCPLocalUser -confirm:$false
     }
+
 }
 
 Describe "Remove Local User" {
@@ -302,6 +317,7 @@ Describe "Remove Local User" {
     AfterEach {
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
     }
+
 }
 
 AfterAll {
