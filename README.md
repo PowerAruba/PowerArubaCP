@@ -438,7 +438,7 @@ You can add Endpoint `Add-ArubaCPLocalUser`, retrieve its informations `Get-Arub
     attributes            :
     _links                : @{self=}
 
-# Remove Endpoint
+# Remove Local User
     $lu = Get-ArubaCPLocaluser -user_id MyPowerArubaCP_userid
     $lu | Remove-ArubaCPLocaluser
 
