@@ -112,7 +112,7 @@ Describe "Add Network Device" {
         $nad.ip_address | Should -Be "192.0.2.1"
         $nad.vendor_name | Should -Be "Aruba"
         ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
-        @($nad.attributes).Location | Should -Be "PowerArubaCP"
+        ($nad.attributes).Location | Should -Be "PowerArubaCP"
     }
 
     It "Add Network Device with 2 attributes (Location and syslocation)" {
@@ -123,8 +123,8 @@ Describe "Add Network Device" {
         $nad.ip_address | Should -Be "192.0.2.1"
         $nad.vendor_name | Should -Be "Aruba"
         ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
-        @($nad.attributes).Location | Should -Be "PowerArubaCP"
-        @($nad.attributes).syslocation | Should -Be "PowerArubaCP"
+        ($nad.attributes).Location | Should -Be "PowerArubaCP"
+        ($nad.attributes).syslocation | Should -Be "PowerArubaCP"
     }
 
 
