@@ -18,6 +18,7 @@ With this module (version 0.5.0) you can manage:
 - [Local User](#local-user) (Add / Get / Set / Remove)
 - [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
+- [Role](#role)
 - [Server](#server) (Get Configuration, Version)
 - [Service](#service) (Get / Enable / Disable)
 - [Static Host List](#static-host-list) (Add / Get / Set / Remove a Static Host List and Add/Remove Member)
@@ -569,6 +570,52 @@ You can create a new Network Device Group `Add-ArubaCPNetworkDeviceGroup`, retri
     Confirm
     Are you sure you want to perform this action?
     Performing the operation "Remove Network Device Group" on target "3043 (NDG-subnet)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+```
+
+### Role
+
+You can add Role `Add-ArubaCPRole`, retrieve its informations `Get-ArubaCPRole`, modify its properties `Set-ArubaCPRole` or delete it `Remove-ArubaCPRole`.
+
+```powershell
+# Add Role
+    Add-ArubaCPRole -name PowerArubaCP_role
+
+    id   name              _links
+    --   ----              ------
+    3028 PowerArubaCP_role @{self=}
+
+# Get information about Role
+    Get-ArubaCPRole | Format-Table
+
+    id name                            description
+    -- ----                            -----------
+     3 [Guest]                         Default role for a Guest
+    12 [TACACS+ Read-only Admin]       Read-only administrator role for Policy Manager Admin
+    13 [TACACS+ API Admin]             API administrator role for Policy Manager Admin
+    14 [TACACS+ Help Desk]             Help desk role for Policy Manager Admin
+    15 [TACACS+ Receptionist]          Receptionist role for Policy Manager Admin
+    16 [TACACS+ Network Admin]         Network administrator role for Policy Manager Admin
+    18 [TACACS+ Super Admin]           Super administrator role for Policy Manager Admin
+    20 [Contractor]                    Default role for a contractor
+    21 [Other]                         Default role for another user or device
+    22 [Employee]                      Default role for an employee
+    [...]
+
+# Modified information (description) about a role
+    Get-ArubaCPRole -name PowerArubaCP_role | Set-ArubaCPRole -description "Change by PowerArubaCP"
+
+    id   name              description            _links
+    --   ----              -----------            ------
+    3028 PowerArubaCP_role Change by PowerArubaCP @{self=}
+
+# Remove Role
+    $r = Get-ArubaCPRole -name PowerArubaCP_role
+    $r | Remove-ArubaCProle
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Role" on target "3028 (PowerArubaCP_role)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
 ```
 
