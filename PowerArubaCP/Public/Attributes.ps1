@@ -51,7 +51,18 @@ function Add-ArubaCPAttributesMember {
     Process {
 
         $id = $atts.id
-        $uri = "api/endpoint/${id}"
+        if ($atts.mac_address -and $atts.status) {
+            $uri = "api/endpoint/${id}"
+        }
+        elseif ($atts.user_id -and $atts.role_name) {
+            $uri = "api/local-user/${id}"
+        }
+        elseif ($atts.ip_address -and $atts.vendor) {
+            $uri = "api/network-device/${id}"
+        }
+        else {
+            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+        }
 
         if ($PSCmdlet.ParameterSetName -eq "nv") {
             if (@($name).count -ne @($value).count) {
@@ -131,7 +142,18 @@ function Set-ArubaCPAttributesMember {
             $old_name = "(" + $atts.name + ")"
         }
 
-        $uri = "api/endpoint/${id}"
+        if ($atts.mac_address -and $atts.status) {
+            $uri = "api/endpoint/${id}"
+        }
+        elseif ($atts.user_id -and $atts.role_name) {
+            $uri = "api/local-user/${id}"
+        }
+        elseif ($atts.ip_address -and $atts.vendor) {
+            $uri = "api/network-device/${id}"
+        }
+        else {
+            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+        }
 
         $_att = New-Object -TypeName PSObject
 
@@ -209,7 +231,18 @@ function Remove-ArubaCPAttributesMember {
 
         $id = $atts.id
         $rname = "(" + $atts.name + ")"
-        $uri = "api/endpoint/${id}"
+        if ($atts.mac_address -and $atts.status) {
+            $uri = "api/endpoint/${id}"
+        }
+        elseif ($atts.user_id -and $atts.role_name) {
+            $uri = "api/local-user/${id}"
+        }
+        elseif ($atts.ip_address -and $atts.vendor) {
+            $uri = "api/network-device/${id}"
+        }
+        else {
+            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+        }
 
         $_att = New-Object -TypeName PSObject
 
