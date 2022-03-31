@@ -205,6 +205,95 @@ Describe "Configure Endpoint" {
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -confirm:$false
     }
 }
+
+Describe "Endpoint Attributes" {
+
+    Context "Add Endpoint Attributes" {
+        BeforeEach {
+            #Add 1 entry
+            Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known
+        }
+
+        It "Add Attribute Endpoint (Add 1 Attribute using hashtable)" {
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -attributes @{ "Location" = "PowerArubaCP" }
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Endpoint (Add 2 Attributes using hashtable)" {
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -attributes @{ "Disabled by" = "PowerArubaCP" ; "Location" = "PowerArubaCP" }
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $ep.attributes.'Disabled by' | Should -Be "PowerArubaCP"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Endpoint (Set 1 Attribute with 1 Attribute before using hashtable)" {
+            #Set first attribute
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name Location -value PowerArubaCP
+            #Set second attribute...
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -attributes @{ "Disabled by" = "PowerArubaCP" }
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            #Should Be Replace ? and not add ??
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $ep.attributes.'Disabled by' | Should -Be "PowerArubaCP"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+
+        It "Add Attribute Endpoint (Add 1 Attribute using name/value)" {
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name Location -value PowerArubaCP
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Endpoint (Add 2 Attributes using name/value)" {
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name "Disabled by", Location -value PowerArubaCP, PowerArubaCP
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $ep.attributes.'Disabled by' | Should -Be "PowerArubaCP"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Endpoint (Set 1 Attribute with 1 Attribute before using name/value)" {
+            #Set first attribute
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name Location -value PowerArubaCP
+            #Set second attribute...
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name "Disabled by" -value PowerArubaCP
+            $ep = Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05
+            $ep.id | Should -Not -BeNullOrEmpty
+            $ep.mac_address | Should -Be "000102030405"
+            $ep.status | Should -Be "Known"
+            #Should Be Replace ? and not add ??
+            ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $ep.attributes.'Disabled by' | Should -Be "PowerArubaCP"
+            $ep.attributes.location | Should -Be "PowerArubaCP"
+        }
+
+        AfterEach {
+            Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
+        }
+    }
+
+
+}
 Describe "Remove Endpoint" {
 
     It "Remove Endpoint by id" {
