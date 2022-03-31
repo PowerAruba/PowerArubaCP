@@ -1,5 +1,5 @@
 #
-# Copyright 2021, Alexis La Goutte <alexis dot lagoutte at gmail dot com>
+# Copyright 2022 Alexis La Goutte <alexis dot lagoutte at gmail dot com>
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -24,10 +24,10 @@ function Add-ArubaCPLocaluser {
         Add a Local User with user_id MyPowerArubaCP_userid, username MyPowerArubaCP_username and role_name [Employee]
 
         .EXAMPLE
-        $attributes = @{"Disabled by"="PowerArubaCP"}
+        $attributes = @{ "Sponsor" = "PowerArubaCP" }
         PS >Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password MyPassword -role_name "[Employee]" -attributes $attributes
 
-        dd a Local User with user_id MyPowerArubaCP_userid (same username), role_name [Employee] attributes to Disabled by PowerArubaCP
+        Add a Local User with user_id MyPowerArubaCP_userid (same username), role_name [Employee] with Sponsor Attributes to PowerArubaCP
     #>
 
     Param(
@@ -126,7 +126,7 @@ function Get-ArubaCPLocaluser {
         .EXAMPLE
         Get-ArubaCPLocalUser MyPowerArubaCP_userid
 
-        Get info about Local UserID MyPowerArubaCP_userid on the ClearPass
+        Get info about Local User ID MyPowerArubaCP_userid on the ClearPass
 
         .EXAMPLE
         Get-ArubaCPLocalUser -id 23
@@ -298,7 +298,7 @@ function Set-ArubaCPLocalUser {
 
     Process {
 
-        #get nad id from nad ps object
+        #get lu id from Local User ps object
         if ($lu) {
             $id = $lu.id
         }
@@ -354,6 +354,7 @@ function Set-ArubaCPLocalUser {
     End {
     }
 }
+
 function Remove-ArubaCPLocalUser {
 
     <#
