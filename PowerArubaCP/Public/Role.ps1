@@ -191,7 +191,7 @@ function Set-ArubaCPRole {
         $r = Get-ArubaCPRole -name MyPowerArubaCP_role
         PS C:\>$r | Set-ArubaCPRole -username MyPowerArubaCP_role2
 
-        Change role (MyPowerArubaCP_role2) for role MyPowerArubaCP
+        Change role name (MyPowerArubaCP_role2) for role MyPowerArubaCP
 
         .EXAMPLE
         $r = Get-ArubaCPRole -name MyPowerArubaCP_role
