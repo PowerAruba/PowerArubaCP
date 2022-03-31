@@ -225,6 +225,7 @@ function Set-ArubaCPRole {
         #get role id from role ps object
         if ($r) {
             $id = $r.id
+            $rname = "(" + $r.name + ")"
         }
 
         $uri = "api/role/${id}"
@@ -238,7 +239,7 @@ function Set-ArubaCPRole {
             $_r | add-member -name "description" -membertype NoteProperty -Value $description
         }
 
-        if ($PSCmdlet.ShouldProcess($id, 'Configure Role')) {
+        if ($PSCmdlet.ShouldProcess("$id $rname", 'Configure Role')) {
             $r = Invoke-ArubaCPRestMethod -method "PATCH" -body $_r -uri $uri -connection $connection
             $r
         }
