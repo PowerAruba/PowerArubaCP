@@ -14,18 +14,19 @@ function Add-ArubaCPLocaluser {
         Add a Local User with user_id, username, password, role...
 
         .EXAMPLE
-        Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password ( ConvertTo-SecureString MyPassword -AsPlainText -Force ) -role_name "[Employee]"
 
         Add a Local User with user_id MyPowerArubaCP_userid (same username) and role_name [Employee]
 
         .EXAMPLE
-        Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -username MyPowerArubaCP_username -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -username MyPowerArubaCP_username -password ( ConvertTo-SecureString MyPassword -AsPlainText -Force ) -role_name "[Employee]"
 
         Add a Local User with user_id MyPowerArubaCP_userid, username MyPowerArubaCP_username and role_name [Employee]
 
         .EXAMPLE
-        $attributes = @{ "Sponsor" = "PowerArubaCP" }
-        PS >Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password MyPassword -role_name "[Employee]" -attributes $attributes
+        $mysecurepassword = ConvertTo-SecureString MyPassword -AsPlainText -Force
+        PS >$attributes = @{ "Sponsor" = "PowerArubaCP" }
+        PS >Add-ArubaCPLocaluser -user_id MyPowerArubaCP_userid -password $mysecurepassword -role_name "[Employee]" -attributes $attributes
 
         Add a Local User with user_id MyPowerArubaCP_userid (same username), role_name [Employee] with Sponsor Attributes to PowerArubaCP
     #>
@@ -38,7 +39,7 @@ function Add-ArubaCPLocaluser {
         [Parameter (Mandatory = $false)]
         [string]$username,
         [Parameter (Mandatory = $true)]
-        [string]$password,
+        [securestring]$password,
         [Parameter (Mandatory = $true)]
         [string]$role_name,
         [Parameter (Mandatory = $false)]
@@ -75,7 +76,8 @@ function Add-ArubaCPLocaluser {
             $_lu | add-member -name "username" -membertype NoteProperty -Value $user_id
         }
 
-        $_lu | add-member -name "password" -membertype NoteProperty -Value $password
+        $credentials = New-Object System.Net.NetworkCredential("", $password)
+        $_lu | add-member -name "password" -membertype NoteProperty -Value $credentials.Password
 
         $_lu | add-member -name "role_name" -membertype NoteProperty -Value $role_name
 
@@ -248,7 +250,7 @@ function Set-ArubaCPLocalUser {
 
         .EXAMPLE
         $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
-        PS C:\>$lu | Set-ArubaCPLocalUser -password MyNewPassword
+        PS C:\>$lu | Set-ArubaCPLocalUser -password ( ConvertTo-SecureString MyPassword -AsPlainText -Force )
 
         Change Password for user(name) MyPowerArubaCP
 
@@ -279,7 +281,7 @@ function Set-ArubaCPLocalUser {
         [Parameter (Mandatory = $false)]
         [string]$username,
         [Parameter (Mandatory = $false)]
-        [string]$password,
+        [securestring]$password,
         [Parameter (Mandatory = $false)]
         [string]$role_name,
         [Parameter (Mandatory = $false)]
@@ -315,7 +317,8 @@ function Set-ArubaCPLocalUser {
         }
 
         if ( $PsBoundParameters.ContainsKey('password') ) {
-            $_lu | add-member -name "password" -membertype NoteProperty -Value $password
+            $credentials = New-Object System.Net.NetworkCredential("", $password)
+            $_lu | add-member -name "password" -membertype NoteProperty -Value $credentials.Password
         }
 
         if ( $PsBoundParameters.ContainsKey('role_name') ) {

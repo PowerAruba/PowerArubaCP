@@ -13,8 +13,8 @@ Describe "Get Local User" {
 
     BeforeAll {
         #Add 2 Local User...
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password MyPassword -role_name "[Guest]" -username "pester_PowerArubaCP_username"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password $MySecurePassword -role_name "[Guest]" -username "pester_PowerArubaCP_username"
     }
 
     It "Get Local User Does not throw an error" {
@@ -81,7 +81,7 @@ Describe "Get Local User" {
 Describe "Add Local User" {
 
     It "Add Local User with mandatory Parameter (password, role_name)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -93,7 +93,7 @@ Describe "Add Local User" {
     }
 
     It "Add Local User with an username" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]" -username pester_PowerArubaCP_username
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -username pester_PowerArubaCP_username
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -105,7 +105,7 @@ Describe "Add Local User" {
     }
 
     It "Add Local User with enabled (disable)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]" -enabled:$false
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -enabled:$false
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -117,7 +117,7 @@ Describe "Add Local User" {
     }
 
     It "Add Local User with change_pwd_next_login (enable)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]" -change_pwd_next_login
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -change_pwd_next_login
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -129,7 +129,7 @@ Describe "Add Local User" {
     }
 
     It "Add Local User with an attribute (Sponsor)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP" }
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP" }
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -142,7 +142,7 @@ Describe "Add Local User" {
     }
 
     It "Add Local User with two attributes (Sponsor and Title)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP"; "Title" = "Pester" }
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP"; "Title" = "Pester" }
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -164,7 +164,7 @@ Describe "Add Local User" {
 Describe "Configure Local User" {
     BeforeEach {
         #Add 1 entry
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
     }
 
     It "Change user_id Local User (pester_PowerArubaCP_1 => pester_PowerArubaCP_2)" {
@@ -193,7 +193,7 @@ Describe "Configure Local User" {
 
     It "Change Password Local User" {
         #no way to check if the password is changed...
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -password MyNewPassword
+        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -password $MyNewSecurePassword
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -293,7 +293,7 @@ Describe "Configure Local User" {
 Describe "Remove Local User" {
 
     It "Remove Local User by id" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
         @($lu).count | Should -Be 1
@@ -304,7 +304,7 @@ Describe "Remove Local User" {
     }
 
     It "Remove Local User by name (and pipeline)" {
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password MyPassword -role_name "[Employee]"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
         @($lu).count | Should -Be 1

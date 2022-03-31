@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "")]
+Param()
+
 if ("Desktop" -eq $PSVersionTable.PsEdition) {
     # -BeOfType is not same on PowerShell Core and Desktop (get int with Desktop and long with Core for number)
     $script:pester_longint = "int"
@@ -26,6 +29,8 @@ if ($null -eq $port) {
 . ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
 Connect-ArubaCP @invokeParams
+$script:MySecurePassword = ConvertTo-SecureString MyPassword -AsPlainText -Force
+$script:MyNewSecurePassword = ConvertTo-SecureString MyNewassword -AsPlainText -Force
 
 $script:VersionBefore680 = $DefaultArubaCPConnection.Version -lt [version]"6.8.0"
 $script:VersionBefore686 = $DefaultArubaCPConnection.Version -lt [version]"6.8.6"
