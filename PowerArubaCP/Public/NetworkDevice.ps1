@@ -257,32 +257,32 @@ function Set-ArubaCPNetworkDevice {
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
+        PS > $nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
 
         Rename Network Device to NAD-PowerArubaCP2
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
+        PS > $nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
 
         Change IP Address and radius_secret of NAD-PowerArubaCP
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
+        PS > $nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
 
         Set Vendor Name to Cisco and (re)configure TACACS Secret of NAD-PowerArubaCP
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
+        PS > $nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
 
         Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
 
         .EXAMPLE
         $attributes = @{ "Location" = "PowerArubaCP" }
-        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -attributes $attributes
+        PS > $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS > $nad | Set-ArubaCPNetworkDevice -attributes $attributes
 
         Set Attributes Location to PowerArubaCP of NAD-PowerArubaCP
 
@@ -410,7 +410,7 @@ function Remove-ArubaCPNetworkDevice {
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Remove-ArubaCPNetworkDevice
+        PS > $nad | Remove-ArubaCPNetworkDevice
 
         Remove Network Device named NAD-PowerArubaCP
 
