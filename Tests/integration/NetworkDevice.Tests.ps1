@@ -104,13 +104,37 @@ Describe "Add Network Device" {
     #    $nad.radsec_enabled | Should -Be true
     #}
 
+    It "Add Network Device with 1 attribute (Location)" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -attributes @{ "Location" = "PowerArubaCP" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        $nad.name | Should -Be "pester_SW1"
+        $nad.ip_address | Should -Be "192.0.2.1"
+        $nad.vendor_name | Should -Be "Aruba"
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+        ($nad.attributes).Location | Should -Be "PowerArubaCP"
+    }
+
+    It "Add Network Device with 2 attributes (Location and syslocation)" {
+        Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -attributes @{ "Location" = "PowerArubaCP"; "syslocation" = "PowerArubaCP" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        $nad.name | Should -Be "pester_SW1"
+        $nad.ip_address | Should -Be "192.0.2.1"
+        $nad.vendor_name | Should -Be "Aruba"
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+        ($nad.attributes).Location | Should -Be "PowerArubaCP"
+        ($nad.attributes).syslocation | Should -Be "PowerArubaCP"
+    }
+
+
     AfterEach {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
 }
 
 Describe "Configure Network Device" {
-    BeforeAll {
+    BeforeEach {
         #Add 1 entry
         Add-ArubaCPNetworkDevice -name pester_SW1 -ip_address 192.0.2.1 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
     }
@@ -128,37 +152,65 @@ Describe "Configure Network Device" {
     }
 
     It "Reconfigure Network Device (Change ip_address => 192.0.2.2 and Vendor => HPE)" {
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -vendor "Hewlett-Packard-Enterprise"
-        $nad = Get-ArubaCPNetworkDevice -name pester_SW2
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -vendor "Hewlett-Packard-Enterprise"
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad.id | Should -Not -Be BeNullOrEmpty
         $nad.ip_address | Should -Be "192.0.2.2"
         $nad.vendor_name | Should -Be "Hewlett-Packard-Enterprise"
     }
 
     It "Reconfigure Network Device (Enable COA and Change COA Port to 6000)" {
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Set-ArubaCPNetworkDevice -coa_capable -coa_port 6000
-        $nad = Get-ArubaCPNetworkDevice -name pester_SW2
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -coa_capable -coa_port 6000
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad.id | Should -Not -Be BeNullOrEmpty
         $nad.coa_capable | Should -Be "true"
         $nad.coa_port | Should -Be "6000"
     }
 
     It "Reconfigure Network Device (Change RADIUS and TACACS secret)" {
-        Get-ArubaCPNetworkDevice -name pester_SW2 | Set-ArubaCPNetworkDevice -radius_secret MySecurePassword -tacacs_secret MySecurePassword
-        $nad = Get-ArubaCPNetworkDevice -name pester_SW2
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -radius_secret MySecurePassword -tacacs_secret MySecurePassword
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
         $nad.id | Should -Not -Be BeNullOrEmpty
         # radius_secret and tacacs_secret are always empty...
     }
 
     #Disable... need to check release version and some change with last 6.8 release... need to configure RadSec Settings...
     #It "Reconfigre Network Device (Enable RadSec)" {
-    #    Get-ArubaCPNetworkDevice -name pester_SW2 | Set-ArubaCPNetworkDevice -radsec_enabled
-    #    $nad = Get-ArubaCPNetworkDevice -name pester_SW2
+    #    Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -radsec_enabled
+    #    $nad = Get-ArubaCPNetworkDevice -name pester_SW1
     #    $nad.id | Should -Not -Be BeNullOrEmpty
     #    $nad.radsec_enabled | Should -Be true
     #}
 
-    AfterAll {
+    It "Change Attribute Network Device (Set 1 Attribute)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+    }
+
+    It "Change Attribute Network Device (Set 2 Attributes)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" ; "syslocation" = "Pester" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+        $nad.attributes.syslocation | Should -Be "Pester"
+    }
+
+    It "Change Attribute Network Device (Set 1 Attribute with 1 Attribute before)" {
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "Location" = "PowerArubaCP" }
+        Get-ArubaCPNetworkDevice -name pester_SW1 | Set-ArubaCPNetworkDevice -attributes @{ "syslocation" = "Pester" }
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW1
+        $nad.id | Should -Not -Be BeNullOrEmpty
+        #Should Be Replace ? and not add ??
+        ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+        $nad.attributes.location | Should -Be "PowerArubaCP"
+        $nad.attributes.syslocation | Should -Be "Pester"
+    }
+
+    AfterEach {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
     }

@@ -32,6 +32,13 @@ function Add-ArubaCPNetworkDevice {
         Add-ArubaCPNetworkDevice -name SW4 -ip_address 192.0.2.4 -radius_secret MySecurePassword -vendor Hewlett-Packard-Enterprise -radsec_enabled
 
         Add Network Device SW4 with RadSec from vendor HPE
+
+        .EXAMPLE
+        $attributes = @{ "Location" = "PowerArubaCP" }
+        PS > Add-ArubaCPNetworkDevice -name SW5 -ip_address 192.0.2.5 -radius_secret MySecurePassword -vendor Aruba -attributes $attributes
+
+        Add Network Device SW5 with hashtable attribute (Location) from vendor Aruba
+
     #>
 
     Param(
@@ -55,6 +62,8 @@ function Add-ArubaCPNetworkDevice {
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
         [switch]$radsec_enabled,
+        [Parameter (Mandatory = $false)]
+        [hashtable]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -109,6 +118,10 @@ function Add-ArubaCPNetworkDevice {
             else {
                 $_nad | add-member -name "radsec_enabled" -membertype NoteProperty -Value $false
             }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
         $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $uri -connection $connection
@@ -244,27 +257,34 @@ function Set-ArubaCPNetworkDevice {
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
+        PS > $nad | Set-ArubaCPNetworkDevice -name NAS-PowerArubaCP2
 
         Rename Network Device to NAD-PowerArubaCP2
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
+        PS > $nad | Set-ArubaCPNetworkDevice -ip_address 192.0.2.2 -radius_secret MySecret2
 
         Change IP Address and radius_secret of NAD-PowerArubaCP
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
+        PS > $nad | Set-ArubaCPNetworkDevice -vendor_name Cisco -tacacs_secret MySecret2
 
         Set Vendor Name to Cisco and (re)configure TACACS Secret of NAD-PowerArubaCP
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
+        PS > $nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
 
         Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
+
+        .EXAMPLE
+        $attributes = @{ "Location" = "PowerArubaCP" }
+        PS > $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS > $nad | Set-ArubaCPNetworkDevice -attributes $attributes
+
+        Set Attributes Location to PowerArubaCP of NAD-PowerArubaCP
 
     #>
 
@@ -293,6 +313,8 @@ function Set-ArubaCPNetworkDevice {
         [int]$coa_port,
         [Parameter (Mandatory = $false)]
         [switch]$radsec_enabled,
+        [Parameter (Mandatory = $false)]
+        [hashtable]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -362,6 +384,10 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
+        if ( $PsBoundParameters.ContainsKey('attributes') ) {
+            $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
+        }
+
         if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network device')) {
             $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
             $nad
@@ -384,7 +410,7 @@ function Remove-ArubaCPNetworkDevice {
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
-        PS C:\>$nad | Remove-ArubaCPNetworkDevice
+        PS > $nad | Remove-ArubaCPNetworkDevice
 
         Remove Network Device named NAD-PowerArubaCP
 
