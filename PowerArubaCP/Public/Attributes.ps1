@@ -144,12 +144,15 @@ function Set-ArubaCPAttributesMember {
 
         if ($atts.mac_address -and $atts.status) {
             $uri = "api/endpoint/${id}"
+            $delete_value = "--For-Delete--"
         }
         elseif ($atts.user_id -and $atts.role_name) {
             $uri = "api/local-user/${id}"
+            $delete_value = ""
         }
         elseif ($atts.ip_address -and $atts.vendor) {
             $uri = "api/network-device/${id}"
+            $delete_value = ""
         }
         else {
             Throw "Not an Endpoint, LocalUser or NetworkDevice"
@@ -177,7 +180,7 @@ function Set-ArubaCPAttributesMember {
                 #Skip if there is already an attribute with this name...
                 continue
             }
-            $attributes | Add-Member -name $n -MemberType NoteProperty -Value "--For-Delete--"
+            $attributes | Add-Member -name $n -MemberType NoteProperty -Value $delete_value
         }
 
         $_att | Add-Member -name "attributes" -MemberType NoteProperty -Value $attributes
@@ -233,12 +236,15 @@ function Remove-ArubaCPAttributesMember {
         $rname = "(" + $atts.name + ")"
         if ($atts.mac_address -and $atts.status) {
             $uri = "api/endpoint/${id}"
+            $delete_value = "--For-Delete--"
         }
         elseif ($atts.user_id -and $atts.role_name) {
             $uri = "api/local-user/${id}"
+            $delete_value = ""
         }
         elseif ($atts.ip_address -and $atts.vendor) {
             $uri = "api/network-device/${id}"
+            $delete_value = ""
         }
         else {
             Throw "Not an Endpoint, LocalUser or NetworkDevice"
@@ -249,7 +255,7 @@ function Remove-ArubaCPAttributesMember {
         $attributes = New-Object -TypeName PSObject
 
         foreach ($n in $name) {
-            $attributes | Add-Member -name $n -MemberType NoteProperty -Value "--For-Delete--"
+            $attributes | Add-Member -name $n -MemberType NoteProperty -Value $delete_value
         }
 
         $_att | Add-Member -name "attributes" -MemberType NoteProperty -Value $attributes
