@@ -372,7 +372,7 @@ Describe "Endpoint Attributes" {
         }
     }
 
-    Context "Set Endpoint Attribute" {
+    Context "Remove Endpoint Attribute" {
 
         BeforeEach {
             #Add 1 entry with 2 attributes
