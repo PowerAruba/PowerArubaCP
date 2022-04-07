@@ -482,6 +482,42 @@ Describe "Attribute Local User" {
         }
     }
 
+    Context "Remove Local User Attributes" {
+
+        BeforeEach {
+            #Add 1 entry with 2 attributes
+            Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP" ; "Title" = "Pester" }
+        }
+
+        It "Remove Attribute Local User (Remove 1 Attribute with 2 before)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor -value PowerArubaCP
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Remove Attribute Local User (Remove 2 Attributes with 2 before)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor, "Title" -value PowerArubaCP, Pester
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "0"
+        }
+
+        AfterEach {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
+        }
+    }
 }
 Describe "Remove Local User" {
 
