@@ -447,7 +447,7 @@ Describe "Attribute Local User" {
         }
 
         It "Remove Attribute Local User (Remove 1 Attribute with 2 before)" {
-            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor -value PowerArubaCP
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor
             $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
             $lu.id | Should -Not -BeNullOrEmpty
             $lu.user_id | Should -Be "pester_PowerArubaCP_1"
@@ -460,7 +460,7 @@ Describe "Attribute Local User" {
         }
 
         It "Remove Attribute Local User (Remove 2 Attributes with 2 before)" {
-            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor, "Title" -value PowerArubaCP, Pester
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor, "Title"
             $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
             $lu.id | Should -Not -BeNullOrEmpty
             $lu.user_id | Should -Be "pester_PowerArubaCP_1"
