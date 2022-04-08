@@ -375,10 +375,6 @@ function Set-ArubaCPNetworkDevice {
             }
         }
 
-        if ( $PsBoundParameters.ContainsKey('attributes') ) {
-            $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
-        }
-
         if ($PSCmdlet.ShouldProcess("$id $old_name", 'Configure Network device')) {
             $nad = Invoke-ArubaCPRestMethod -method "PATCH" -body $_nad -uri $uri -connection $connection
             $nad
