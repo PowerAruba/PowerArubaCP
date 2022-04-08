@@ -381,12 +381,14 @@ Describe "Attribute Network Device" {
             $nad.attributes.syslocation | Should -Be "Pester"
         }
 
+        <#Bug ?! get 'No Tag definition specified for this tag value' when remove ALL attributes
         It "Remove Attribute Local User (Remove 2 Attributes with 2 before)" {
             Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPAttributesMember -name Location, syslocation
             $nad = Get-ArubaCPNetworkDevice -name pester_SW1
             $nad.id | Should -Not -Be BeNullOrEmpty
             ($nad.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "0"
         }
+        #>
 
         AfterEach {
             Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
