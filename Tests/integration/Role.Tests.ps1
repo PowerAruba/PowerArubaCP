@@ -39,21 +39,32 @@ Describe "Get Role" {
         Confirm-ArubaCPRole $r | Should -Be $true
     }
 
-    It "Search Role by name (pester_PowerArubaCP_2)" {
-        $r = Get-ArubaCPRole -name pester_PowerArubaCP_2
-        @($r).count | Should -Be 1
-        $r.id | Should -Not -BeNullOrEmpty
-        $r.name | Should -Be "pester_PowerArubaCP_2"
-    }
+    Context "Search" {
 
-    It "Search Role by name (contains *pester*)" {
-        $r = Get-ArubaCPRole -name pester -filter_type contains
-        @($r).count | Should -Be 2
-    }
+        It "Search Role by name (pester_PowerArubaCP_2)" {
+            $r = Get-ArubaCPRole -name pester_PowerArubaCP_2
+            @($r).count | Should -Be 1
+            $r.id | Should -Not -BeNullOrEmpty
+            $r.name | Should -Be "pester_PowerArubaCP_2"
+        }
 
-    It "Search Role by attribute (name contains PowerArubaCP)" {
-        $r = Get-ArubaCPRole -filter_attribute description -filter_type contains -filter_value PowerArubaCP
-        @($r).count | Should -Be 1
+        It "Search Role by name (pester_PowerArubaCP_2)" {
+            $r = Get-ArubaCPRole -name pester_PowerArubaCP_2
+            @($r).count | Should -Be 1
+            $r.id | Should -Not -BeNullOrEmpty
+            $r.name | Should -Be "pester_PowerArubaCP_2"
+        }
+
+        It "Search Role by name (contains *pester*)" {
+            $r = Get-ArubaCPRole -name pester -filter_type contains
+            @($r).count | Should -Be 2
+        }
+
+        It "Search Role by attribute (name contains PowerArubaCP)" {
+            $r = Get-ArubaCPRole -filter_attribute description -filter_type contains -filter_value PowerArubaCP
+            @($r).count | Should -Be 1
+        }
+
     }
 
     AfterAll {
