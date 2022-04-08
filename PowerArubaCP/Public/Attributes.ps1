@@ -57,7 +57,7 @@ function Add-ArubaCPAttributesMember {
         elseif ($atts.user_id -and $atts.role_name) {
             $uri = "api/local-user/${id}"
         }
-        elseif ($atts.ip_address -and $atts.vendor) {
+        elseif ($atts.ip_address -and $atts.vendor_name) {
             $uri = "api/network-device/${id}"
         }
         else {
@@ -150,7 +150,7 @@ function Set-ArubaCPAttributesMember {
             $uri = "api/local-user/${id}"
             $delete_value = ""
         }
-        elseif ($atts.ip_address -and $atts.vendor) {
+        elseif ($atts.ip_address -and $atts.vendor_name) {
             $uri = "api/network-device/${id}"
             $delete_value = ""
         }
@@ -242,7 +242,7 @@ function Remove-ArubaCPAttributesMember {
             $uri = "api/local-user/${id}"
             $delete_value = ""
         }
-        elseif ($atts.ip_address -and $atts.vendor) {
+        elseif ($atts.ip_address -and $atts.vendor_name) {
             $uri = "api/network-device/${id}"
             $delete_value = ""
         }
