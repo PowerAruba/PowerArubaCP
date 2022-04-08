@@ -244,7 +244,7 @@ Describe "Attribute Network Device" {
             ($nad.attributes).Location | Should -Be "PowerArubaCP"
         }
 
-        It "Add Attribute Network Device (Add 2 attributes with hashtable)" {
+        It "Add Attribute Network Device (Add 2 attributes with name/value)" {
             Get-ArubaCPNetworkDevice -name pester_SW1 | Add-ArubaCPAttributesMember -name "Location", syslocation -value "PowerArubaCP", Pester
             $nad = Get-ArubaCPNetworkDevice -name pester_SW1
             $nad.id | Should -Not -Be BeNullOrEmpty
@@ -256,7 +256,7 @@ Describe "Attribute Network Device" {
             ($nad.attributes).syslocation | Should -Be "Pester"
         }
 
-        It "Add Attribute Network Device (Add 1 Attribute with 1 Attribute before with hashtable)" {
+        It "Add Attribute Network Device (Add 1 Attribute with 1 Attribute before with name/value)" {
             Get-ArubaCPNetworkDevice -name pester_SW1 | Add-ArubaCPAttributesMember -name "Location" -value "PowerArubaCP"
             Get-ArubaCPNetworkDevice -name pester_SW1 | Add-ArubaCPAttributesMember -name syslocation -value Pester
             $nad = Get-ArubaCPNetworkDevice -name pester_SW1
