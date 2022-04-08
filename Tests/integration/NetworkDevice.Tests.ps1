@@ -68,6 +68,7 @@ Describe "Get Network Device" {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
         Get-ArubaCPNetworkDevice -name pester_SW2 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
+
 }
 
 Describe "Add Network Device" {
@@ -131,6 +132,7 @@ Describe "Add Network Device" {
     AfterEach {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
+
 }
 
 Describe "Configure Network Device" {
@@ -398,6 +400,7 @@ Describe "Remove Network Device" {
     AfterEach {
         Get-ArubaCPNetworkDevice -name pester_SW1 | Remove-ArubaCPNetworkDevice -confirm:$false
     }
+
 }
 
 AfterAll {
