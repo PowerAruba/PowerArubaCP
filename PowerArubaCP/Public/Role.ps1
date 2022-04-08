@@ -62,6 +62,7 @@ function Add-ArubaCPRole {
 
     End {
     }
+
 }
 
 function Get-ArubaCPRole {
@@ -175,6 +176,7 @@ function Get-ArubaCPRole {
 
     End {
     }
+
 }
 
 
@@ -248,6 +250,7 @@ function Set-ArubaCPRole {
 
     End {
     }
+
 }
 
 function Remove-ArubaCPRole {
