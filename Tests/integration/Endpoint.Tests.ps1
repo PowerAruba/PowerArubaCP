@@ -72,6 +72,7 @@ Describe "Get Endpoint" {
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-06 | Remove-ArubaCPEndpoint -confirm:$false
     }
+
 }
 
 Describe "Add Endpoint" {
@@ -128,9 +129,11 @@ Describe "Add Endpoint" {
     AfterEach {
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
     }
+
 }
 
 Describe "Configure Endpoint" {
+
     BeforeEach {
         #Add 1 entry
         Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known
@@ -173,6 +176,7 @@ Describe "Configure Endpoint" {
 Describe "Endpoint Attributes" {
 
     Context "Add Endpoint Attributes" {
+
         BeforeEach {
             #Add 1 entry
             Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known
@@ -254,6 +258,7 @@ Describe "Endpoint Attributes" {
         AfterEach {
             Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
         }
+
     }
 
     Context "Set Endpoint Attribute" {
@@ -334,6 +339,7 @@ Describe "Endpoint Attributes" {
         AfterEach {
             Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
         }
+
     }
 
     Context "Remove Endpoint Attribute" {
@@ -366,9 +372,11 @@ Describe "Endpoint Attributes" {
         AfterEach {
             Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
         }
+
     }
 
 }
+
 Describe "Remove Endpoint" {
 
     It "Remove Endpoint by id" {
@@ -396,6 +404,7 @@ Describe "Remove Endpoint" {
     AfterEach {
         Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPEndpoint -confirm:$false
     }
+
 }
 
 AfterAll {
