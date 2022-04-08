@@ -23,7 +23,7 @@ Describe "Get Role" {
         } | Should -Not -Throw
     }
 
-    It "Get ALL Role" {
+    It "Get ALL Role(s)" {
         $r = Get-ArubaCPRole -limit 100
         $r.count | Should -Not -Be $NULL
     }
