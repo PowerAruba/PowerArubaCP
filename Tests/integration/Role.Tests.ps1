@@ -48,8 +48,8 @@ Describe "Get Role" {
             $r.name | Should -Be "pester_PowerArubaCP_2"
         }
 
-        It "Search Role by name (pester_PowerArubaCP_2)" {
-            $r = Get-ArubaCPRole -name pester_PowerArubaCP_2
+        It "Search Role by name (pester_PowerArubaCP_2)  with position 1" {
+            $r = Get-ArubaCPRole pester_PowerArubaCP_2
             @($r).count | Should -Be 1
             $r.id | Should -Not -BeNullOrEmpty
             $r.name | Should -Be "pester_PowerArubaCP_2"
