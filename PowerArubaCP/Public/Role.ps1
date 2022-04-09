@@ -179,7 +179,6 @@ function Get-ArubaCPRole {
 
 }
 
-
 function Set-ArubaCPRole {
 
     <#
