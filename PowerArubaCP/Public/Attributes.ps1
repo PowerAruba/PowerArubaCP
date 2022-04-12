@@ -209,11 +209,12 @@ function Remove-ArubaCPAttributesMember {
         Remove an Attribute Member on Endpoint / Local User / Network Device
 
         .EXAMPLE
-        Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPAttributesMember -name "Disabled by"
+        Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Remove-ArubaCPAttributesMember -name "Disabled by"
+
         Remove Attribute name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
 
         .EXAMPLE
-        Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Set-ArubaCPAttributesMember -name "Location", "syslocation"
+        Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Remove-ArubaCPAttributesMember -name "Location", "syslocation"
 
         Remove Attribute name "Location and Syslocation" to network Device NAD-PowerArubaCP
 
