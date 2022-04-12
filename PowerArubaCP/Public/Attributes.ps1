@@ -16,17 +16,17 @@ function Add-ArubaCPAttributesMember {
         .EXAMPLE
         Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Add-ArubaCPAttributesMember -name "Disabled by" -value PowerArubaCP
 
-        Add Attributes name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
+        Add Attribute name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
 
         .EXAMPLE
         Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Add-ArubaCPAttributesMember -name "Location", "syslocation" -value "PowerArubaCP", "PowerArubaCP"
 
-        Add Attributes name "Location and Syslocation" with value PowerArubaCP to network Device NAD-PowerArubaCP
+        Add Attribute name "Location and Syslocation" with value PowerArubaCP to network Device NAD-PowerArubaCP
 
         .EXAMPLE
         Get-ArubaCPLocalUser -user_id MyPowerArubaCP_userid | Add-ArubaCPAttributesMember -attributes @{"Disabled by"="PowerArubaCP"}
 
-        Add Attributes name "Disabled By" with value PowerArubaCP to Local User MyPowerArubaCP_userid
+        Add Attribute name "Disabled By" with value PowerArubaCP to Local User MyPowerArubaCP_userid
 
     #>
 
@@ -61,7 +61,7 @@ function Add-ArubaCPAttributesMember {
             $uri = "api/network-device/${id}"
         }
         else {
-            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+            Throw "Not an Endpoint, a Local User or a Network Device"
         }
 
         if ($PSCmdlet.ParameterSetName -eq "nv") {
@@ -102,17 +102,17 @@ function Set-ArubaCPAttributesMember {
         .EXAMPLE
         Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPAttributesMember -name "Disabled by" -value PowerArubaCP
 
-        Set Attributes name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
+        Set Attribute name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
 
         .EXAMPLE
         Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Set-ArubaCPAttributesMember -name "Location", "syslocation" -value "PowerArubaCP", "PowerArubaCP"
 
-        Set Attributes name "Location and Syslocation" with value PowerArubaCP to network Device NAD-PowerArubaCP
+        Set Attribute name "Location and Syslocation" with value PowerArubaCP to network Device NAD-PowerArubaCP
 
         .EXAMPLE
         Get-ArubaCPLocalUser -user_id MyPowerArubaCP_userid | Set-ArubaCPAttributesMember -attributes @{"Disabled by"="PowerArubaCP"}
 
-        Set Attributes name "Disabled By" with value PowerArubaCP to Local User MyPowerArubaCP_userid
+        Set Attribute name "Disabled By" with value PowerArubaCP to Local User MyPowerArubaCP_userid
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
@@ -136,7 +136,7 @@ function Set-ArubaCPAttributesMember {
 
     Process {
 
-        #get atts id from endpoint/local user/Network Device ps object
+        #get atts id from Endpoint/Local User/Network Device PS object
         if ($atts) {
             $id = $atts.id
             $old_name = "(" + $atts.name + ")"
@@ -155,7 +155,7 @@ function Set-ArubaCPAttributesMember {
             $delete_value = ""
         }
         else {
-            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+            Throw "Not an Endpoint, a Local User or a Network Device"
         }
 
         $_att = New-Object -TypeName PSObject
@@ -199,19 +199,19 @@ function Remove-ArubaCPAttributesMember {
 
     <#
         .SYNOPSIS
-        Remove an Attribute embmer
+        Remove an Attribute member
 
         .DESCRIPTION
         Remove an Attribute Member on Endpoint / Local User / Network Device
 
         .EXAMPLE
         Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Set-ArubaCPAttributesMember -name "Disabled by"
-        Remove  Attributes name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
+        Remove Attribute name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
 
         .EXAMPLE
         Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Set-ArubaCPAttributesMember -name "Location", "syslocation"
 
-        Remove Attributes name "Location and Syslocation" to network Device NAD-PowerArubaCP
+        Remove Attribute name "Location and Syslocation" to network Device NAD-PowerArubaCP
 
     #>
 
@@ -247,7 +247,7 @@ function Remove-ArubaCPAttributesMember {
             $delete_value = ""
         }
         else {
-            Throw "Not an Endpoint, LocalUser or NetworkDevice"
+            Throw "Not an Endpoint, a Local User or a Network Device"
         }
 
         $_att = New-Object -TypeName PSObject
