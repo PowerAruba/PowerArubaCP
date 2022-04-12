@@ -1,6 +1,26 @@
 
 # PowerArubaCP
 
+<p align="center">
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PowerShell Gallery Version">
+        <img src="https://img.shields.io/powershellgallery/v/PowerArubaCP.svg" /></a>
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PS Gallery Downloads">
+        <img src="https://img.shields.io/powershellgallery/dt/PowerArubaCP.svg" /></a>
+    <!--
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PS Platform">
+        <img src="https://img.shields.io/powershellgallery/p/PowerArubaCP.svg" /></a>
+    -->
+</p>
+<p align="center">
+    <a href="https://github.com/PowerAruba/PowerArubaCP/graphs/commit-activity" alt="GitHub Last Commit">
+        <img src="https://img.shields.io/github/last-commit/PowerAruba/PowerArubaCP/master.svg" /></a>
+    <a href="https://raw.githubusercontent.com/PowerAruba/PowerArubaCP/master/LICENSE" alt="GitHub License">
+        <img src="https://img.shields.io/github/license/PowerAruba/PowerArubaCP.svg" /></a>
+    <a href="https://github.com/PowerAruba/PowerArubaCP/graphs/contributors" alt="GitHub Contributors">
+        <img src="https://img.shields.io/github/contributors/PowerAruba/PowerArubaCP.svg"/></a>
+</p>
+
+
 This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
 <p align="center">
