@@ -212,12 +212,10 @@ Describe "Endpoint Attributes" {
             $ep.id | Should -Not -BeNullOrEmpty
             $ep.mac_address | Should -Be "000102030405"
             $ep.status | Should -Be "Known"
-            #Should Be Replace ? and not add ??
             ($ep.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
             $ep.attributes.'Disabled by' | Should -Be "PowerArubaCP"
             $ep.attributes.location | Should -Be "Pester"
         }
-
 
         It "Add Attribute Endpoint (Add 1 Attribute using name/value)" {
             Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Add-ArubaCPAttributesMember -name Location -value Pester
@@ -348,7 +346,6 @@ Describe "Endpoint Attributes" {
             #Add 1 entry with 2 attributes
             Add-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 -status Known  -attributes @{ "Disabled by" = "PowerArubaCP" ; "Location " = "Pester" }
         }
-
 
         It "Remove Attribute Network Device (Remove 1 Attribute with 2 before)" {
             Get-ArubaCPEndpoint -mac_address 00-01-02-03-04-05 | Remove-ArubaCPAttributesMember -name "Location"
