@@ -75,6 +75,7 @@ function Add-ArubaCPAttributesMember {
                 $attributes | Add-Member -name $n -MemberType NoteProperty -Value $value[$i]
                 $i++
             }
+
         }
 
         $_att = New-Object -TypeName PSObject
@@ -87,6 +88,7 @@ function Add-ArubaCPAttributesMember {
 
     End {
     }
+
 }
 
 function Set-ArubaCPAttributesMember {
@@ -189,10 +191,12 @@ function Set-ArubaCPAttributesMember {
             $att = Invoke-ArubaCPRestMethod -method "PATCH" -body $_att -uri $uri -connection $connection
             $att
         }
+
     }
 
     End {
     }
+
 }
 
 function Remove-ArubaCPAttributesMember {
@@ -264,7 +268,10 @@ function Remove-ArubaCPAttributesMember {
             $att = Invoke-ArubaCPRestMethod -method "PATCH" -body $_att -uri $uri -connection $connection
             $att
         }
+
     }
+
     End {
     }
+
 }
