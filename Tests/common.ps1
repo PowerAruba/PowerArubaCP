@@ -15,6 +15,7 @@ else {
     $script:pester_longint = "long"
 }
 
+. ../credential.ps1
 $script:invokeParams = @{
     server               = $ipaddress;
     token                = $token;
@@ -26,7 +27,6 @@ if ($null -eq $port) {
     $invokeParams.port = 443
 }
 
-. ../credential.ps1
 #TODO: Add check if no ipaddress/token info...
 Connect-ArubaCP @invokeParams
 $script:MySecurePassword = ConvertTo-SecureString MyPassword -AsPlainText -Force
