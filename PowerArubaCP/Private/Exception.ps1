@@ -43,7 +43,14 @@ function Show-ArubaCPException() {
             }
         }
         elseif ($Exception.ErrorDetails.Message) {
-            Write-Warning "Error details: $($Exception.ErrorDetails.Message)"
+            $ErrorDetails = $Exception.ErrorDetails.Message | ConvertFrom-Json
+            if ($ErrorDetails.detail) {
+                Write-Warning "Error details: $($ErrorDetails.detail)"
+            }
+            else {
+                Write-Warning "Error details: $($Exception.ErrorDetails.Message)"
+            }
+
         }
     }
 }
