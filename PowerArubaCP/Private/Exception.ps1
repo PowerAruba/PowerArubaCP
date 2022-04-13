@@ -25,11 +25,15 @@ function Show-ArubaCPException() {
             $result = $Exception.Exception.Response.GetResponseStream()
             $reader = New-Object System.IO.StreamReader($result)
             $responseBody = $reader.ReadToEnd()
-            $responseJson =  $responseBody | ConvertFrom-Json
+            $responseJson = $responseBody | ConvertFrom-Json
+            $code = $Exception.Exception.Response.StatusDescription
+        }
+        else {
+            $code = $Exception.Exception.Response.ReasonPhrase
         }
 
         Write-Warning "The ClearPass API sends an error message:"
-        Write-Warning "Error description (code): $($Exception.Exception.Response.StatusDescription) ($($Exception.Exception.Response.StatusCode.Value__))"
+        Write-Warning "Error description (code): $($code) ($($Exception.Exception.Response.StatusCode.Value__))"
         if ($responseBody) {
             if ($responseJson.message) {
                 Write-Warning "Error details: $($responseJson.message)"
@@ -39,7 +43,14 @@ function Show-ArubaCPException() {
             }
         }
         elseif ($Exception.ErrorDetails.Message) {
-            Write-Warning "Error details: $($Exception.ErrorDetails.Message)"
+            $ErrorDetails = $Exception.ErrorDetails.Message | ConvertFrom-Json
+            if ($ErrorDetails.detail) {
+                Write-Warning "Error details: $($ErrorDetails.detail)"
+            }
+            else {
+                Write-Warning "Error details: $($Exception.ErrorDetails.Message)"
+            }
+
         }
     }
 }
