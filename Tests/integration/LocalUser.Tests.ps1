@@ -240,52 +240,244 @@ Describe "Configure Local User" {
         $lu.attributes | Should -Be ""
     }
 
-    It "Change Attribute Local User (Set 1 Attribute)" {
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -attributes @{ "Sponsor" = "PowerArubaCP" }
-        $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
-        $lu.id | Should -Not -BeNullOrEmpty
-        $lu.user_id | Should -Be "pester_PowerArubaCP_1"
-        $lu.username | Should -Be "pester_PowerArubaCP_1"
-        $lu.role_name | Should -Be "[Employee]"
-        $lu.enabled | Should -Be $true
-        $lu.change_pwd_next_login | Should -Be $false
-        ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
-        $lu.attributes.sponsor | Should -Be "PowerArubaCP"
-    }
-
-    It "Change Attribute Local User (Set 2 Attributes)" {
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -attributes @{ "Sponsor" = "PowerArubaCP" ; "Title" = "Pester" }
-        $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
-        $lu.id | Should -Not -BeNullOrEmpty
-        $lu.user_id | Should -Be "pester_PowerArubaCP_1"
-        $lu.username | Should -Be "pester_PowerArubaCP_1"
-        $lu.role_name | Should -Be "[Employee]"
-        $lu.enabled | Should -Be $true
-        $lu.change_pwd_next_login | Should -Be $false
-        ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
-        $lu.attributes.sponsor | Should -Be "PowerArubaCP"
-        $lu.attributes.title | Should -Be "Pester"
-    }
-
-    It "Change Attribute Local User (Set 1 Attribute with 1 Attribute before)" {
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -attributes @{ "Sponsor" = "PowerArubaCP" }
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -attributes @{ "Title" = "Pester" }
-        $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
-        $lu.id | Should -Not -BeNullOrEmpty
-        $lu.user_id | Should -Be "pester_PowerArubaCP_1"
-        $lu.username | Should -Be "pester_PowerArubaCP_1"
-        $lu.role_name | Should -Be "[Employee]"
-        $lu.enabled | Should -Be $true
-        $lu.change_pwd_next_login | Should -Be $false
-        #Should Be Replace ? and not add ??
-        ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
-        $lu.attributes.sponsor | Should -Be "PowerArubaCP"
-        $lu.attributes.title | Should -Be "Pester"
-    }
-
     AfterEach {
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
         Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 | Remove-ArubaCPLocalUser -confirm:$false
+    }
+
+}
+
+Describe "Attribute Local User" {
+
+    Context "Add Local User Attribute" {
+        BeforeEach {
+            #Add 1 entry
+            Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
+        }
+
+        It "Add Attribute Local User (Add 1 Attribute with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Local User (Add 2 Attributes with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" ; "Title" = "Pester" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Add Attribute Local User (Add 1 Attribute with 1 Attribute before with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" }
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -attributes @{ "Title" = "Pester" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Add Attribute Local User (Add 1 Attribute with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -name Sponsor -value PowerArubaCP
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+        }
+
+        It "Add Attribute Local User (Add 2 Attributes with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -name Sponsor, Title -value "PowerArubaCP", Pester
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Add Attribute Local User (Add 1 Attribute with 1 Attribute before with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -name Sponsor -value PowerArubaCP
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Add-ArubaCPAttributesMember -Name Title -Value Pester
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        AfterEach {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
+        }
+
+    }
+
+    Context "Set Local User Attributes" {
+
+        BeforeEach {
+            #Add 1 entry
+            Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
+        }
+
+        It "Change Attribute Local User (Set 1 Attribute with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+        }
+
+        It "Change Attribute Local User (Set 2 Attributes with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" ; "Title" = "Pester" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Change Attribute Local User (Set 1 Attribute with 1 Attribute before with hashtable)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -attributes @{ "Sponsor" = "PowerArubaCP" }
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -attributes @{ "Title" = "Pester" }
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Change Attribute Local User (Set 1 Attribute with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -name Sponsor -value PowerArubaCP
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+        }
+
+        It "Change Attribute Local User (Set 2 Attributes with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -name Sponsor, "Title" -value PowerArubaCP, Pester
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "2"
+            $lu.attributes.sponsor | Should -Be "PowerArubaCP"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        It "Change Attribute Local User (Set 1 Attribute with 1 Attribute before with name/value)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -name "Sponsor" -value PowerArubaCP
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPAttributesMember -name Title -value Pester
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        AfterEach {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
+        }
+
+    }
+
+    Context "Remove Local User Attributes" {
+
+        BeforeEach {
+            #Add 1 entry with 2 attributes
+            Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]" -attributes @{ "Sponsor" = "PowerArubaCP" ; "Title" = "Pester" }
+        }
+
+        It "Remove Attribute Local User (Remove 1 Attribute with 2 before)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "1"
+            $lu.attributes.title | Should -Be "Pester"
+        }
+
+        <#Bug ?! get 'No Tag definition specified for this tag value' when remove ALL attributes
+        It "Remove Attribute Local User (Remove 2 Attributes with 2 before)" {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPAttributesMember -name Sponsor, "Title"
+            $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
+            $lu.id | Should -Not -BeNullOrEmpty
+            $lu.user_id | Should -Be "pester_PowerArubaCP_1"
+            $lu.username | Should -Be "pester_PowerArubaCP_1"
+            $lu.role_name | Should -Be "[Employee]"
+            $lu.enabled | Should -Be $true
+            $lu.change_pwd_next_login | Should -Be $false
+            ($lu.attributes | Get-Member -MemberType NoteProperty).count | Should -Be "0"
+        }
+        #>
+
+        AfterEach {
+            Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Remove-ArubaCPLocalUser -confirm:$false
+        }
+
     }
 
 }

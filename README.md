@@ -14,9 +14,9 @@ With this module (version 0.5.0) you can manage:
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add /Get)
-- [Endpoint](#endpoint) (Add / Get / Set / Remove)
-- [Local User](#local-user) (Add / Get / Set / Remove)
-- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device)
+- [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
+- [Local User](#local-user) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
+- [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device and Add / Set / Remove [Attribute](#attribute))
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
 - [Role](#role)
 - [Server](#server) (Get Configuration, Version)
@@ -773,6 +773,51 @@ You can add Static Host List `Add-ArubaCPStaticHostList`, retrieve its informati
     Are you sure you want to perform this action?
     Performing the operation "Remove Static Host List" on target "3041 (SHL-list-MACAddress)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"): Y
+
+```
+
+### Attribute
+
+You can add Attribute `Add-ArubaCPAttributesMember`, modify its `Set-ArubaCPAttributesMember` or remove it `Remove-ArubaCPAttributesMember` for Endpoint, Local User and Network Device
+
+```powershell
+
+#Add Attribute name "Location and Syslocation" with value PowerArubaCP to network Device NAD-PowerArubaCP
+    Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP | Add-ArubaCPAttributesMember -name "Location", "syslocation" -value "PowerArubaCP", "PowerArubaCP"
+
+    id            : 3125
+    name          : NAD-PowerArubaCP
+    description   : Add by PowerArubaCP
+    ip_address    : 192.0.2.1
+    radius_secret :
+    tacacs_secret :
+    vendor_name   : Aruba
+    coa_capable   : False
+    coa_port      : 3799
+    attributes    : @{syslocation=PowerArubaCP; Location=PowerArubaCP}
+    _links        : @{self=}
+
+#Set Attribute name "Disabled By" with value PowerArubaCP to Local User MyPowerArubaCP_userid
+    Get-ArubaCPLocalUser -user_id MyPowerArubaCP_userid | Set-ArubaCPAttributesMember -attributes @{"Disabled by"="PowerArubaCP"}
+
+    id                    : 3059
+    user_id               : MyPowerArubaCP_userid
+    username              : MyPowerArubaCP_userid
+    role_name             : [Guest]
+    enabled               : True
+    change_pwd_next_login : False
+    attributes            : @{Disabled by=PowerArubaCP}
+    _links                : @{self=}
+
+#Remove Attribute name "Disabled By" with value PowerArubaCP to Endpoint 00:01:02:03:04:05
+    Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05 | Remove-ArubaCPAttributesMember -name "Disabled by"
+
+    id          : 3001
+    mac_address : 000102030405
+    description :
+    status      : Unknown
+    attributes  : @{Compromised=true}
+    _links      : @{self=}
 
 ```
 

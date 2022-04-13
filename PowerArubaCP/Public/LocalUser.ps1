@@ -260,13 +260,6 @@ function Set-ArubaCPLocalUser {
 
         Change Role (Guest) for user(name) MyPowerArubaCP
 
-        .EXAMPLE
-        $lu = Get-ArubaCPLocalUser -username MyPowerArubaCP
-        PS >$attributes = @{ "Sponsor" = "PowerArubaCP" }
-        PS >$lu | Set-ArubaCPLocalUser -attributes $attributes
-
-        Change attributes (Sponsor) for user(name) MyPowerArubaCP
-
     #>
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'medium')]
@@ -288,8 +281,6 @@ function Set-ArubaCPLocalUser {
         [switch]$enabled,
         [Parameter (Mandatory = $false)]
         [switch]$change_pwd_next_login,
-        [Parameter (Mandatory = $false)]
-        [psobject]$attributes,
         [Parameter (Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -341,10 +332,6 @@ function Set-ArubaCPLocalUser {
             else {
                 $_lu | add-member -name "change_pwd_next_login" -membertype NoteProperty -Value $false
             }
-        }
-
-        if ( $PsBoundParameters.ContainsKey('attributes') ) {
-            $_lu | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
         if ($PSCmdlet.ShouldProcess($id, 'Configure Local User')) {

@@ -226,13 +226,6 @@ function Set-ArubaCPEndpoint {
 
         .EXAMPLE
         $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
-        PS C:\>$attributes = @{"Disabled by"= "PowerArubaCP"}
-        PS C:\>$ep | Set-ArubaCPEndpoint -attributes $attributes
-
-        Change attributes for MAC Address 00:01:02:03:04:05
-
-        .EXAMPLE
-        $ep = Get-ArubaCPEndpoint -mac_address 00:01:02:03:04:05
         PS C:\>$ep | Set-ArubaCPEndpoint -mac_address 00:01:02:03:04:06
 
         Change MAC Address 00:01:02:03:04:05 => 00:01:02:03:04:06
@@ -253,8 +246,6 @@ function Set-ArubaCPEndpoint {
         [Parameter (Mandatory = $false)]
         [ValidateSet('Known', 'Unknown', 'Disabled', IgnoreCase = $false)]
         [string]$status,
-        [Parameter (Mandatory = $false)]
-        [psobject]$attributes,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -287,10 +278,6 @@ function Set-ArubaCPEndpoint {
 
         if ( $PsBoundParameters.ContainsKey('status') ) {
             $_ep | add-member -name "status" -membertype NoteProperty -Value $status
-        }
-
-        if ( $PsBoundParameters.ContainsKey('attributes') ) {
-            $_ep | add-member -name "attributes" -membertype NoteProperty -Value $attributes
         }
 
         if ($PSCmdlet.ShouldProcess($id, 'Configure Endpoint')) {
