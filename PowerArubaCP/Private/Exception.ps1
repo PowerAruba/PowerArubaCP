@@ -26,10 +26,14 @@ function Show-ArubaCPException() {
             $reader = New-Object System.IO.StreamReader($result)
             $responseBody = $reader.ReadToEnd()
             $responseJson = $responseBody | ConvertFrom-Json
+            $code = $Exception.Exception.Response.StatusDescription
+        }
+        else {
+            $code = $Exception.Exception.Response.ReasonPhrase
         }
 
         Write-Warning "The ClearPass API sends an error message:"
-        Write-Warning "Error description (code): $($Exception.Exception.Response.StatusDescription) ($($Exception.Exception.Response.StatusCode.Value__))"
+        Write-Warning "Error description (code): $($code) ($($Exception.Exception.Response.StatusCode.Value__))"
         if ($responseBody) {
             if ($responseJson.message) {
                 Write-Warning "Error details: $($responseJson.message)"
