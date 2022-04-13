@@ -328,7 +328,7 @@ function Remove-ArubaCPEndpoint {
 
     Process {
 
-        #get endpoint id from nad ps object
+        #get endpoint id from ep ps object
         if ($ep) {
             $id = $ep.id
             $mac = "(" + $ep.mac_address + ")"

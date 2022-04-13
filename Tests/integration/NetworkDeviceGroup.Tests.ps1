@@ -276,18 +276,18 @@ Describe "Remove Network Device Group Member" {
         Add-ArubaCPNetworkDevice -name pester_SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Aruba -description "Add by PowerArubaCP"
     }
 
-    It "Remove an entry of Network Device Group with format list and type IPAddress" {
+    It "Remove an entry of Network Device Group with format list and type IPAddress (with 2 IP)" {
         $ndg = Add-ArubaCPNetworkDeviceGroup -name pester_NDG -list_ip 192.0.2.1, 192.0.2.2
         $ndg.value | Should -Be "192.0.2.1, 192.0.2.2"
-        #Remove a entry...
+        #Remove an entry...
         $ndg = Get-ArubaCPNetworkDeviceGroup -name pester_NDG | Remove-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.1
         $ndg.value | Should -Be "192.0.2.2"
     }
 
-    It "Remove an entry of Network Device Group with format list and type IPAddress" {
+    It "Remove an entry of Network Device Group with format list and type IPAddress (with 3 IP)" {
         $ndg = Add-ArubaCPNetworkDeviceGroup -name pester_NDG -list_ip 192.0.2.1, 192.0.2.2, 192.0.2.3
         $ndg.value | Should -Be "192.0.2.1, 192.0.2.2, 192.0.2.3"
-        #Remove a entry...
+        #Remove an entry...
         $ndg = Get-ArubaCPNetworkDeviceGroup -name pester_NDG | Remove-ArubaCPNetworkDeviceGroupMember -list_ip 192.0.2.1
         $ndg.value | Should -Be "192.0.2.2, 192.0.2.3"
     }
