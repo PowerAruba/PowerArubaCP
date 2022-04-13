@@ -1,13 +1,33 @@
 
 # PowerArubaCP
 
+<p align="center">
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PowerShell Gallery Version">
+        <img src="https://img.shields.io/powershellgallery/v/PowerArubaCP.svg" /></a>
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PS Gallery Downloads">
+        <img src="https://img.shields.io/powershellgallery/dt/PowerArubaCP.svg" /></a>
+    <!--
+    <a href="https://www.powershellgallery.com/packages/PowerArubaCP/" alt="PS Platform">
+        <img src="https://img.shields.io/powershellgallery/p/PowerArubaCP.svg" /></a>
+    -->
+</p>
+<p align="center">
+    <a href="https://github.com/PowerAruba/PowerArubaCP/graphs/commit-activity" alt="GitHub Last Commit">
+        <img src="https://img.shields.io/github/last-commit/PowerAruba/PowerArubaCP/master.svg" /></a>
+    <a href="https://raw.githubusercontent.com/PowerAruba/PowerArubaCP/master/LICENSE" alt="GitHub License">
+        <img src="https://img.shields.io/github/license/PowerAruba/PowerArubaCP.svg" /></a>
+    <a href="https://github.com/PowerAruba/PowerArubaCP/graphs/contributors" alt="GitHub Contributors">
+        <img src="https://img.shields.io/github/contributors/PowerAruba/PowerArubaCP.svg"/></a>
+</p>
+
+
 This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/PowerAruba/PowerArubaCP/master/Medias/PowerArubaCP.png" width="250" height="250" />
 </p>
 
-With this module (version 0.5.0) you can manage:
+With this module (version 0.6.0) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
@@ -31,7 +51,7 @@ There is some extra feature
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.0)  
+Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.x)  
 Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0  
 Device Fingerprint are not supported on Clearpass < 6.9.0  
 
@@ -936,7 +956,7 @@ Contribution and feature requests are more than welcome. Please use the followin
 
   * For bugs and [issues](https://github.com/PowerAruba/PowerArubaCP/issues), please use the [issues](https://github.com/PowerAruba/PowerArubaCP/issues) register with details of the problem.
   * For Feature Requests, please use the [issues](https://github.com/PowerAruba/PowerArubaCP/issues) register with details of what's required.
-  * For code contribution (bug fixes, or feature request), please request fork PowerFGT, create a feature/fix branch, add tests if needed then submit a pull request.
+  * For code contribution (bug fixes, or feature request), please request fork PowerArubaCP, create a feature/fix branch, add tests if needed then submit a pull request.
 
 # Contact
 
