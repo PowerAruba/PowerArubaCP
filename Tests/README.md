@@ -5,7 +5,7 @@
 The tests don't be to be run on PRODUCTION ClearPass ! there is no warning about change on ClearPass.
 It need to be use only for TESTS !
 
-    A ArubaOS ClearPass with release >= 6.7.x or 6.8.x
+    An ArubaOS ClearPass with release >= 6.8.x, 6.9.x and 6.10.x
     A Token API (See Doc for HOWTO get API)
 
 These are the required modules for the tests
