@@ -5,6 +5,10 @@
 #
 . ../common.ps1
 
+BeforeAll {
+    Connect-ArubaCP @invokeParams
+}
+
 Describe  "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
 
     It "Get Cluster Certificates Does not throw an error" {
@@ -88,4 +92,6 @@ Describe  "Get Server Certificate (Get-ArubaCPServerCertificate)" {
 
 }
 
-Disconnect-ArubaCP -noconfirm
+AfterAll {
+    Disconnect-ArubaCP -confirm:$false
+}
