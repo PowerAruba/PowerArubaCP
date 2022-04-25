@@ -29,16 +29,20 @@ Describe  "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
         } | Should -Not -Throw
     }
 
-    It "Get Cluster Certificates with service_name Does not throw an error" {
-        {
-            Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
-        } | Should -Not -Throw
+    if ($DefaultArubaCPConnection.version -gt "6.10.0") {
+        It "Get Cluster Certificates with service_name Does not throw an error" {
+            {
+                Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
+            } | Should -Not -Throw
+        }
     }
 
-    It "Get Cluster Certificates with service_type Does not throw an error" {
-        {
-            Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
-        } | Should -Not -Throw
+    if ($DefaultArubaCPConnection.version -gt "6.10.0") {
+        It "Get Cluster Certificates with service_type Does not throw an error" {
+            {
+                Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
+            } | Should -Not -Throw
+        }
     }
 
     It "Get Cluster Certificates with service_id" {
@@ -46,14 +50,18 @@ Describe  "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
         @($cc).count | Should -Not -Be $NULL
     }
 
-    It "Get Cluster Certificates with service_name" {
-        $cc = Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
-        @($cc).count | Should -Not -Be $NULL
+    if ($DefaultArubaCPConnection.version -gt "6.10.0") {
+        It "Get Cluster Certificates with service_name" {
+            $cc = Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
+            @($cc).count | Should -Not -Be $NULL
+        }
     }
 
-    It "Get Cluster Certificates with service_type" {
-        $cc = Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
-        @($cc).count | Should -Not -Be $NULL
+    if ($DefaultArubaCPConnection.version -gt "6.10.0") {
+        It "Get Cluster Certificates with service_type" {
+            $cc = Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
+            @($cc).count | Should -Not -Be $NULL
+        }
     }
 
 }
@@ -71,9 +79,11 @@ Describe  "Get Server Certificate (Get-ArubaCPServerCertificate)" {
         @($cc).count | Should -Not -Be $NULL
     }
 
-    It "Get Server Certificate and confirm" {
-        $cc = Get-ArubaCPServerCertificate -service_name "HTTPS(RSA)"
-        Confirm-ArubaCPServerCertificate $cc | Should -Be $true
+    if ($DefaultArubaCPConnection.version -gt "6.10.0") {
+        It "Get Server Certificate and confirm" {
+            $cc = Get-ArubaCPServerCertificate -service_name "HTTPS(RSA)"
+            Confirm-ArubaCPServerCertificate $cc | Should -Be $true
+        }
     }
 
 }
