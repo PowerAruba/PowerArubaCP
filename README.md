@@ -19,7 +19,10 @@
     <a href="https://github.com/PowerAruba/PowerArubaCP/graphs/contributors" alt="GitHub Contributors">
         <img src="https://img.shields.io/github/contributors/PowerAruba/PowerArubaCP.svg"/></a>
 </p>
-
+<p align="center">
+    <a href="https://twitter.com/PowerAruba" alt="Twitter">
+            <img src="https://img.shields.io/twitter/follow/PowerAruba.svg?style=social"/></a>
+</p>
 
 This is a Powershell module for configure an Aruba ClearPass (CPPM).
 
