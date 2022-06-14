@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-function Get-ArubaCPClusterCertificates {
+function Get-ArubaCPClusterCertificate {
 
     <#
         .SYNOPSIS
@@ -15,22 +15,22 @@ function Get-ArubaCPClusterCertificates {
         Get all the cluster certificates on ClearPass (HTTPS, RADIUS, etc ...)
 
         .EXAMPLE
-        Get-ArubaCPClusterCertificates
+        Get-ArubaCPClusterCertificate
 
         Return a list of cluster certificates on ClearPass
 
         .EXAMPLE
-        Get-ArubaCPClusterCertificates -service_id 1
+        Get-ArubaCPClusterCertificate -service_id 1
 
         Return the cluster certificate for service id 1 (RADIUS)
 
         .EXAMPLE
-        Get-ArubaCPClusterCertificates -service_name "HTTPS"
+        Get-ArubaCPClusterCertificate -service_name "HTTPS"
 
         Return the cluster certificate for service name HTTPS
 
         .EXAMPLE
-        Get-ArubaCPClusterCertificates -certificate_type "RadSec Server Certificate"
+        Get-ArubaCPClusterCertificate -certificate_type "RadSec Server Certificate"
 
         Return the cluster certificate which is a RadSec Server Certificate type
     #>
