@@ -597,7 +597,7 @@ function Set-ArubaCPVmAddLicencePlatform {
     }
 
     Process {
-        $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
+        $uri = "https://" + $mgmt_ip + "/tips/addLicense.action"
         $body = @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey }
         #Token ? (for > 6.11)
         $iwr = Invoke-WebRequest $uri -Method "GET" -SkipCertificateCheck -SessionVariable LicenceCPPM
@@ -606,6 +606,7 @@ function Set-ArubaCPVmAddLicencePlatform {
             $body.add("struts.token.name","token")
             $body.add("token", $token)
         }
+        $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
         Write-Verbose ($body | ConvertTo-Json)
         #No API available for this... push directly the licence with agreement eula
         Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body $body -WebSession $licenceCPPM -SkipCertificateCheck | Out-Null
