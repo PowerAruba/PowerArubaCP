@@ -194,7 +194,7 @@ function Set-ArubaCPVmFirstBoot {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [Parameter (Mandatory = $true)]
-        [ValidateSet("6.8", "6.9", "6.10")]
+        [ValidateSet("6.8", "6.9", "6.10", "6.11")]
         [version]$version,
         [Parameter (Mandatory = $true)]
         [ValidateSet("CLABV", "C1000V", "C2000V", "C3000V")]
@@ -311,7 +311,7 @@ function Set-ArubaCPVmSetup {
     Param(
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
-        [ValidateSet("6.8", "6.9", "6.10")]
+        [ValidateSet("6.8", "6.9", "6.10", "6.11")]
         [version]$version,
         [Parameter (Mandatory = $true)]
         [string]$hostname,
@@ -597,11 +597,19 @@ function Set-ArubaCPVmAddLicencePlatform {
     }
 
     Process {
-        $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
+        $uri = "https://" + $mgmt_ip + "/tips/addLicense.action"
         $body = @{ appId = 101 ; agree_eula = "on"; licenseKey = $licencekey }
+        #Token ? (for > 6.11)
+        $iwr = Invoke-WebRequest $uri -Method "GET" -SkipCertificateCheck -SessionVariable LicenceCPPM
+        $token = ($iwr.InputFields | Where-Object {$_.name -eq "token"}).value
+        if ($token) {
+            $body.add("struts.token.name","token")
+            $body.add("token", $token)
+        }
+        $uri = "https://" + $mgmt_ip + "/tips/submitLicense.action"
         Write-Verbose ($body | ConvertTo-Json)
         #No API available for this... push directly the licence with agreement eula
-        Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body $body -SkipCertificateCheck | Out-Null
+        Invoke-WebRequest $uri -Method "POST" -ContentType "application/x-www-form-urlencoded" -Body $body -WebSession $licenceCPPM -SkipCertificateCheck | Out-Null
     }
 
     End {
