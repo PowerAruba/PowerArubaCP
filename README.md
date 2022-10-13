@@ -30,7 +30,7 @@ This is a Powershell module for configure an Aruba ClearPass (CPPM).
 <img src="https://raw.githubusercontent.com/PowerAruba/PowerArubaCP/master/Medias/PowerArubaCP.png" width="250" height="250" />
 </p>
 
-With this module (version 0.6.0) you can manage:
+With this module (version 0.6.1) you can manage:
 
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
@@ -54,7 +54,7 @@ There is some extra feature
 
 More functionality will be added later.
 
-Tested with Aruba ClearPass (using release 6.8.x, 6.9.x and 6.10.x)  
+Tested with Aruba ClearPass (using release 6.8.x, 6.9.x, 6.10.x and 6.11.x)  
 Application Licence, Service and Static Host List are not supported on Clearpass < 6.8.0  
 Device Fingerprint are not supported on Clearpass < 6.9.0  
 
