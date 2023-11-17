@@ -24,6 +24,11 @@ function Add-ArubaCPNetworkDevice {
         Add Network Device SW2 with COA Capability on port 5000
 
         .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -snmp_version V2C -community_string CommString
+
+        Add Network Device SW3 with a snmp-read community string from vendor Cisco
+
+        .EXAMPLE
         Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -tacacs_secret MySecurePassword
 
         Add Network Device SW3 with a tacacs secret from vendor Cisco
@@ -52,6 +57,10 @@ function Add-ArubaCPNetworkDevice {
         [ipaddress]$ip_address,
         [Parameter (Mandatory = $true)]
         [string]$radius_secret,
+        [Parameter (Mandatory = $false)]
+        [string]$snmp_version,
+        [Parameter (Mandatory = $false)]
+        [string]$community_string,
         [Parameter (Mandatory = $false)]
         [string]$tacacs_secret,
         [Parameter (Mandatory = $true)]
@@ -122,6 +131,15 @@ function Add-ArubaCPNetworkDevice {
 
         if ( $PsBoundParameters.ContainsKey('attributes') ) {
             $_nad | add-member -name "attributes" -membertype NoteProperty -Value $attributes
+        }
+
+        if ($PsBoundParameters.ContainsKey('snmp_version')) {
+            $snmp_read = @{
+            snmp_version = $snmp_version
+            community_string = $community_string
+            zone_name = "default"
+            }
+            $_nad | add-member -name "snmp_read" -membertype NoteProperty -Value $snmp_read
         }
 
         $nad = invoke-ArubaCPRestMethod -method "POST" -body $_nad -uri $uri -connection $connection
@@ -275,6 +293,12 @@ function Set-ArubaCPNetworkDevice {
 
         .EXAMPLE
         $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
+        PS > $nad | Set-ArubaCPNetworkDevice -snmp_version V2C -community_string MyComm
+
+        Set SNMP version and community string of NAD-PowerArubaCP
+
+        .EXAMPLE
+        $nad = Get-ArubaCPNetworkDevice -name NAD-PowerArubaCP
         PS > $nad | Set-ArubaCPNetworkDevice -coa_capable -coa_port 5000
 
         Enable COA and set COA Port to 5000 of NAD-PowerArubaCP
@@ -296,6 +320,10 @@ function Set-ArubaCPNetworkDevice {
         [ipaddress]$ip_address,
         [Parameter (Mandatory = $false)]
         [string]$radius_secret,
+        [Parameter (Mandatory = $false)]
+        [string]$snmp_version,
+        [Parameter (Mandatory = $false)]
+        [string]$community_string,
         [Parameter (Mandatory = $false)]
         [string]$tacacs_secret,
         [Parameter (Mandatory = $false)]
@@ -344,6 +372,16 @@ function Set-ArubaCPNetworkDevice {
         if ( $PsBoundParameters.ContainsKey('radius_secret') ) {
             $_nad | add-member -name "radius_secret" -membertype NoteProperty -Value $radius_secret
         }
+
+        if ($PsBoundParameters.ContainsKey('snmp_version')) {
+            $snmp_read = @{
+            snmp_version = $snmp_version
+            community_string = $community_string
+            zone_name = "default"
+            }
+            $_nad | add-member -name "snmp_read" -membertype NoteProperty -Value $snmp_read
+        }
+
 
         if ( $PsBoundParameters.ContainsKey('tacacs_secret') ) {
             $_nad | add-member -name "tacacs_secret" -membertype NoteProperty -Value $tacacs_secret
