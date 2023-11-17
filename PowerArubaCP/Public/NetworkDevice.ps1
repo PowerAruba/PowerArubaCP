@@ -58,6 +58,7 @@ function Add-ArubaCPNetworkDevice {
         [Parameter (Mandatory = $true)]
         [string]$radius_secret,
         [Parameter (Mandatory = $false)]
+        [ValidateSet('v1', 'v2c')]
         [string]$snmp_version,
         [Parameter (Mandatory = $false)]
         [string]$community_string,
@@ -134,10 +135,14 @@ function Add-ArubaCPNetworkDevice {
         }
 
         if ($PsBoundParameters.ContainsKey('snmp_version')) {
+            # Check if snmp_version is provided, and if so, make community_string mandatory
+            if (-not $PsBoundParameters.ContainsKey('community_string')) {
+                throw "If snmp_version is specified, community_string is mandatory."
+            }
             $snmp_read = @{
-            snmp_version = $snmp_version
-            community_string = $community_string
-            zone_name = "default"
+                snmp_version = $snmp_version
+                community_string = $community_string
+                zone_name = "default"
             }
             $_nad | add-member -name "snmp_read" -membertype NoteProperty -Value $snmp_read
         }
@@ -321,6 +326,7 @@ function Set-ArubaCPNetworkDevice {
         [Parameter (Mandatory = $false)]
         [string]$radius_secret,
         [Parameter (Mandatory = $false)]
+        [ValidateSet('v1', 'v2c')]
         [string]$snmp_version,
         [Parameter (Mandatory = $false)]
         [string]$community_string,
@@ -374,10 +380,14 @@ function Set-ArubaCPNetworkDevice {
         }
 
         if ($PsBoundParameters.ContainsKey('snmp_version')) {
+            # Check if snmp_version is provided, and if so, make community_string mandatory
+            if (-not $PsBoundParameters.ContainsKey('community_string')) {
+                throw "If snmp_version is specified, community_string is mandatory."
+            }
             $snmp_read = @{
-            snmp_version = $snmp_version
-            community_string = $community_string
-            zone_name = "default"
+                snmp_version = $snmp_version
+                community_string = $community_string
+                zone_name = "default"
             }
             $_nad | add-member -name "snmp_read" -membertype NoteProperty -Value $snmp_read
         }
