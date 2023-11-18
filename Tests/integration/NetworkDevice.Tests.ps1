@@ -403,6 +403,60 @@ Describe "Remove Network Device" {
 
 }
 
+Describe "Add Network Device" {
+
+    It "Add Network Device with snmp v2c" {
+        Add-ArubaCPNetworkDevice -name pester_SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Cisco -snmp_version v2c -community_string myString
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW6
+        $nad.name | Should -Be "pester_SW6"
+        $nad.ip_address | Should -Be "192.0.2.6"
+        $nad.vendor_name | Should -Be "Cisco"
+        $nad.snmp_read.snmp_version | Should -Be "v2c"
+        $nad.snmp_read.zone_name | Should -Be "default"
+        # community_string is always empty
+    }
+
+    It "Add Network Device with snmp v1" {
+        Add-ArubaCPNetworkDevice -name pester_SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Cisco -snmp_version v1 -community_string myString
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW6
+        $nad.name | Should -Be "pester_SW6"
+        $nad.ip_address | Should -Be "192.0.2.6"
+        $nad.vendor_name | Should -Be "Cisco"
+        $nad.snmp_read.snmp_version | Should -Be "v1"
+        $nad.snmp_read.zone_name | Should -Be "default"
+        # community_string is always empty
+    }
+
+    It "Add Network Device with snmp v2c then change it to v1" {
+        Add-ArubaCPNetworkDevice -name pester_SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Cisco -snmp_version v2c -community_string myString
+        Get-ArubaCPNetworkDevice -name pester_SW6 | Set-ArubaCPNetworkDevice -snmp_version v1 -community_string myString
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW6
+        $nad.name | Should -Be "pester_SW6"
+        $nad.ip_address | Should -Be "192.0.2.6"
+        $nad.vendor_name | Should -Be "Cisco"
+        $nad.snmp_read.snmp_version | Should -Be "v1"
+        $nad.snmp_read.zone_name | Should -Be "default"
+        # community_string is always empty
+    }
+
+    It "Add Network Device with snmp v1 then change it to v2c" {
+        Add-ArubaCPNetworkDevice -name pester_SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Cisco -snmp_version v1 -community_string myString
+        Get-ArubaCPNetworkDevice -name pester_SW6 | Set-ArubaCPNetworkDevice -snmp_version v2c -community_string myString
+        $nad = Get-ArubaCPNetworkDevice -name pester_SW6
+        $nad.name | Should -Be "pester_SW6"
+        $nad.ip_address | Should -Be "192.0.2.6"
+        $nad.vendor_name | Should -Be "Cisco"
+        $nad.snmp_read.snmp_version | Should -Be "v2c"
+        $nad.snmp_read.zone_name | Should -Be "default"
+        # community_string is always empty
+    }
+
+    AfterEach {
+        Get-ArubaCPNetworkDevice -name pester_SW6 | Remove-ArubaCPNetworkDevice -confirm:$false
+    }
+
+}
+
 AfterAll {
     Disconnect-ArubaCP -confirm:$false
 }
