@@ -140,7 +140,7 @@ function Add-ArubaCPNetworkDevice {
                 throw "If snmp_version is specified, community_string is mandatory."
             }
             $snmp_read = @{
-                snmp_version = $snmp_version
+                snmp_version = $snmp_version.ToUpper()
                 community_string = $community_string
                 zone_name = "default"
             }
@@ -385,7 +385,7 @@ function Set-ArubaCPNetworkDevice {
                 throw "If snmp_version is specified, community_string is mandatory."
             }
             $snmp_read = @{
-                snmp_version = $snmp_version
+                snmp_version = $snmp_version.ToUpper()
                 community_string = $community_string
                 zone_name = "default"
             }
