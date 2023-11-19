@@ -24,11 +24,6 @@ function Add-ArubaCPNetworkDevice {
         Add Network Device SW2 with COA Capability on port 5000
 
         .EXAMPLE
-        Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -snmp_version V2C -community_string CommString
-
-        Add Network Device SW3 with a snmp-read community string from vendor Cisco
-
-        .EXAMPLE
         Add-ArubaCPNetworkDevice -name SW3 -ip_address 192.0.2.3 -radius_secret MySecurePassword -vendor Cisco -tacacs_secret MySecurePassword
 
         Add Network Device SW3 with a tacacs secret from vendor Cisco
@@ -43,6 +38,11 @@ function Add-ArubaCPNetworkDevice {
         PS > Add-ArubaCPNetworkDevice -name SW5 -ip_address 192.0.2.5 -radius_secret MySecurePassword -vendor Aruba -attributes $attributes
 
         Add Network Device SW5 with hashtable attribute (Location) from vendor Aruba
+
+        .EXAMPLE
+        Add-ArubaCPNetworkDevice -name SW6 -ip_address 192.0.2.6 -radius_secret MySecurePassword -vendor Cisco -snmp_version V2C -community_string CommString
+
+        Add Network Device SW6 with a snmp-read community string from vendor Cisco
 
     #>
 
