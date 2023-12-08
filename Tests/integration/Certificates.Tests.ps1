@@ -9,7 +9,7 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe  "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
+Describe "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
 
     It "Get Cluster Certificates Does not throw an error" {
         {
