@@ -73,7 +73,7 @@ Describe "Get CPPM Version" {
     It "Get CPPM Version (Major, Minor, service, hardware...)" {
         $cv = Get-ArubaCPCPPMVersion
         $cv.app_major_version | Should -Be "6"
-        $cv.app_minor_version | Should -BeIn (8..11)
+        $cv.app_minor_version | Should -BeIn (8..12)
         $cv.app_service_release | Should -BeIn (0..15)
         $cv.app_build_number | Should -Not -Be $NULL
         $cv.hardware_version | Should -Not -Be $NULL
