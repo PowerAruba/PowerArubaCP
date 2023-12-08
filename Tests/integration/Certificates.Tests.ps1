@@ -74,18 +74,18 @@ Describe  "Get Server Certificate (Get-ArubaCPServerCertificate)" {
 
     It "Get Server Certificate Does not throw an error" {
         {
-            Get-ArubaCPServerCertificate -service_name "RADIUS"
+            Get-ArubaCPServerCertificate -service_name "RADIUS" -server_uuid $server_uuid
         } | Should -Not -Throw
     }
 
     It "Get Server Certificate" {
-        $cc = Get-ArubaCPServerCertificate -service_name "RadSec"
+        $cc = Get-ArubaCPServerCertificate -service_name "RadSec" -server_uuid $server_uuid
         @($cc).count | Should -Not -Be $NULL
     }
 
     if ($DefaultArubaCPConnection.version -gt "6.10.0") {
         It "Get Server Certificate and confirm" {
-            $cc = Get-ArubaCPServerCertificate -service_name "HTTPS(RSA)"
+            $cc = Get-ArubaCPServerCertificate -service_name "HTTPS(RSA)" -server_uuid $server_uuid
             Confirm-ArubaCPServerCertificate $cc | Should -Be $true
         }
     }
