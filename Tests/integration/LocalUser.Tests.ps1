@@ -14,7 +14,7 @@ Describe "Get Local User" {
     BeforeAll {
         #Add 2 Local User...
         Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 -password $MySecurePassword -role_name "[Employee]"
-        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password $MySecurePassword -role_name "[Guest]" -username "pester_PowerArubaCP_username"
+        Add-ArubaCPLocalUser -user_id pester_PowerArubaCP_2 -password $MySecurePassword -role_name "[Other]" -username "pester_PowerArubaCP_username"
     }
 
     It "Get Local User Does not throw an error" {
@@ -204,13 +204,13 @@ Describe "Configure Local User" {
         $lu.attributes | Should -Be ""
     }
 
-    It "Change role(_name) Local User ([Guest])" {
-        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -role_name "[Guest]"
+    It "Change role(_name) Local User ([Other])" {
+        Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1 | Set-ArubaCPLocalUser -role_name "[Other]"
         $lu = Get-ArubaCPLocalUser -user_id pester_PowerArubaCP_1
         $lu.id | Should -Not -BeNullOrEmpty
         $lu.user_id | Should -Be "pester_PowerArubaCP_1"
         $lu.username | Should -Be "pester_PowerArubaCP_1"
-        $lu.role_name | Should -Be "[Guest]"
+        $lu.role_name | Should -Be "[Other]"
         $lu.enabled | Should -Be $True
         $lu.change_pwd_next_login | Should -Be $false
         $lu.attributes | Should -Be ""
