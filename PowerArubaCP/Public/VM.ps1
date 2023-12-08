@@ -467,7 +467,7 @@ function Set-ArubaCPVmSetup {
         #SLAAC
         if ($version -ge "6.10") {
             Write-Output "Skip Configure SLAAC IPv6"
-            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
+            Set-VMKeystrokes -VMName $name_vm -StringInput n -SpecialKeyInput "KeyEnter" 6>> $null
             Start-Sleep 2
         }
 
