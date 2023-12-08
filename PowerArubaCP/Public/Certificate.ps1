@@ -84,9 +84,10 @@ function Get-ArubaCPServerCertificate {
         Get a server certificate on ClearPass (HTTPS, RADIUS, etc ...)
 
         .EXAMPLE
-        Get-ArubaCPServerCertificate -service_name RADIUS
+        $server_uuid = (Get-ArubaCPServerConfiguration).server_uuid[0]
+        Get-ArubaCPServerCertificate -service_name RADIUS -server_uuid server_uuid
 
-        Return the RADIUS certificates
+        Return the RADIUS certificates of first Server (using uuid)
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
@@ -95,6 +96,8 @@ function Get-ArubaCPServerCertificate {
         [Parameter (Mandatory = $true)]
         [ValidateSet("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec")]
         [string]$service_name,
+        [Parameter (Mandatory = $true)]
+        [string]$server_uuid,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -104,9 +107,6 @@ function Get-ArubaCPServerCertificate {
     }
 
     Process {
-        $server = Get-ArubaCPServerConfiguration
-        $server_uuid = $server.server_uuid
-
         $uri = "api/server-cert/name/${server_uuid}/${service_name}"
 
         $cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri -connection $connection
