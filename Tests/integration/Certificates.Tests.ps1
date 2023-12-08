@@ -9,34 +9,34 @@ BeforeAll {
     Connect-ArubaCP @invokeParams
 }
 
-Describe "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
+Describe "Get Cluster Certificates (Get-ArubaCPClusterCertificate)" {
 
     It "Get Cluster Certificates Does not throw an error" {
         {
-            Get-ArubaCPClusterCertificates
+            Get-ArubaCPClusterCertificate
         } | Should -Not -Throw
     }
 
     It "Get Cluster Certificates" {
-        $cc = Get-ArubaCPClusterCertificates
+        $cc = Get-ArubaCPClusterCertificate
         @($cc).count | Should -Not -Be $NULL
     }
 
     It "Get Cluster Certificates and confirm" {
-        $cc = Get-ArubaCPClusterCertificates
+        $cc = Get-ArubaCPClusterCertificate
         Confirm-ArubaCPServerCertificate $cc | Should -Be $true
     }
 
     It "Get Cluster Certificates with service_id Does not throw an error" {
         {
-            Get-ArubaCPClusterCertificates -service_id 1
+            Get-ArubaCPClusterCertificate -service_id 1
         } | Should -Not -Throw
     }
 
     if ($DefaultArubaCPConnection.version -gt "6.10.0") {
         It "Get Cluster Certificates with service_name Does not throw an error" {
             {
-                Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
+                Get-ArubaCPClusterCertificate -service_name "HTTPS(ECC)"
             } | Should -Not -Throw
         }
     }
@@ -44,26 +44,26 @@ Describe "Get Cluster Certificates (Get-ArubaCPClusterCertificates)" {
     if ($DefaultArubaCPConnection.version -gt "6.10.0") {
         It "Get Cluster Certificates with service_type Does not throw an error" {
             {
-                Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
+                Get-ArubaCPClusterCertificate -certificate_type "HTTPS(RSA) Server Certificate"
             } | Should -Not -Throw
         }
     }
 
     It "Get Cluster Certificates with service_id" {
-        $cc = Get-ArubaCPClusterCertificates -service_id 1
+        $cc = Get-ArubaCPClusterCertificate -service_id 1
         @($cc).count | Should -Not -Be $NULL
     }
 
     if ($DefaultArubaCPConnection.version -gt "6.10.0") {
         It "Get Cluster Certificates with service_name" {
-            $cc = Get-ArubaCPClusterCertificates -service_name "HTTPS(ECC)"
+            $cc = Get-ArubaCPClusterCertificate -service_name "HTTPS(ECC)"
             @($cc).count | Should -Not -Be $NULL
         }
     }
 
     if ($DefaultArubaCPConnection.version -gt "6.10.0") {
         It "Get Cluster Certificates with service_type" {
-            $cc = Get-ArubaCPClusterCertificates -certificate_type "HTTPS(RSA) Server Certificate"
+            $cc = Get-ArubaCPClusterCertificate -certificate_type "HTTPS(RSA) Server Certificate"
             @($cc).count | Should -Not -Be $NULL
         }
     }
