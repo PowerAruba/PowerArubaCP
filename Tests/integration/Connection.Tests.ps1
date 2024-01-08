@@ -95,6 +95,9 @@ Describe "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Cluster Certificate" {
             { Get-ArubaCPClusterCertificate -connection $cppm } | Should -Not -Throw
         }
+        It "Use Multi connection for call Get Certificat Trust List" {
+            { Get-ArubaCPCertTrustList -connection $cppm } | Should -Not -Throw
+        }
     }
 
     It "Disconnect to a ClearPass (Multi connection)" {
