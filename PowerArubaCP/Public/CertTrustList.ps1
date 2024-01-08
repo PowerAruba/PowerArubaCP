@@ -19,6 +19,11 @@ function Get-ArubaCPCertTrustList {
         Get ALL Certificate Trusted Lists on the Clearpass
 
         .EXAMPLE
+        Get-ArubaCPCertTrustList -details
+
+        Get ALL Certificate Trusted Lists with details (subject_DN, issue_date, expiry_date, signature_algorithm...) on the Clearpass
+
+        .EXAMPLE
         Get-ArubaCPCertTrustList -id 23
 
         Get info about Cert Trust List id 23 on the ClearPass
@@ -29,15 +34,17 @@ function Get-ArubaCPCertTrustList {
         Get info about Cert Trust List where cert usage contains Aruba
 
        .EXAMPLE
-        Get-ArubaCPCertTrustList -filter_attribute enabled -filter_type equal -filter_value True
+        Get-ArubaCPCertTrustList -details -filter_attribute enabled -filter_type equal -filter_value True
 
-        Get info about Cert Trust List where enabled equal True
+        Get info about Cert Trust List details where enabled equal True
 
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
 
     Param(
+        [Parameter (Mandatory = $false)]
+        [switch]$details,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
         [int]$id,
@@ -101,8 +108,13 @@ function Get-ArubaCPCertTrustList {
             $filter = @{ $filter_attribute = $filter_value }
             $invokeParams.add( 'filter', $filter )
         }
+        if ($details) {
+            $uri = "api/cert-trust-list-details"
+        }
+        else {
+            $uri = "api/cert-trust-list"
+        }
 
-        $uri = "api/cert-trust-list"
 
         $ctl = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
         $ctl._embedded.items
