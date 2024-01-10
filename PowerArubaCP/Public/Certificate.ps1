@@ -44,7 +44,7 @@ function Get-ArubaCPClusterCertificate {
         [int]$service_id,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "name")]
-        [ValidateSet ("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec")]
+        [ValidateSet ("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec", "Database")]
         [string]$service_name,
         [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "type")]
@@ -94,7 +94,7 @@ function Get-ArubaCPServerCertificate {
 
     Param(
         [Parameter (Mandatory = $true)]
-        [ValidateSet("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec")]
+        [ValidateSet("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec", "Database")]
         [string]$service_name,
         [Parameter (Mandatory = $true)]
         [string]$server_uuid,
