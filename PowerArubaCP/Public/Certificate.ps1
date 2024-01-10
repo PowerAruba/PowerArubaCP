@@ -117,3 +117,113 @@ function Get-ArubaCPServerCertificate {
     End {
     }
 }
+
+function Get-ArubaCPServiceCertificate {
+
+    <#
+        .SYNOPSIS
+        Get Service Certificate on CPPM
+
+        .DESCRIPTION
+        Get Service Certificate (Id, file, Usage ...)
+
+        .EXAMPLE
+        Get-ArubaCPServiceCertificate
+
+        Get ALL Service Certificates on the Clearpass
+
+        .EXAMPLE
+        Get-ArubaCPServiceCertificate -id 23
+
+        Get info about Service Certificate id 23 on the ClearPass
+
+        .EXAMPLE
+        Get-ArubaCPServiceCertificate Aruba -filter_type contains
+
+        Get info about Service Certificate where subject contains Aruba
+
+       .EXAMPLE
+        Get-ArubaCPServiceCertificate -filter_attribute validity -filter_type equal -filter_value Valid
+
+        Get info about Service Certificates where validity equal Valid
+
+    #>
+
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+
+    Param(
+        [Parameter (Mandatory = $false)]
+        [switch]$details,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $false, Position = 1)]
+        [Parameter (ParameterSetName = "subject")]
+        [string]$subject,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [string]$filter_attribute,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "id")]
+        [Parameter (ParameterSetName = "subject")]
+        [Parameter (ParameterSetName = "filter")]
+        [ValidateSet('equal', 'contains')]
+        [string]$filter_type,
+        [Parameter (Mandatory = $false)]
+        [Parameter (ParameterSetName = "filter")]
+        [psobject]$filter_value,
+        [Parameter (Mandatory = $false)]
+        [int]$limit,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $invokeParams = @{ }
+        if ( $PsBoundParameters.ContainsKey('limit') ) {
+            $invokeParams.add( 'limit', $limit )
+        }
+
+        switch ( $PSCmdlet.ParameterSetName ) {
+            "id" {
+                $filter_value = $id
+                $filter_attribute = "id"
+            }
+            "subject" {
+                $filter_value = $subject
+                $filter_attribute = "subject"
+            }
+            default { }
+        }
+
+        if ( $PsBoundParameters.ContainsKey('filter_type') ) {
+            switch ( $filter_type ) {
+                "equal" {
+                    $filter_value = @{ "`$eq" = $filter_value }
+                }
+                "contains" {
+                    $filter_value = @{ "`$contains" = $filter_value }
+                }
+                default { }
+            }
+        }
+
+        if ($filter_value -and $filter_attribute) {
+            $filter = @{ $filter_attribute = $filter_value }
+            $invokeParams.add( 'filter', $filter )
+        }
+
+        $uri = "api/service-cert"
+
+        $service_cert = Invoke-ArubaCPRestMethod -method "GET" -uri $uri @invokeParams -connection $connection
+        $service_cert._embedded.items
+    }
+
+    End {
+    }
+}
