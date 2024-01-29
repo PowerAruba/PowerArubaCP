@@ -38,6 +38,6 @@ $script:VersionBefore690 = $DefaultArubaCPConnection.Version -lt [version]"6.9.0
 $script:VersionBefore6100 = $DefaultArubaCPConnection.Version -lt [version]"6.10.0"
 $script:VersionBefore6110 = $DefaultArubaCPConnection.Version -lt [version]"6.11.0"
 
-$script:server_uuid = (Get-ArubaCPServerConfiguration).server_uuid[0]
+$script:server_uuid = (Get-ArubaCPServerConfiguration)[0].server_uuid
 
 Disconnect-ArubaCP -confirm:$false
