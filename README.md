@@ -35,6 +35,7 @@ With this module (version 0.7.0) you can manage:
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
+- [Certificate](#Certificate) (Get Cluster, Service, Server and Trust List Certificate)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
@@ -319,6 +320,150 @@ You can retrieve its Authentication information of Method (EAP, PAP...) `Get-Aru
   100 [Zone Cache Repository]      Access attributes cached by Context Server Actions in previous sessions            HTTP                   True
     8 [Insight Repository]         Insight database with session information for users and devices                    Local                  True
 ```
+
+### Certificate
+
+You can retrieve its Cluster Certificate information of Method (HTTPS, RadSec, Database...) `Get-ArubaCPClusterCertificate`,
+Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate`
+
+```powershell
+# Get Cluster Certificate
+    Get-ArubaCPClusterCertificate
+
+    service_id           : 1
+    service_name         : RADIUS
+    certificate_type     : RADIUS Server Certificate
+    subject              : CN=secure.arubademo.net
+    expiry_date          : Mar 15, 2024 20:21:15 PDT
+    issue_date           : Feb 12, 2023 19:21:15 PST
+    issued_by            : CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US
+    validity             : Valid
+    root_ca_cert         :
+    intermediate_ca_cert : {@{subject=CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US; 
+                        expiry_date=May 03, 2031 00:00:00 PDT; issue_date=May 03, 2011 00:00:00 PDT; issued_by=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", 
+                        L=Scottsdale, ST=Arizona, C=US; validity=Valid; public_key_algorithm=RSA}, @{subject=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", L=Scottsdale, 
+                        ST=Arizona, C=US; expiry_date=May 30, 2031 00:00:00 PDT; issue_date=Dec 31, 2013 23:00:00 PST; issued_by=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy 
+                        Group, Inc.", C=US; validity=Valid; public_key_algorithm=RSA}}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+
+    service_id           : 2
+    service_name         : HTTPS(ECC)
+    certificate_type     : HTTPS(ECC) Server Certificate
+    subject              : CN=clearpass-sjc1.arubademo.net
+    expiry_date          : Jun 07, 2025 15:36:29 PDT
+    issue_date           : Jun 08, 2023 15:36:29 PDT
+    issued_by            : CN=clearpass-sjc1.arubademo.net
+    validity             : Valid
+    root_ca_cert         :
+    intermediate_ca_cert : {}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : False
+    public_key_algorithm : EC
+
+    service_id           : 7
+    service_name         : HTTPS(RSA)
+    certificate_type     : HTTPS(RSA) Server Certificate
+    subject              : CN=*.arubademo.net
+    expiry_date          : Jul 20, 2024 13:32:07 PDT
+    issue_date           : Jul 24, 2023 12:43:51 PDT
+    issued_by            : CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US
+    validity             : Valid
+    root_ca_cert         : @{subject=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy Group, Inc.", C=US; expiry_date=Jun 29, 2034 10:06:20 PDT; issue_date=Jun 29, 2004 10:06:20 
+                        PDT; issued_by=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy Group, Inc.", C=US; validity=Valid; public_key_algorithm=RSA}
+    intermediate_ca_cert : {@{subject=CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US; 
+                        expiry_date=May 03, 2031 00:00:00 PDT; issue_date=May 03, 2011 00:00:00 PDT; issued_by=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", 
+                        L=Scottsdale, ST=Arizona, C=US; validity=Valid; public_key_algorithm=RSA}, @{subject=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", L=Scottsdale, 
+                        ST=Arizona, C=US; expiry_date=May 30, 2031 00:00:00 PDT; issue_date=Dec 31, 2013 23:00:00 PST; issued_by=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy 
+                        Group, Inc.", C=US; validity=Valid; public_key_algorithm=RSA}}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+
+    service_id           : 21
+    service_name         : RadSec
+    certificate_type     : RadSec Server Certificate
+    subject              : CN=clearpass-sjc1.arubademo.net
+    expiry_date          : May 11, 2025 14:33:46 PDT
+    issue_date           : Nov 20, 2019 13:33:46 PST
+    issued_by            : CN=clearpass-sjc1.arubademo.net
+    validity             : Valid
+    root_ca_cert         :
+    intermediate_ca_cert : {}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+
+    service_id           : 106
+    certificate_type     : Database Server Certificate
+    subject              : O=PolicyManager, CN=clearpass-sjc1.arubademo.net
+    expiry_date          : Mar 18, 2027 16:36:57 PDT
+    issue_date           : Mar 18, 2022 16:36:57 PDT
+    issued_by            : O=PolicyManager, CN=clearpass-sjc1.arubademo.net
+    validity             : Valid
+    root_ca_cert         : 
+    intermediate_ca_cert : {}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+
+# Get Server Certificate RadSec from Server clearpass-sjc1.arubademo.net
+    $server_uuid = (Get-ArubaCPServerConfiguration -name clearpass-sjc1.arubademo.net).server_uuid
+    Get-ArubaCPServerCertificate -server_uuid $server_uuid -service_name "RadSec"
+
+    service_id           : 21
+    service_name         : RadSec
+    certificate_type     : RadSec Server Certificate
+    subject              : CN=clearpass-sjc1.arubademo.net
+    expiry_date          : May 11, 2025 14:33:46 PDT
+    issue_date           : Nov 20, 2019 13:33:46 PST
+    issued_by            : CN=clearpass-sjc1.arubademo.net
+    validity             : Valid
+    root_ca_cert         :
+    intermediate_ca_cert : {}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+    _links               : @{self=}
+
+# Get Service Certificate
+    Get-ArubaCPServiceCertificate
+
+    id                   : 3147
+    subject              : CN=*.arubademo.net
+    expiry_date          : Jul 20, 2024 13:32:07 PDT
+    issue_date           : Jul 24, 2023 12:43:51 PDT
+    issued_by            : CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US
+    validity             : Valid
+    root_ca_cert         : @{subject=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy Group, Inc.", C=US; expiry_date=Jun 29, 2034 10:06:20 PDT; issue_date=Jun 29, 2004 10:06:20 
+                        PDT; issued_by=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy Group, Inc.", C=US; validity=Valid}
+    intermediate_ca_cert : {@{subject=CN=Go Daddy Secure Certificate Authority - G2, OU=http://certs.godaddy.com/repository/, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US; 
+                        expiry_date=May 03, 2031 00:00:00 PDT; issue_date=May 03, 2011 00:00:00 PDT; issued_by=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", 
+                        L=Scottsdale, ST=Arizona, C=US; validity=Valid}, @{subject=CN=Go Daddy Root Certificate Authority - G2, O="GoDaddy.com, Inc.", L=Scottsdale, ST=Arizona, C=US; 
+                        expiry_date=May 30, 2031 00:00:00 PDT; issue_date=Dec 31, 2013 23:00:00 PST; issued_by=OU=Go Daddy Class 2 Certification Authority, O="The Go Daddy Group, Inc.", 
+                        C=US; validity=Valid}}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [...]
+                        -----END CERTIFICATE-----
+    _links               : @{self=}
+
+    ...
+
+```
+
 
 ### ClearPass Version
 
