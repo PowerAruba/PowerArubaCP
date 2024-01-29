@@ -324,7 +324,7 @@ You can retrieve its Authentication information of Method (EAP, PAP...) `Get-Aru
 ### Certificate
 
 You can retrieve its Cluster Certificate information of Method (HTTPS, RadSec, Database...) `Get-ArubaCPClusterCertificate`,
-Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate`
+Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate` or Certificate Trust List `Get-ArubaCPServiceCertificate`
 
 ```powershell
 # Get Cluster Certificate
@@ -461,6 +461,38 @@ Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `G
     _links               : @{self=}
 
     ...
+
+# Get Certificate Trust List (with details)
+
+    Get-ArubaCPCertTrustList -details
+
+    id                  : 2029
+    subject_DN          : CN=COMODO RSA Certification Authority,O=COMODO CA Limited,L=Salford,ST=Greater Manchester,C=GB
+    issue_date          : 2010/01/18 16:00:00
+    expiry_date         : 2038/01/18 15:59:59
+    enabled             : True
+    valid               : valid
+    signature_algorithm : SHA384WITHRSA
+    public_key_format   : X.509
+    serial_number       : 101909084537582093308941363524873193117
+    cert_usage          : {Others}
+    issuer_DN           : C=GB,ST=Greater Manchester,L=Salford,O=COMODO CA Limited,CN=COMODO RSA Certification Authority
+    _links              : @{self=}
+
+    id                  : 2012
+    subject_DN          : OU=Class 3 Public Primary Certification Authority,O=VeriSign\, Inc.,C=US
+    issue_date          : 1996/01/28 16:00:00
+    expiry_date         : 2028/08/02 16:59:59
+    enabled             : False
+    valid               : valid
+    signature_algorithm : SHA1WITHRSA
+    public_key_format   : X.509
+    serial_number       : 80507572722862485515306429940691309246
+    cert_usage          : {Others}
+    issuer_DN           : C=US,O=VeriSign\, Inc.,OU=Class 3 Public Primary Certification Authority
+    _links              : @{self=}
+
+    [...]
 
 ```
 
