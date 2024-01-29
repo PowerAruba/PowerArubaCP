@@ -101,7 +101,7 @@ Describe "Connect to a ClearPass (using multi connection)" {
         It "Use Multi connection for call Get Service Certificate" {
             { Get-ArubaCPServiceCertificate -connection $cppm } | Should -Not -Throw
         }
-        It "Use Multi connection for call Get Enforcement Policy"  -Skip:$VersionBefore6110 {
+        It "Use Multi connection for call Get Enforcement Policy" -Skip:$VersionBefore6110 {
             { Get-ArubaCPEnforcementPolicy -connection $cppm } | Should -Not -Throw
         }
         It "Use Multi connection for call Get Enforcement Profile" -Skip:$VersionBefore6110 {

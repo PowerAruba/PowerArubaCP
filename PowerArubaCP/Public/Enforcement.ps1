@@ -12,7 +12,7 @@ function Get-ArubaCPEnforcementPolicy {
         Get Enforcement Policy on CPPM
 
         .DESCRIPTION
-        Get Enforcement Policy (Id, file, Usage ...)
+        Get Enforcement Policy (Id, name, description, (enforcement_)type, rules ...)
 
         .EXAMPLE
         Get-ArubaCPEnforcementPolicy
