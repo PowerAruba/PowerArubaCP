@@ -39,6 +39,7 @@ With this module (version 0.7.0) you can manage:
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add /Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
+- [Enforcement](#Enforcement) (Get Enforcement Policy / Profile)
 - [Local User](#local-user) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
 - [Network Device](#Network-device) (Add / Get / Set / Remove a Network Device and Add / Set / Remove [Attribute](#attribute))
 - [Network Device Group](#network-device-group) (Add / Get / Set / Remove a Network Device Group and Add/remove Member)
@@ -601,6 +602,62 @@ You can add Endpoint `Add-ArubaCPEndpoint`, retrieve its informations `Get-Aruba
     Are you sure you want to perform this action?
     Performing the operation "Remove Endpoint" on target "3174 (000102030405)".
     [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):Y
+```
+
+### Enforcement
+
+You can retrieve its Enforcement Policy information (name, Type, Rules...) `Get-ArubaCPEnforcementPolicy`, or Enforcement Profile `Get-ArubaCPEnforcementProfile`
+Need ClearPass >= 6.11.0
+
+```powershell
+# Get Enforcement Policy
+    Get-ArubaCPEnforcementPolicy
+
+    id                          : 5
+    name                        : [Admin Network Login Policy]
+    description                 : Enforcement policy controlling access to Policy Manager Admin
+    enforcement_type            : TACACS
+    default_enforcement_profile : [TACACS+ Deny Profile]
+    rule_eval_algo              : evaluate-all
+    rules                       : {@{enforcement_profile_names=System.Object[]; condition=System.Object[]}, @{enforcement_profile_names=System.Object[]; condition=System.Object[]}, 
+                                @{enforcement_profile_names=System.Object[]; condition=System.Object[]}, @{enforcement_profile_names=System.Object[]; condition=System.Object[]}…}
+    _links                      : @{self=}
+
+    id                          : 7
+    name                        : [AirGroup Enforcement Policy]
+    description                 : Enforcement policy controlling access for AirGroup devices
+    enforcement_type            : RADIUS
+    default_enforcement_profile : [AirGroup Response]
+    rule_eval_algo              : evaluate-all
+    rules                       : {@{enforcement_profile_names=System.Object[]; condition=System.Object[]}, @{enforcement_profile_names=System.Object[]; condition=System.Object[]}, 
+                                @{enforcement_profile_names=System.Object[]; condition=System.Object[]}, @{enforcement_profile_names=System.Object[]; condition=System.Object[]}}
+    _links                      : @{self=}
+    [...]
+
+# Get Enforcement Profile
+    Get-ArubaCPEnforcementProfile
+
+    id          : 1
+    name        : [Allow Access Profile]
+    description : System-defined profile to allow network access
+    type        : RADIUS
+    action      : Accept
+    _links      : @{self=}
+
+    id          : 2
+    name        : [Deny Access Profile]
+    description : System-defined profile to deny network access
+    type        : RADIUS
+    action      : Reject
+    _links      : @{self=}
+
+    id          : 3
+    name        : [Drop Access Profile]
+    description : System-defined profile to drop the request
+    type        : RADIUS
+    action      : Drop
+    _links      : @{self=}
+    [...]
 ```
 
 ### Local User
