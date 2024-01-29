@@ -132,7 +132,7 @@ function Get-ArubaCPEnforcementProfile {
         .EXAMPLE
         Get-ArubaCPEnforcementProfile
 
-        Get ALL Enforcement Policies on the Clearpass
+        Get ALL Enforcement Profiles on the Clearpass
 
         .EXAMPLE
         Get-ArubaCPEnforcementProfile -id 23
@@ -147,7 +147,7 @@ function Get-ArubaCPEnforcementProfile {
        .EXAMPLE
         Get-ArubaCPEnforcementProfile -filter_attribute description -filter_type equal -filter_value MAC
 
-        Get info about Enforcement Policies where description equal MAC
+        Get info about Enforcement Profiles where description equal MAC
 
     #>
 
