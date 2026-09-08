@@ -49,7 +49,15 @@ function Add-ArubaCPServerCertificate {
 
         $_cert | Add-Member -name "pkcs12_file_url" -MemberType NoteProperty -Value $pkcs12_file_url
 
-        $_cert | Add-Member -name "pkcs12_passphrase" -MemberType NoteProperty -Value $pkcs12_passphrase
+        if (("Desktop" -eq $PSVersionTable.PsEdition) -or ($null -eq $PSVersionTable.PsEdition)) {
+            $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pkcs12_passphrase);
+            $passphrase = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr);
+        }
+        else {
+            $passphrase = ConvertFrom-SecureString -SecureString $pkcs12_passphrase -AsPlainText
+        }
+
+        $_cert | Add-Member -name "pkcs12_passphrase" -MemberType NoteProperty -Value $passphrase
 
         $cert = Invoke-ArubaCPRestMethod -method "PUT" -uri $uri -body $_cert -connection $connection
 
