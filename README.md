@@ -326,6 +326,7 @@ You can retrieve its Authentication information of Method (EAP, PAP...) `Get-Aru
 
 You can retrieve its Cluster Certificate information of Method (HTTPS, RadSec, Database...) `Get-ArubaCPClusterCertificate`,
 Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate` or Certificate Trust List `Get-ArubaCPServiceCertificate`
+You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Database.
 
 ```powershell
 # Get Cluster Certificate
@@ -495,6 +496,29 @@ Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `G
 
     [...]
 
+# Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)
+#You need to get the uuid of server using 'Get-ArubaCPServerConfiguration' and host the certificate on web server (not possible to import directly like WebGui), the CA need to be import on Trust Certificate (and enable) before
+
+    $passphrase = ConvertTo-SecureString MyPFXPassPhrase -AsPlainText -Force
+    Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid b0157ce9-7ffd-4250-880d-a834861c61be -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+
+    service_id           : 1
+    service_name         : RADIUS
+    certificate_type     : RADIUS Server Certificate
+    subject              : CN=PowerArubaCP, OU=PowerArubaCP, O=PowerArubaCA, L=Aruba, ST=Power, C=FR
+    expiry_date          : Sep 04, 2041 10:59:34 CEST
+    issue_date           : Sep 08, 2026 10:59:34 CEST
+    issued_by            : CN=PowerArubaCA Root CA, OU=PowerArubaCP, O=PowerArubaCA, L=Aruba, ST=Power, C=FR
+    validity             : Valid
+    root_ca_cert         : @{subject=CN=PowerArubaCA Root CA, OU=PowerArubaCP, O=PowerArubaCA, L=Aruba, ST=Power, C=FR; expiry_date=Sep 08, 2046 10:58:12 CEST; issue_date=Sep 08, 2026
+                        10:58:12 CEST; issued_by=CN=PowerArubaCA Root CA, OU=PowerArubaCP, O=PowerArubaCA, L=Aruba, ST=Power, C=FR; validity=Valid; public_key_algorithm=RSA}
+    intermediate_ca_cert : {}
+    cert_file            : -----BEGIN CERTIFICATE-----
+                        [....]
+                        -----END CERTIFICATE-----
+    enabled              : True
+    public_key_algorithm : RSA
+    _links               : @{self=}
 ```
 
 
