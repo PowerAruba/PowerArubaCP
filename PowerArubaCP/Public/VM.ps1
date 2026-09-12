@@ -15,19 +15,19 @@ function Deploy-ArubaCPVm {
         Deploy a Virtual Machine ClearPass on a vSphere environment with a lot of parameters like the choice of the cluster, the datastore, and the host. You can even preconfigure your VM with the network configuration, the hostname, and the dns.
 
         .EXAMPLE
-        Deploy-ArubaCPVm -ovf_path "D:\ISO\CPPM-VM-x86_64-6.9.0.130064-ESX\CPPM-VM-x86_64-6.9.0.130064-ESX.ovf" -vm_Host "host_PowerarubaCP-01" -datastore "datastore_powerarubacp-01" -cluster "cluster_powerarubacp-01" -name_vm "CPPM" -vmnetwork1 "CPPM - MGMT" -vmnetwork2 "CPPM - DATA"
+        Deploy-ArubaCPVm -ovf_path "D:\ISO\CPPM-VM-x86_64-6.14.0.371380-ARUBA-ESX\CPPM-VM-x86_64-6.14.0.371380-ARUBA-ESX.ovf" -vm_Host "host_PowerarubaCP-01" -datastore "datastore_powerarubacp-01" -cluster "cluster_powerarubacp-01" -name_vm "CPPM" -vmnetwork1 "CPPM - MGMT" -vmnetwork2 "CPPM - DATA"
 
         This install your .ovf on your vsphere with the host, the datastore, the cluster, the folder to place it and the name of your vm. It also configure your vm with a hostname, a network configuration, the network adapter and the port group of your vSwitch
 
         .EXAMPLE
         $cppmBuildParams = @{
-            ovf_path                    = "D:\ISO\CPPM-VM-x86_64-6.9.0.130064-ESX\CPPM-VM-x86_64-6.9.0.130064-ESX.ovf"
+            ovf_path                    = "D:\ISO\CPPM-VM-x86_64-6.14.0.371380-ARUBA-ESX\CPPM-VM-x86_64-6.14.0.371380-ARUBA-ESX.ovf"
             vm_host                     = "host_PowerarubaCP-01"
             datastore                   = "datastore_powerarubacp-01"
             cluster                     = "cluster_powerarubacp-01"
             inventory                   = "PowerArubaCP"
             name_vm                     = "CPPM"
-            capacityGB                  = "80" #Minimum size for LAB
+            capacityGB                  = "400" #Minimum size for LAB
             memoryGB                    = "8" #Default value
             cpu                         = "8" #Default value
             StartVM                     = $true
@@ -54,7 +54,7 @@ function Deploy-ArubaCPVm {
         [Parameter (Mandatory = $true)]
         [string]$name_vm,
         [Parameter (Mandatory = $false)]
-        [ValidateRange(31, 512)]
+        [ValidateRange(31, 1024)]
         [int]$capacityGB = 80,
         [Parameter (Mandatory = $false)]
         [ValidateRange(2, 32)]
