@@ -267,14 +267,13 @@ function Set-ArubaCPVmSetup {
         Setup a VM ClearPass (hostname, management/data ip address, dns, password...).
 
         .EXAMPLE
-        Set-ArubaCPVmSetup -name "CPPM" -version 6.9 -hostname "CPPM" -mgmt_ip 192.0.2.225 -mgmt_netmask 24 -mgmt_gateway 192.0.2.254 -dns_primary 192.0.2.1 -new_pasword "MyPassword"
+        Set-ArubaCPVmSetup -name "CPPM" -hostname "CPPM" -mgmt_ip 192.0.2.225 -mgmt_netmask 24 -mgmt_gateway 192.0.2.254 -dns_primary 192.0.2.1 -new_pasword "MyPassword"
 
         Initial configuration with minimal settings of ClearPasss (Name, IP Address MGMT, DNS, Password...)
 
         .EXAMPLE
         $cppmsetupParams = @{
             name_vm                 = "CPPM"
-            version                 = "6.9"
             hostname                = "CPPM"
             mgmt_ip                 = "192.0.2.225"
             mgmt_netmask            = "24"
@@ -301,9 +300,6 @@ function Set-ArubaCPVmSetup {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
         [string]$name_vm,
-        [Parameter (Mandatory = $true)]
-        [ValidateSet("6.8", "6.9", "6.10", "6.11", "6.12")]
-        [version]$version,
         [Parameter (Mandatory = $true)]
         [string]$hostname,
         [Parameter (Mandatory = $true)]
@@ -368,83 +364,43 @@ function Set-ArubaCPVmSetup {
         Start-Sleep 1
 
         #Management IPv4
-        if ($version -eq "6.8") {
-            Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_ip.ToString() -ReturnCarriage $true 6>> $null
+        $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
+        Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
+        Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true 6>> $null
+        Start-Sleep 1
+        Write-Output "Configure Management IPv4 Gateway: $mgmt_gateway"
+        Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
+        Start-Sleep 1
+
+        #Management IPv6 (Skip...)
+        Write-Output "Skip Configure Management IPv6..."
+        Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
+        Start-Sleep 1
+
+        #Data Port
+        if ($data_ip -and $data_netmask -and $data_gateway) {
+            $data = $data_ip.ToString() + "/" + $data_netmask
+            Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true 6>> $null
             Start-Sleep 1
-            #Netmask
-            Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($mgmt_netmask)) -ReturnCarriage $true 6>> $null
-            Start-Sleep 1
-            #Gateway (Management)
-            Write-Output "Configure Management IPv4 Gateway: $mgmt_gateway"
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
+            Write-Output "Configure Data IPv4 Gateway: $data_gateway"
+            Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true 6>> $null
             Start-Sleep 1
 
-        }
-        else {
-            #with 6.9.x using CIDR for netmask and add IPv6 support
-
-            $mgmt = $mgmt_ip.ToString() + "/" + $mgmt_netmask
-            Write-Output "Configure Management IPv4: $mgmt_ip / $mgmt_netmask"
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt -ReturnCarriage $true 6>> $null
-            Start-Sleep 1
-            Write-Output "Configure Management IPv4 Gateway: $mgmt_gateway"
-            Set-VMKeystrokes -VMName $name_vm -StringInput $mgmt_gateway.ToString() -ReturnCarriage $true 6>> $null
-            Start-Sleep 1
-
-            #Management IPv6 (Skip...)
-            Write-Output "Skip Configure Management IPv6..."
+            #IPv6
+            Write-Output "Skip Configure Data IPv6..."
             Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
             Start-Sleep 1
         }
-
-        #Data Port
-        if ($version -eq "6.8") {
-            if ($data_ip -and $data_netmask -and $data_gateway) {
-                $data = $data_ip.ToString() + "/" + $data_netmask
-                Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_ip.ToString() -ReturnCarriage $true 6>> $null
-                Start-Sleep 1
-                #Netmask
-                Set-VMKeystrokes -VMName $name_vm -StringInput (Convert-ArubaCPCIDR2Mask($data_netmask)) -ReturnCarriage $true 6>> $null
-                Start-Sleep 1
-                #Gateway (Data)
-                Write-Output "Configure Data IPv4 Gateway: $data_gateway"
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true 6>> $null
-                Start-Sleep 1
-            }
-            else {
-                Write-Output "Skip Configure Data IPv4"
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
-                Start-Sleep 1
-            }
-        }
         else {
-            #with 6.9.x using CIDR for netmask and add IPv6 support
-            if ($data_ip -and $data_netmask -and $data_gateway) {
-                $data = $data_ip.ToString() + "/" + $data_netmask
-                Write-Output "Configure Data IPv4: $data_ip / $data_netmask"
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data -ReturnCarriage $true 6>> $null
-                Start-Sleep 1
-                Write-Output "Configure Data IPv4 Gateway: $data_gateway"
-                Set-VMKeystrokes -VMName $name_vm -StringInput $data_gateway.ToString() -ReturnCarriage $true 6>> $null
-                Start-Sleep 1
+            Write-Output "Skip Configure Data IPv4"
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
+            Start-Sleep 1
 
-                #IPv6
-                Write-Output "Skip Configure Data IPv6..."
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
-                Start-Sleep 1
-            }
-            else {
-                Write-Output "Skip Configure Data IPv4"
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
-                Start-Sleep 1
-
-                #IPv6
-                Write-Output "Skip Configure Data IPv6"
-                Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
-                Start-Sleep 1
-            }
+            #IPv6
+            Write-Output "Skip Configure Data IPv6"
+            Set-VMKeystrokes -VMName $name_vm -SpecialKeyInput "KeyEnter" 6>> $null
+            Start-Sleep 1
         }
 
         #DNS
@@ -456,11 +412,9 @@ function Set-ArubaCPVmSetup {
         Start-Sleep 1
 
         #SLAAC
-        if ($version -ge "6.10") {
-            Write-Output "Skip Configure SLAAC IPv6"
-            Set-VMKeystrokes -VMName $name_vm -StringInput n -SpecialKeyInput "KeyEnter" 6>> $null
-            Start-Sleep 2
-        }
+        Write-Output "Skip Configure SLAAC IPv6"
+        Set-VMKeystrokes -VMName $name_vm -StringInput n -SpecialKeyInput "KeyEnter" 6>> $null
+        Start-Sleep 2
 
         #Password
         Write-Output "Configure Password..."
@@ -515,12 +469,10 @@ function Set-ArubaCPVmSetup {
                 Write-Output "Skip Configure Timezone (Continent and Country) ..."
                 Set-VMKeystrokes -VMName $name_vm -StringInput n -ReturnCarriage $true 6>> $null
                 Start-Sleep 1
-                if ($version -ne "6.8") {
-                    #No need to confirm (1) Time Settings before 6.9
-                    Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
-                    Start-Sleep 1
+                #need to confirm (1) Time Settings
+                Set-VMKeystrokes -VMName $name_vm -StringInput 1 -ReturnCarriage $true 6>> $null
+                Start-Sleep 1
                 }
-            }
         }
         else {
             #No NTP or Timezone settings, skip
