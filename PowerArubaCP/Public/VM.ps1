@@ -130,7 +130,12 @@ function Deploy-ArubaCPVm {
         $ovfConfig.NetworkMapping.VM_Network.Value = $vmnetwork1
 
         if ( $PsBoundParameters.ContainsKey('vmnetwork2') ) {
-            $ovfConfig.NetworkMapping.VM_Network_2.Value = $vmnetwork2
+            #OVF of ClearPass 6.14 (and later ?) use vmnic named VLAN_51...
+            if($ovfConfig.NetworkMapping.VLAN_51) {
+                $ovfConfig.NetworkMapping.VLAN_51.Value = $vmnetwork2
+            } else {
+                $ovfConfig.NetworkMapping.VM_Network_2.Value = $vmnetwork2
+            }
         }
 
         Import-VApp @vapp_config -OvfConfiguration $ovfConfig | Out-Null
