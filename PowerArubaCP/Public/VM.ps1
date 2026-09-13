@@ -304,6 +304,7 @@ function Set-ArubaCPVmSetup {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
     Param(
+        [Parameter (Mandatory = $true)]
         [string]$name_vm,
         [Parameter (Mandatory = $true)]
         [string]$hostname,
