@@ -618,7 +618,7 @@ function Set-ArubaCPVmApiClient {
         #Create API Client (oauth)
         Write-Output "Add API client $client_id"
         Set-VMKeystrokes -VMName $name_vm -StringInput "system create-api-client $client_id $client_secret" -ReturnCarriage $true 6>> $null
-        Start-Sleep 1
+        Start-Sleep 2
 
         #Exit !
         Write-Output "Exit to console"
