@@ -23,7 +23,7 @@ function Add-ArubaCPCertSignRequest {
 
         .EXAMPLE
         $key_password = ConvertTo-SecureString mypassword -AsPlainText -Force
-        PS > Add-ArubaCPCertSignRequest  -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
+        PS > Add-ArubaCPCertSignRequest -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
 
         Add a Certificate Sign Request (CSR) with RSA 2048 and SHA-256 for cipher/digest algorithm
 
