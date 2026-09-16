@@ -5,6 +5,117 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+
+function Add-ArubaCPCertSignRequest {
+
+    <#
+        .SYNOPSIS
+        Add a Certf(ificate) Sign Request (CSR) Certificate on ClearPass
+
+        .DESCRIPTION
+        Add a Certf(ificate) Sign Request (CSR) Certificate on ClearPass(HTTPS, RADIUS, etc ...)
+
+        .EXAMPLE
+        $key_password = ConvertTo-SecureString mypassword -AsPlainText -Force
+        PS > Add-ArubaCPCertSignRequest -common_name MyPowerArubaCP -private_key_password $key_password
+
+        Add a CSR with Common Name MyPowerArubaCP (with default other settings)
+
+        .EXAMPLE
+        $key_password = ConvertTo-SecureString mypassword -AsPlainText -Force
+        PS > Add-ArubaCPCertSignRequest -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
+
+        Add a Certificate Sign Request (CSR) with RSA 2048 and SHA-256 for cipher/digest algorithm
+
+    #>
+
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [string]$common_name,
+        [Parameter (Mandatory = $false)]
+        [string]$organization,
+        [Parameter (Mandatory = $false)]
+        [string]$organization_unit,
+        [Parameter (Mandatory = $false)]
+        [string]$location,
+        [Parameter (Mandatory = $false)]
+        [string]$state,
+        [Parameter (Mandatory = $false)]
+        [string]$country,
+        [Parameter (Mandatory = $false)]
+        [string]$san,
+        [Parameter (Mandatory = $true)]
+        [securestring]$private_key_password,
+        [Parameter (Mandatory = $false)]
+        [ValidateSet('2048-bit rsa', '3072-bit rsa', '4096-bit rsa')]
+        [string]$private_key_type = "4096-bit rsa",
+        [Parameter (Mandatory = $false)]
+        [ValidateSet('SHA-1', 'SHA-224', 'SHA-256', 'SHA-384', 'SHA-512')]
+        [string]$digest_algorithm = "SHA-512",
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+        $uri = "api/cert-sign-request"
+
+        $_ssc = New-Object psobject
+
+        $_ssc | Add-Member -name "subject_CN" -MemberType NoteProperty -Value $common_name
+
+        if ( $PsBoundParameters.ContainsKey('organization') ) {
+            $_ssc | Add-Member -name "subject_O" -MemberType NoteProperty -Value $organization
+        }
+
+        if ( $PsBoundParameters.ContainsKey('organization_unit') ) {
+            $_ssc | Add-Member -name "subject_OU" -MemberType NoteProperty -Value $organization_unit
+        }
+
+        if ( $PsBoundParameters.ContainsKey('location') ) {
+            $_ssc | Add-Member -name "subject_L" -MemberType NoteProperty -Value $location
+        }
+
+        if ( $PsBoundParameters.ContainsKey('state') ) {
+            $_ssc | Add-Member -name "subject_S" -MemberType NoteProperty -Value $state
+        }
+
+        if ( $PsBoundParameters.ContainsKey('country') ) {
+            $_ssc | Add-Member -name "subject_C" -MemberType NoteProperty -Value $country
+        }
+
+        if ( $PsBoundParameters.ContainsKey('san') ) {
+            $_ssc | Add-Member -name "subject_SAN" -MemberType NoteProperty -Value $san
+        }
+
+        if (("Desktop" -eq $PSVersionTable.PsEdition) -or ($null -eq $PSVersionTable.PsEdition)) {
+            $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($private_key_password);
+            $key_password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr);
+        }
+        else {
+            $key_password = ConvertFrom-SecureString -SecureString $private_key_password -AsPlainText
+        }
+
+        $_ssc | Add-Member -name "private_key_password" -MemberType NoteProperty -Value $key_password
+
+        $_ssc | Add-Member -name "private_key_type" -MemberType NoteProperty -Value $private_key_type
+
+        $_ssc | Add-Member -name "digest_algorithm" -MemberType NoteProperty -Value $digest_algorithm
+
+        $ssc = Invoke-ArubaCPRestMethod -method "POST" -uri $uri -body $_ssc -connection $connection
+
+        $ssc
+    }
+
+    End {
+    }
+}
+
 function Add-ArubaCPServerCertificate {
 
     <#
@@ -17,9 +128,15 @@ function Add-ArubaCPServerCertificate {
         .EXAMPLE
         $passphrase = ConvertTo-SecureString mypassword -AsPlainText -Force
         PS > $server_uuid = (Get-ArubaCPServerConfiguration).server_uuid[0]
-        PS > Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid server_uuid -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+        PS > Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid $server_uuid -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
 
-        Add certificate (pfx) for service RADIUS on CPPM Server with uuid from Get-ArubaCPServerConfiguration using passphrase
+        Add certificate (pfx) for service RADIUS on CPPM Server with uuid (multiple server) from Get-ArubaCPServerConfiguration using passphrase
+
+        .EXAMPLE
+        $server_uuid = (Get-ArubaCPServerConfiguration).server_uuid
+        PS > Add-ArubaCPServerCertificate -service_name RadSec -server_uuid $server_uuid -certificate_url http://192.0.2.1/PowerArubaCP.crt
+
+        Add certificate (crt) for service RadSec on CPPM Server with uuid from Get-ArubaCPServerConfiguratione
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
@@ -30,10 +147,12 @@ function Add-ArubaCPServerCertificate {
         [string]$service_name,
         [Parameter (Mandatory = $true)]
         [string]$server_uuid,
-        [Parameter (Mandatory = $true)]
+        [Parameter (ParameterSetName = "pkcs12", Mandatory = $true)]
         [string]$pkcs12_file_url,
-        [Parameter (Mandatory = $true)]
+        [Parameter (ParameterSetName = "pkcs12", Mandatory = $true)]
         [securestring]$pkcs12_passphrase,
+        [Parameter (ParameterSetName = "crt", Mandatory = $true)]
+        [string]$certificate_url,
         [Parameter (Mandatory = $False)]
         [ValidateNotNullOrEmpty()]
         [PSObject]$connection = $DefaultArubaCPConnection
@@ -47,17 +166,25 @@ function Add-ArubaCPServerCertificate {
 
         $_cert = New-Object psobject
 
-        $_cert | Add-Member -name "pkcs12_file_url" -MemberType NoteProperty -Value $pkcs12_file_url
+        if ( $PSCmdlet.ParameterSetName -eq "pkcs12" ) {
+            $_cert | Add-Member -name "pkcs12_file_url" -MemberType NoteProperty -Value $pkcs12_file_url
 
-        if (("Desktop" -eq $PSVersionTable.PsEdition) -or ($null -eq $PSVersionTable.PsEdition)) {
-            $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pkcs12_passphrase);
-            $passphrase = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr);
-        }
-        else {
-            $passphrase = ConvertFrom-SecureString -SecureString $pkcs12_passphrase -AsPlainText
+            if (("Desktop" -eq $PSVersionTable.PsEdition) -or ($null -eq $PSVersionTable.PsEdition)) {
+                $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pkcs12_passphrase);
+                $passphrase = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr);
+            }
+            else {
+                $passphrase = ConvertFrom-SecureString -SecureString $pkcs12_passphrase -AsPlainText
+            }
+
+            $_cert | Add-Member -name "pkcs12_passphrase" -MemberType NoteProperty -Value $passphrase
         }
 
-        $_cert | Add-Member -name "pkcs12_passphrase" -MemberType NoteProperty -Value $passphrase
+        elseif ( $PSCmdlet.ParameterSetName -eq "crt" ) {
+
+            $_cert | Add-Member -name "certificate_url" -MemberType NoteProperty -Value $certificate_url
+
+        }
 
         $cert = Invoke-ArubaCPRestMethod -method "PUT" -uri $uri -body $_cert -connection $connection
 
