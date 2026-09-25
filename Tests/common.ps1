@@ -34,6 +34,7 @@ $script:MyNewSecurePassword = ConvertTo-SecureString MyNewassword -AsPlainText -
 $script:key_password = ConvertTo-SecureString mypassword -AsPlainText -Force
 
 $script:server_uuid = (Get-ArubaCPServerConfiguration)[0].server_uuid
+$script:server_name = (Get-ArubaCPServerConfiguration)[0].name
 
 $script:cert_trust = "
 -----BEGIN CERTIFICATE-----
