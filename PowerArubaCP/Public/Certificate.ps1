@@ -479,8 +479,6 @@ function Get-ArubaCPServiceCertificate {
 
     Param(
         [Parameter (Mandatory = $false)]
-        [switch]$details,
-        [Parameter (Mandatory = $false)]
         [Parameter (ParameterSetName = "id")]
         [int]$id,
         [Parameter (Mandatory = $false, Position = 1)]
