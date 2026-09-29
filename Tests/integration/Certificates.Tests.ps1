@@ -228,6 +228,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.digest_algorithm | Should -Be "SHA-384"
         }
 
+        <# Disable this test because need to restart server after and also add IP to SAN...
         It "Add Server Self Signed Certificate (Database) with default parameter (RSA 4096 / SHA-512)" {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "Database" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password
             $ssc.certificate_type | Should -Be "server"
@@ -237,7 +238,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.private_key_type | Should -Be "4096-bit rsa"
             $ssc.digest_algorithm | Should -Be "SHA-512"
         }
-
+        #>
         It "Add Server Self Signed Certificate (RadSec) with default parameter (RSA 4096 / SHA-512)" {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "RadSec" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password
             $ssc.certificate_type | Should -Be "server"
