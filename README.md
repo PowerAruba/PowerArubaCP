@@ -1290,6 +1290,11 @@ The issue coming from use Self-Signed or Expired Certificate for switch manageme
 
 Try to connect using `Connect-ArubaCP -SkipCertificateCheck`
 
+## URL not trusted or Cert File is empty
+
+When use import Certificate with HTTPS Web Server, if you get following error : `validation_messages: Could not fetch certificate. URL not trusted or Cert File is empty.`
+The problem can coming from missing CA (and Chain) of Web Server on Trust List, you need to add on Certificate Trust List with cert usage `Others`
+
 # How to contribute
 
 Contribution and feature requests are more than welcome. Please use the following methods:
