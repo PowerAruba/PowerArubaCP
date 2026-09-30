@@ -66,7 +66,7 @@ Describe "Get Cluster Certificates (Get-ArubaCPClusterCertificate)" {
 
 }
 
-Describe  "Get Server Certificate (Get-ArubaCPServerCertificate)" {
+Describe "Get Server Certificate (Get-ArubaCPServerCertificate)" {
 
     It "Get Server Certificate Does not throw an error" {
         {
