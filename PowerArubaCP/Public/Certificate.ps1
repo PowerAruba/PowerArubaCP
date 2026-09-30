@@ -331,6 +331,78 @@ function Import-ArubaCPServerCertificate {
     }
 }
 
+function Import-ArubaCPServiceCertificate {
+
+    <#
+        .SYNOPSIS
+        Import a service certificate on ClearPass
+
+        .DESCRIPTION
+        Import a service certificate on ClearPass
+
+        .EXAMPLE
+        $passphrase = ConvertTo-SecureString mypassword -AsPlainText -Force
+        PS > Import-ArubaCPServerviceCertificate  -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+
+        Import certificate (pfx) for service Certificate
+
+        .EXAMPLE
+        PS > Import-ArubaCPServerviceCertificate-certificate_url http://192.0.2.1/PowerArubaCP.crt
+
+        Import certificate (crt) for service Certificate
+    #>
+
+    [CmdLetBinding(DefaultParameterSetName = "Default")]
+
+    Param(
+        [Parameter (ParameterSetName = "pkcs12", Mandatory = $true)]
+        [string]$pkcs12_file_url,
+        [Parameter (ParameterSetName = "pkcs12", Mandatory = $true)]
+        [securestring]$pkcs12_passphrase,
+        [Parameter (ParameterSetName = "crt", Mandatory = $true)]
+        [string]$certificate_url,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+        $uri = "api/service-cert"
+
+        $_cert = New-Object psobject
+
+        if ( $PSCmdlet.ParameterSetName -eq "pkcs12" ) {
+            $_cert | Add-Member -name "pkcs12_file_url" -MemberType NoteProperty -Value $pkcs12_file_url
+
+            if (("Desktop" -eq $PSVersionTable.PsEdition) -or ($null -eq $PSVersionTable.PsEdition)) {
+                $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($pkcs12_passphrase);
+                $passphrase = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr);
+            }
+            else {
+                $passphrase = ConvertFrom-SecureString -SecureString $pkcs12_passphrase -AsPlainText
+            }
+
+            $_cert | Add-Member -name "pkcs12_passphrase" -MemberType NoteProperty -Value $passphrase
+        }
+
+        elseif ( $PSCmdlet.ParameterSetName -eq "crt" ) {
+
+            $_cert | Add-Member -name "certificate_url" -MemberType NoteProperty -Value $certificate_url
+
+        }
+
+        $cert = Invoke-ArubaCPRestMethod -method "POST" -uri $uri -body $_cert -connection $connection
+
+        $cert
+    }
+
+    End {
+    }
+}
+
 function Get-ArubaCPClusterCertificate {
 
     <#
