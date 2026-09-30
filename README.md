@@ -37,7 +37,7 @@ With this module (version 0.7.0) you can manage:
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [Certificate](#Certificate) (Get Cluster, Service, Server and Trust List Certificate)
 - [CPPM](#clearpass-version) (Get Version)
-- [Device Fingerprint](#device-fingerprint) (Add /Get)
+- [Device Fingerprint](#device-fingerprint) (Add / Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
 - [Enforcement](#Enforcement) (Get Enforcement Policy / Profile)
 - [Local User](#local-user) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
