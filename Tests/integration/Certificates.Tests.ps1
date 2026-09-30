@@ -98,8 +98,8 @@ Describe "Get Service Certificate (Get-ArubaCPServiceCertificate)" {
     }
 
     It "Get Service Certificate" {
-        $cc = Get-ArubaCPServiceCertificate
-        @($cc).count | Should -Not -Be $NULL
+        $sc = Get-ArubaCPServiceCertificate
+        @($sc).count | Should -Not -Be $NULL
     }
 
     It "Get Service Certificate and confirm" {
@@ -168,7 +168,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.subject_SAN | Should -Be "DNS:clearpass.example.net"
         }
 
-        It "Add SERVICE Self Signed Certificate with parameter (ec|secp521r1 / SHA-384)" {
+        It "Add Service Self Signed Certificate with parameter (ec|secp521r1 / SHA-384)" {
             $ssc = Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -private_key_password $key_password  -private_key_type 'nist/secg curve over a 521 bit prime field' -digest_algorithm SHA-384
             $ssc.certificate_type | Should -Be "service"
             $ssc.subject_CN | Should -Be "MyPowerArubaCP"
