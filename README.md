@@ -35,7 +35,8 @@ With this module (version 0.7.0) you can manage:
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
-- [Certificate](#Certificate) (Get Cluster, Service, Server and Trust List Certificate)
+- [Certificate](#Certificate) (Add CSR / Self Sign, Get Cluster, Service, Server and Service Certificate)
+- [CertTrust](#CertTrust) (Add / Get /Set and Remove Certificate Trust)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add / Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
@@ -325,7 +326,7 @@ You can retrieve its Authentication information of Method (EAP, PAP...) `Get-Aru
 ### Certificate
 
 You can retrieve its Cluster Certificate information of Method (HTTPS, RadSec, Database...) `Get-ArubaCPClusterCertificate`,
-Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate` or Certificate Trust List `Get-ArubaCPServiceCertificate`
+Server (HTTPS, RadSec, Database...) `Get-ArubaCPServerCertificate` or Service `Get-ArubaCPServiceCertificate`
 You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Database.
 
 ```powershell
@@ -495,10 +496,13 @@ You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Databas
     _links              : @{self=}
 
     [...]
+```
 
-# Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)
-#You need to get the uuid of server using 'Get-ArubaCPServerConfiguration' and host the certificate on web server (not possible to import directly like WebGui), the CA need to be import on Trust Certificate (and enable) before
+Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)
+You need to get the uuid of server using 'Get-ArubaCPServerConfiguration' and host the certificate on web server (not possible to import directly like WebGui), the CA need to be import on Trust Certificate (and enable) before
 
+```powershell
+#Import PKCS (PFX) certificat using web Server
     $passphrase = ConvertTo-SecureString MyPFXPassPhrase -AsPlainText -Force
     Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid b0157ce9-7ffd-4250-880d-a834861c61be -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
 
@@ -521,6 +525,26 @@ You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Databas
     _links               : @{self=}
 ```
 
+You can also generate a CSR (Certificate Sign Request) and Add/import the certificate (CRT)
+```powershell
+
+#Generate a CSR with all information (Organization, location, state, SAN...)
+    $csr = Add-ArubaCPCertSignRequest -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
+    $csr.cert_sign_request
+
+        -----BEGIN CERTIFICATE REQUEST-----
+    MIIDGDCCAgACAQAwWDEXMBUGA1UEAwwOTXlQb3dlckFydWJhQ1AxCzAJBgNVBAsM
+    [...]
+    WhlcH4MdBGMgqEibm/j4rxgNYodlrjF1zIpGlw==
+    -----END CERTIFICATE REQUEST-----
+
+#Sign the CSR by your CA and upload on web server (192.0.2.1)
+
+#Add/Import CRT on ClearPass
+    Add-ArubaCPServerCertificate -service_name 'HTTPS(RSA)' -server_uuid $server_uuid -certificate_url https://192.0.2.1/PowerArubaCP.crt
+
+#The certificate is installed on service HTTPS(RSA) for server with uuid $server_uuid
+```
 
 ### ClearPass Version
 
