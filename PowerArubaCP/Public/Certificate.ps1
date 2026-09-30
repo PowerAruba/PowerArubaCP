@@ -551,3 +551,58 @@ function Get-ArubaCPServiceCertificate {
     End {
     }
 }
+
+function Remove-ArubaCPServiceCertificate {
+
+    <#
+        .SYNOPSIS
+        Remove a Service Certificate on ClearPass
+
+        .DESCRIPTION
+        Remove a Service Certificate on ClearPass
+
+        .EXAMPLE
+        $sc = Remove-ArubaCPServiceCertificate -id 3002
+        PS C:\>$sc | Remove-ArubaCPServiceCertificate
+
+        Remove Service Certificate using pipeline
+
+        .EXAMPLE
+        Remove-ArubaCPServiceCertificate -id 3001 -confirm:$false
+
+        Remove Service Certificate with id 3001 with no confirmation
+    #>
+
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'high')]
+    Param(
+        [Parameter (Mandatory = $true, ParameterSetName = "id")]
+        [int]$id,
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ctl")]
+        [ValidateScript({ Confirm-ArubaCPServiceCertificate $_ })]
+        [psobject]$sc,
+        [Parameter (Mandatory = $False)]
+        [ValidateNotNullOrEmpty()]
+        [PSObject]$connection = $DefaultArubaCPConnection
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        #get Certificat Trust List id from ctl ps object
+        if ($sc) {
+            $id = $sc.id
+            $name = "(" + $sc.subject + ")"
+        }
+
+        $uri = "api/service-cert/${id}"
+
+        if ($PSCmdlet.ShouldProcess("$id $name", 'Remove Service Certificate')) {
+            Invoke-ArubaCPRestMethod -method "DELETE" -uri $uri -connection $connection
+        }
+    }
+
+    End {
+    }
+}
