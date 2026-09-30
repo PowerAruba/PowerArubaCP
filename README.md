@@ -35,7 +35,7 @@ With this module (version 0.7.0) you can manage:
 - [API Client](#api-client) (Add / Get / Remove)
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
-- [Certificate](#Certificate) (Add CSR / Self Sign, Get Cluster, Service, Server and Service Certificate)
+- [Certificate](#Certificate) (Add CSR / Self Sign, Get Cluster, Server and Service Certificate)
 - [Certificate Trust](#Certificate-Trust) (Add / Get /Set and Remove Certificate Trust)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add / Get)
