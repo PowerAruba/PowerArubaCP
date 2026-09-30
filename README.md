@@ -36,7 +36,7 @@ With this module (version 0.7.0) you can manage:
 - [Application License](#application-license) (Add / Get / Remove)
 - [Authentication Method and Source](#Authentication-Method-and-Source) (Get Auth Source and Method)
 - [Certificate](#Certificate) (Add CSR / Self Sign, Get Cluster, Service, Server and Service Certificate)
-- [CertTrust](#CertTrust) (Add / Get /Set and Remove Certificate Trust)
+- [Certificate Trust](#Certificate-Trust) (Add / Get /Set and Remove Certificate Trust)
 - [CPPM](#clearpass-version) (Get Version)
 - [Device Fingerprint](#device-fingerprint) (Add / Get)
 - [Endpoint](#endpoint) (Add / Get / Set / Remove and Add / Set / Remove [Attribute](#attribute))
@@ -463,39 +463,6 @@ You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Databas
                         -----END CERTIFICATE-----
     _links               : @{self=}
 
-    ...
-
-# Get Certificate Trust List (with details)
-
-    Get-ArubaCPCertTrustList -details
-
-    id                  : 2029
-    subject_DN          : CN=COMODO RSA Certification Authority,O=COMODO CA Limited,L=Salford,ST=Greater Manchester,C=GB
-    issue_date          : 2010/01/18 16:00:00
-    expiry_date         : 2038/01/18 15:59:59
-    enabled             : True
-    valid               : valid
-    signature_algorithm : SHA384WITHRSA
-    public_key_format   : X.509
-    serial_number       : 101909084537582093308941363524873193117
-    cert_usage          : {Others}
-    issuer_DN           : C=GB,ST=Greater Manchester,L=Salford,O=COMODO CA Limited,CN=COMODO RSA Certification Authority
-    _links              : @{self=}
-
-    id                  : 2012
-    subject_DN          : OU=Class 3 Public Primary Certification Authority,O=VeriSign\, Inc.,C=US
-    issue_date          : 1996/01/28 16:00:00
-    expiry_date         : 2028/08/02 16:59:59
-    enabled             : False
-    valid               : valid
-    signature_algorithm : SHA1WITHRSA
-    public_key_format   : X.509
-    serial_number       : 80507572722862485515306429940691309246
-    cert_usage          : {Others}
-    issuer_DN           : C=US,O=VeriSign\, Inc.,OU=Class 3 Public Primary Certification Authority
-    _links              : @{self=}
-
-    [...]
 ```
 
 Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)
@@ -544,6 +511,94 @@ You can also generate a CSR (Certificate Sign Request) and Add/import the certif
     Add-ArubaCPServerCertificate -service_name 'HTTPS(RSA)' -server_uuid $server_uuid -certificate_url https://192.0.2.1/PowerArubaCP.crt
 
 #The certificate is installed on service HTTPS(RSA) for server with uuid $server_uuid
+```
+
+### Certificate Trust
+
+You can add Certificate Trust List `Add-ArubaCPCertTrustList`, retrieve its informations `Get-ArubaCPCertTrustList`, modify its properties `Set-ArubaCPCertTrustList` or delete it `Remove-ArubaCPCertTrustList`.
+
+
+```powershell
+
+# Get Certificate Trust List (with details)
+
+    Get-ArubaCPCertTrustList -details
+
+    id                  : 2029
+    subject_DN          : CN=COMODO RSA Certification Authority,O=COMODO CA Limited,L=Salford,ST=Greater Manchester,C=GB
+    issue_date          : 2010/01/18 16:00:00
+    expiry_date         : 2038/01/18 15:59:59
+    enabled             : True
+    valid               : valid
+    signature_algorithm : SHA384WITHRSA
+    public_key_format   : X.509
+    serial_number       : 101909084537582093308941363524873193117
+    cert_usage          : {Others}
+    issuer_DN           : C=GB,ST=Greater Manchester,L=Salford,O=COMODO CA Limited,CN=COMODO RSA Certification Authority
+    _links              : @{self=}
+
+    id                  : 2012
+    subject_DN          : OU=Class 3 Public Primary Certification Authority,O=VeriSign\, Inc.,C=US
+    issue_date          : 1996/01/28 16:00:00
+    expiry_date         : 2028/08/02 16:59:59
+    enabled             : False
+    valid               : valid
+    signature_algorithm : SHA1WITHRSA
+    public_key_format   : X.509
+    serial_number       : 80507572722862485515306429940691309246
+    cert_usage          : {Others}
+    issuer_DN           : C=US,O=VeriSign\, Inc.,OU=Class 3 Public Primary Certification Authority
+    _links              : @{self=}
+
+# Add Certificate on Trust List with cert_usage EAP and Others
+    $crt = Get-Content PowerArubaCA-RootCA.crt -Raw
+    Add-ArubaCPCertTrustList -cert_file $crt -cert_usage EAP, Others
+
+    id         : 3030
+    cert_file  : -----BEGIN CERTIFICATE-----
+                MIIF6DCCA9CgAwIBAgIUTMpT5FERnkDdKwQuGSk0ls7LmyQwDQYJKoZIhvcNAQEL
+                [...]
+                6vjLkmDB10o8CmyvXhk9kxoFY21akLyWfb35QA==
+                -----END CERTIFICATE-----
+
+    enabled    : True
+    cert_usage : {EAP, Others}
+    _links     : @{self=}
+
+# Set Certificate on Trust List with only cert_usage Database and set to disable
+    Get-ArubaCPCertTrustList -id 3030 | Set-ArubaCPCertTrustList -cert_usage Database -enabled:$false
+
+    id         : 3030
+    cert_file  : -----BEGIN CERTIFICATE-----
+                MIIF6DCCA9CgAwIBAgIUTMpT5FERnkDdKwQuGSk0ls7LmyQwDQYJKoZIhvcNAQEL
+                [...]
+                6vjLkmDB10o8CmyvXhk9kxoFY21akLyWfb35QA==
+
+    enabled    : False
+    cert_usage : {Database}
+    _links     : @{self=}
+
+# Append Certificate on Trust List with cert_usage RadSec
+    Get-ArubaCPCertTrustList -id 3030 | Add-ArubaCPCertTrustListMember -cert_usage RadSec
+
+    id         : 3030
+    cert_file  : -----BEGIN CERTIFICATE-----
+                MIIF6DCCA9CgAwIBAgIUTMpT5FERnkDdKwQuGSk0ls7LmyQwDQYJKoZIhvcNAQEL
+                [...]
+                6vjLkmDB10o8CmyvXhk9kxoFY21akLyWfb35QA==
+
+    enabled    : False
+    cert_usage : {Database, RadSec}
+    _links     : @{self=}
+
+# Remove Certificate from Trust List
+
+    Get-ArubaCPCertTrustList -id 3030 -details | Remove-ArubaCPCertTrustList
+
+    Confirm
+    Are you sure you want to perform this action?
+    Performing the operation "Remove Certificate Trust" on target "3030 (CN=PowerArubaCA Root)".
+    [Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "Y"):
 ```
 
 ### ClearPass Version
