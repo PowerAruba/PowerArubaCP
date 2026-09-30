@@ -139,9 +139,9 @@ function Add-ArubaCPSelfSignedCertificate {
 
         .EXAMPLE
         $key_password = ConvertTo-SecureString mypassword -AsPlainText -Force
-        PS > Add-ArubaCPSelfSignedCertificate -type RADIUS -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
+        PS > Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net -private_key_password $key_password -private_key_type '2048-bit rsa' -digest_algorithm SHA-256
 
-        Add Self Signed Certificate for service RADIUS on SERVICE with custom certificate settings (CN, Organization, State...) and RSA 2048 with SHA-256 for cipher/digest algorithm
+        Add Self Signed SERVICE Certificate ith custom certificate settings (CN, Organization, State...) and RSA 2048 with SHA-256 for cipher/digest algorithm
 
     #>
 
@@ -150,7 +150,7 @@ function Add-ArubaCPSelfSignedCertificate {
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "server")]
         [string]$server,
-        [Parameter (Mandatory = $true)]
+        [Parameter (Mandatory = $true, ParameterSetName = "server")]
         [ValidateSet("RADIUS", "HTTPS(RSA)", "HTTPS(ECC)", "RadSec", "Database")]
         [string]$type,
         [Parameter (Mandatory = $true)]
@@ -195,13 +195,13 @@ function Add-ArubaCPSelfSignedCertificate {
             #if you specify -server, add name of server
             $certificate_type = "server"
             $_ssc | Add-Member -name "server" -MemberType NoteProperty -Value $server
+
+            #Ugly hack add Server Certificate to all type some API call (Server) need complete name...
+            $type_sc = $type + " Server Certificate"
+            $_ssc | Add-Member -name "type" -MemberType NoteProperty -Value $type_sc
         }
 
         $_ssc | Add-Member -name "certificate_type" -MemberType NoteProperty -Value $certificate_type
-
-        #Ugly hack add Server Certificate to all type some API call (Server) need complete name...
-        $type_sc = $type + " Server Certificate"
-        $_ssc | Add-Member -name "type" -MemberType NoteProperty -Value $type_sc
 
         $_ssc | Add-Member -name "subject_CN" -MemberType NoteProperty -Value $common_name
 
