@@ -252,27 +252,27 @@ function Add-ArubaCPSelfSignedCertificate {
     }
 }
 
-function Add-ArubaCPServerCertificate {
+function Import-ArubaCPServerCertificate {
 
     <#
         .SYNOPSIS
-        Add a server certificate on ClearPass
+        Import a server certificate on ClearPass
 
         .DESCRIPTION
-        Add a server certificate on ClearPass (HTTPS, RADIUS, etc ...)
+        Import a server certificate on ClearPass (HTTPS, RADIUS, etc ...)
 
         .EXAMPLE
         $passphrase = ConvertTo-SecureString mypassword -AsPlainText -Force
         PS > $server_uuid = (Get-ArubaCPServerConfiguration).server_uuid[0]
-        PS > Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid $server_uuid -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+        PS > Import-ArubaCPServerCertificate -service_name RADIUS -server_uuid $server_uuid -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
 
-        Add certificate (pfx) for service RADIUS on CPPM Server with uuid (multiple server) from Get-ArubaCPServerConfiguration using passphrase
+        Import certificate (pfx) for service RADIUS on CPPM Server with uuid (multiple server) from Get-ArubaCPServerConfiguration using passphrase
 
         .EXAMPLE
         $server_uuid = (Get-ArubaCPServerConfiguration).server_uuid
-        PS > Add-ArubaCPServerCertificate -service_name RadSec -server_uuid $server_uuid -certificate_url http://192.0.2.1/PowerArubaCP.crt
+        PS > Import-ArubaCPServerCertificate -service_name RadSec -server_uuid $server_uuid -certificate_url http://192.0.2.1/PowerArubaCP.crt
 
-        Add certificate (crt) for service RadSec on CPPM Server with uuid from Get-ArubaCPServerConfiguratione
+        Import certificate (crt) for service RadSec on CPPM Server with uuid from Get-ArubaCPServerConfiguratione
     #>
 
     [CmdLetBinding(DefaultParameterSetName = "Default")]
