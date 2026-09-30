@@ -471,7 +471,7 @@ You need to get the uuid of server using 'Get-ArubaCPServerConfiguration' and ho
 ```powershell
 #Import PKCS (PFX) certificat using web Server
     $passphrase = ConvertTo-SecureString MyPFXPassPhrase -AsPlainText -Force
-    Add-ArubaCPServerCertificate -service_name RADIUS -server_uuid b0157ce9-7ffd-4250-880d-a834861c61be -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+    Import-ArubaCPServerCertificate -service_name RADIUS -server_uuid b0157ce9-7ffd-4250-880d-a834861c61be -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
 
     service_id           : 1
     service_name         : RADIUS
@@ -508,7 +508,7 @@ You can also generate a CSR (Certificate Sign Request) and Add/import the certif
 #Sign the CSR by your CA and upload on web server (192.0.2.1)
 
 #Add/Import CRT on ClearPass
-    Add-ArubaCPServerCertificate -service_name 'HTTPS(RSA)' -server_uuid $server_uuid -certificate_url https://192.0.2.1/PowerArubaCP.crt
+    Import-ArubaCPServerCertificate -service_name 'HTTPS(RSA)' -server_uuid $server_uuid -certificate_url https://192.0.2.1/PowerArubaCP.crt
 
 #The certificate is installed on service HTTPS(RSA) for server with uuid $server_uuid
 ```
