@@ -1324,7 +1324,6 @@ Add-ArubaCPNetworkDeviceGroup
 Add-ArubaCPNetworkDeviceGroupMember
 Add-ArubaCPRole
 Add-ArubaCPSelfSignedCertificate
-Add-ArubaCPServerCertificate
 Add-ArubaCPStaticHostList
 Add-ArubaCPStaticHostListMember
 Confirm-ArubaCPApiClient
@@ -1367,6 +1366,8 @@ Get-ArubaCPServerVersion
 Get-ArubaCPService
 Get-ArubaCPServiceCertificate
 Get-ArubaCPStaticHostList
+Import-ArubaCPServerCertificate
+Import-ArubaCPServiceCertificate
 Invoke-ArubaCPRestMethod
 Remove-ArubaCPApiClient
 Remove-ArubaCPApplicationLicense
