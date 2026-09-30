@@ -577,7 +577,7 @@ function Remove-ArubaCPServiceCertificate {
     Param(
         [Parameter (Mandatory = $true, ParameterSetName = "id")]
         [int]$id,
-        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "ctl")]
+        [Parameter (Mandatory = $true, ValueFromPipeline = $true, Position = 1, ParameterSetName = "sc")]
         [ValidateScript({ Confirm-ArubaCPServiceCertificate $_ })]
         [psobject]$sc,
         [Parameter (Mandatory = $False)]
@@ -590,7 +590,7 @@ function Remove-ArubaCPServiceCertificate {
 
     Process {
 
-        #get Certificat Trust List id from ctl ps object
+        #get Service Certificat id from sc ps object
         if ($sc) {
             $id = $sc.id
             $name = "(" + $sc.subject + ")"
