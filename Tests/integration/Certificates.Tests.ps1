@@ -150,6 +150,10 @@ Describe  "Add Self Signed Certificate" {
             $ssc.digest_algorithm | Should -Be "SHA-384"
         }
 
+        AfterEach {
+            Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP -filter_type contains | Remove-ArubaCPServiceCertificate -Confirm:$false
+        }
+
     }
 
     Context "Server" {
