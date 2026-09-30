@@ -251,6 +251,41 @@ Function Confirm-ArubaCPServerCertificate {
     $true
 
 }
+
+Function Confirm-ArubaCPServiceCertificate {
+
+    Param (
+        [Parameter (Mandatory = $true)]
+        [object]$argument
+    )
+
+    #Check if it looks like an Service Certificate element
+
+    if ( -not ( $argument | get-member -name id -Membertype Properties)) {
+        throw "Element specified does not contain an id property."
+    }
+    if ( -not ( $argument | get-member -name subject  -Membertype Properties)) {
+        throw "Element specified does not contain an subject  property."
+    }
+    if ( -not ( $argument | get-member -name expiry_date -Membertype Properties)) {
+        throw "Element specified does not contain an expiry_date property."
+    }
+    if ( -not ( $argument | get-member -name issue_date -Membertype Properties)) {
+        throw "Element specified does not contain an issue_date property."
+    }
+    if ( -not ( $argument | get-member -name issued_by -Membertype Properties)) {
+        throw "Element specified does not contain an issued_by property."
+    }
+    if ( -not ( $argument | get-member -name validity -Membertype Properties)) {
+        throw "Element specified does not contain a validity property."
+    }
+    if ( -not ( $argument | get-member -name cert_file -Membertype Properties)) {
+        throw "Element specified does not contain a cert_file property."
+    }
+    $true
+
+}
+
 Function Confirm-ArubaCPRole {
 
     Param (
