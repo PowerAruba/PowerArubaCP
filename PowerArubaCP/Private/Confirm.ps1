@@ -259,13 +259,13 @@ Function Confirm-ArubaCPServiceCertificate {
         [object]$argument
     )
 
-    #Check if it looks like an Service Certificate element
+    #Check if it looks like a Service Certificate element
 
     if ( -not ( $argument | get-member -name id -Membertype Properties)) {
         throw "Element specified does not contain an id property."
     }
     if ( -not ( $argument | get-member -name subject  -Membertype Properties)) {
-        throw "Element specified does not contain an subject  property."
+        throw "Element specified does not contain a subject  property."
     }
     if ( -not ( $argument | get-member -name expiry_date -Membertype Properties)) {
         throw "Element specified does not contain an expiry_date property."
