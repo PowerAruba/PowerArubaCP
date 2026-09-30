@@ -86,6 +86,32 @@ Describe  "Get Server Certificate (Get-ArubaCPServerCertificate)" {
 
 }
 
+Describe "Get Service Certificate (Get-ArubaCPServiceCertificate)" {
+
+    BeforeAll {
+        Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -private_key_password $key_password
+    }
+    It "Get Service Certificate Does not throw an error" {
+        {
+            Get-ArubaCPServiceCertificate
+        } | Should -Not -Throw
+    }
+
+    It "Get Service Certificate" {
+        $cc = Get-ArubaCPServiceCertificate
+        @($cc).count | Should -Not -Be $NULL
+    }
+
+    It "Get Service Certificate and confirm" {
+        $sc = Get-ArubaCPServiceCertificate
+        Confirm-ArubaCPServiceCertificate $sc | Should -Be $true
+    }
+
+    AfterAll {
+        Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP -filter_type contains | Remove-ArubaCPServiceCertificate -Confirm:$false
+    }
+}
+
 Describe  "Add Certificate Sign Request (CSR)" {
 
     It "Add Certificate Sign Request (CSR) with default parameter (RSA 4096 / SHA-512)" {
