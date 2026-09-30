@@ -342,12 +342,12 @@ function Import-ArubaCPServiceCertificate {
 
         .EXAMPLE
         $passphrase = ConvertTo-SecureString mypassword -AsPlainText -Force
-        PS > Import-ArubaCPServerviceCertificate  -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
+        PS > Import-ArubaCPServiceCertificate  -pkcs12_file_url http://192.0.2.1/PowerArubaCP.pfx -pkcs12_passphrase $passphrase
 
         Import certificate (pfx) for service Certificate
 
         .EXAMPLE
-        PS > Import-ArubaCPServerviceCertificate-certificate_url http://192.0.2.1/PowerArubaCP.crt
+        PS > Import-ArubaCPServiceCertificate -certificate_url http://192.0.2.1/PowerArubaCP.crt
 
         Import certificate (crt) for service Certificate
     #>
