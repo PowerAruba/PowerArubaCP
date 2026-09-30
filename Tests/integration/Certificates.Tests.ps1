@@ -259,6 +259,33 @@ Describe  "Add Self Signed Certificate" {
 
 }
 
+Describe "Remove Service Certificate" {
+
+    BeforeEach {
+        Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -private_key_password $key_password
+    }
+
+    It "Remove Service Certificate Trust by id" {
+        $sc = Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP
+        $sc.subject | Should -Be "CN=MyPowerArubaCP"
+        @($sc).count | Should -Be 1
+        Remove-ArubaCPServiceCertificate -id $sc.id -confirm:$false
+        $sc = Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP
+        $sc | Should -BeNullOrEmpty
+        @($sc).count | Should -Be 0
+    }
+
+    It "Remove Service Certificate by pipeline" {
+        $sc = Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP
+        $sc.subject | Should -Be "CN=MyPowerArubaCP"
+        @($sc).count | Should -Be 1
+        $sc | Remove-ArubaCPServiceCertificate -confirm:$false
+        $sc = Get-ArubaCPServiceCertificate -filter_attribute subject -filter_value CN=MyPowerArubaCP
+        $sc | Should -BeNullOrEmpty
+        @($sc).count | Should -Be 0
+    }
+}
+
 AfterAll {
     Disconnect-ArubaCP -confirm:$false
 }
