@@ -64,7 +64,7 @@ Describe "Get CPPM Version" {
         $cv = Get-ArubaCPCPPMVersion
         $cv.app_major_version | Should -Be "6"
         $cv.app_minor_version | Should -BeIn (8..14)
-        $cv.app_service_release | Should -BeIn (0..15)
+        $cv.app_service_release | Should -BeIn (0..20)
         $cv.app_build_number | Should -Not -Be $NULL
         $cv.hardware_version | Should -Not -Be $NULL
         $cv.fips_enabled | Should -Not -Be $NULL
