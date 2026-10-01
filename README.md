@@ -523,7 +523,6 @@ You can add Certificate Trust List `Add-ArubaCPCertTrustList`, retrieve its info
 ```powershell
 
 # Get Certificate Trust List (with details)
-
     Get-ArubaCPCertTrustList -details
 
     id                  : 2029
@@ -594,7 +593,6 @@ You can add Certificate Trust List `Add-ArubaCPCertTrustList`, retrieve its info
     _links     : @{self=}
 
 # Remove Certificate from Trust List
-
     Get-ArubaCPCertTrustList -id 3030 -details | Remove-ArubaCPCertTrustList
 
     Confirm
