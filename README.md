@@ -465,8 +465,10 @@ You can also import certificat (for Server) for RADIUS, HTTPS, RadSec or Databas
 
 ```
 
-Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)
-You need to get the uuid of server using 'Get-ArubaCPServerConfiguration' and host the certificate on web server (not possible to import directly like WebGui), the CA need to be import on Trust Certificate (and enable) before
+
+Add (Import) Server Certificate (RADIUS, HTTPS, RadSec, Database)  
+You need to get the uuid of server using `Get-ArubaCPServerConfiguration` and host the certificate on web server (not possible to import directly like WebGui),the CA need to be import on Trust Certificate (and enable) before.
+
 
 ```powershell
 #Import PKCS (PFX) certificat using web Server
