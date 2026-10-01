@@ -551,6 +551,50 @@ You can add Certificate Trust List `Add-ArubaCPCertTrustList`, retrieve its info
     issuer_DN           : C=US,O=VeriSign\, Inc.,OU=Class 3 Public Primary Certification Authority
     _links              : @{self=}
 
+# Get Certificate Trust with SHA1(RSA) and enabled (for upgrade to CPPM 6.14...)
+    Get-ArubaCPCertTrustList -details -limit 1000 | Where-Object { $_.signature_algorithm -eq "SHA1WITHRSA" -and $_.enabled -eq $true }
+
+    id                  : 2003
+    subject_DN          : OU=Go Daddy Class 2 Certification Authority,O=The Go Daddy Group\, Inc.,C=US
+    issue_date          : 2004/06/29 19:06:20
+    expiry_date         : 2034/06/29 19:06:20
+    enabled             : True
+    valid               : valid
+    signature_algorithm : SHA1WITHRSA
+    public_key_format   : X.509
+    serial_number       : 0
+    cert_usage          : {AD/LDAP Servers, Aruba Services, Endpoint Context Servers, SAML…}
+    issuer_DN           : C=US,O=The Go Daddy Group\, Inc.,OU=Go Daddy Class 2 Certification Authority
+    _links              : @{self=}
+
+    id                  : 2007
+    subject_DN          : CN=VeriSign Class 1 Public Primary Certification Authority - G3,OU=(c) 1999 VeriSign\, Inc. - For authorized use
+                        only,OU=VeriSign Trust Network,O=VeriSign\, Inc.,C=US
+    issue_date          : 1999/10/01 02:00:00
+    expiry_date         : 2036/07/17 01:59:59
+    enabled             : True
+    valid               : valid
+    signature_algorithm : SHA1WITHRSA
+    public_key_format   : X.509
+    serial_number       : 185237570324729778462978133790525665700
+    cert_usage          : {AD/LDAP Servers, Aruba Services, Endpoint Context Servers, SAML…}
+    issuer_DN           : C=US,O=VeriSign\, Inc.,OU=VeriSign Trust Network,OU=(c) 1999 VeriSign\, Inc. - For authorized use only,CN=VeriSign Class 1
+                        Public Primary Certification Authority - G3
+    _links              : @{self=}
+
+    id                  : 2021
+    subject_DN          : CN=DigiCert Global Root CA,OU=www.digicert.com,O=DigiCert Inc,C=US
+    issue_date          : 2006/11/10 01:00:00
+    expiry_date         : 2031/11/10 01:00:00
+    enabled             : True
+    valid               : valid
+    signature_algorithm : SHA1WITHRSA
+    public_key_format   : X.509
+    serial_number       : 10944719598952040374951832963794454346
+    cert_usage          : {AD/LDAP Servers, Aruba Services, Endpoint Context Servers, SAML…}
+    issuer_DN           : C=US,O=DigiCert Inc,OU=www.digicert.com,CN=DigiCert Global Root CA
+    _links              : @{self=}
+
 # Add Certificate on Trust List with cert_usage EAP and Others
     $crt = Get-Content PowerArubaCA-RootCA.crt -Raw
     Add-ArubaCPCertTrustList -cert_file $crt -cert_usage EAP, Others
