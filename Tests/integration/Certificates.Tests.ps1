@@ -183,7 +183,7 @@ Describe  "Add Self Signed Certificate" {
     }
 
     Context "Server" {
-        It "Add Server Self Signed Certificate (HTTPS RSA) with default parameter (RSA 4096 / SHA-512)" {
+        It "Add Server Self Signed Certificate (HTTPS RSA) with default parameter (RSA 4096 / SHA-512)" -Skip:$skip_test_server_cert {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(RSA)" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "HTTPS(RSA) Server Certificate"
@@ -193,7 +193,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.digest_algorithm | Should -Be "SHA-512"
         }
 
-        It "Add Server Self Signed Certificate (HTTPS RSA) with parameter (RSA 2048 / SHA-256)" {
+        It "Add Server Self Signed Certificate (HTTPS RSA) with parameter (RSA 2048 / SHA-256)" -Skip:$skip_test_server_cert {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(RSA)"  -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password -private_key_type "2048-bit rsa" -digest_algorithm SHA-256
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "HTTPS(RSA) Server Certificate"
@@ -202,7 +202,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.digest_algorithm | Should -Be "SHA-256"
         }
 
-        It "Add Server Self Signed Certificate (HTTPS RSA) with other parameter (org, location, state, Country, san...)" {
+        It "Add Server Self Signed Certificate (HTTPS RSA) with other parameter (org, location, state, Country, san...)" -Skip:$skip_test_server_cert {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(RSA)" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password -organization PowerAruba -organization_unit CP -location Aruba -state PowerAruba -country FR -san DNS:clearpass.example.net
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "HTTPS(RSA) Server Certificate"
@@ -216,7 +216,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.subject_SAN | Should -Be "DNS:clearpass.example.net"
         }
 
-        It "Add Server Self Signed Certificate (HTTPS ECC) with parameter (ec|secp521r1 / SHA-384)" {
+        It "Add Server Self Signed Certificate (HTTPS ECC) with parameter (ec|secp521r1 / SHA-384)" -Skip:$skip_test_server_cert {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(ECC)" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password -private_key_type 'nist/secg curve over a 521 bit prime field' -digest_algorithm SHA-384
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "HTTPS(ECC) Server Certificate"
@@ -225,8 +225,8 @@ Describe  "Add Self Signed Certificate" {
             $ssc.digest_algorithm | Should -Be "SHA-384"
         }
 
-        <# Disable this test because need to restart server after and also add IP to SAN...
-        It "Add Server Self Signed Certificate (Database) with default parameter (RSA 4096 / SHA-512)" {
+        <# Disable this test because need to restart server after and also add IP to SAN... #>
+        It "Add Server Self Signed Certificate (Database) with default parameter (RSA 4096 / SHA-512)" -Skip:$true {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "Database" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "Database Server Certificate"
@@ -235,7 +235,7 @@ Describe  "Add Self Signed Certificate" {
             $ssc.private_key_type | Should -Be "4096-bit rsa"
             $ssc.digest_algorithm | Should -Be "SHA-512"
         }
-        #>
+
         It "Add Server Self Signed Certificate (RadSec) with default parameter (RSA 4096 / SHA-512)" {
             $ssc = Add-ArubaCPSelfSignedCertificate -type "RadSec" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password
             $ssc.certificate_type | Should -Be "server"

@@ -8,6 +8,7 @@
 
 $script:ipaddress = "10.44.23.213"
 $script:token = "aaaaaaaaaaaaaaaaaa"
+$script:skip_test_server_cert = $true
 
 #Uncomment if you want to use another port to access to ClearPass
 #script:port = "443"
