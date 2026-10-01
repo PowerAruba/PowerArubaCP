@@ -169,7 +169,7 @@ Describe  "Add Self Signed Certificate" {
         }
 
         It "Add Service Self Signed Certificate with parameter (ec|secp521r1 / SHA-384)" {
-            $ssc = Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -private_key_password $key_password  -private_key_type 'nist/secg curve over a 521 bit prime field' -digest_algorithm SHA-384
+            $ssc = Add-ArubaCPSelfSignedCertificate -common_name MyPowerArubaCP -private_key_password $key_password -private_key_type 'nist/secg curve over a 521 bit prime field' -digest_algorithm SHA-384
             $ssc.certificate_type | Should -Be "service"
             $ssc.subject_CN | Should -Be "MyPowerArubaCP"
             $ssc.private_key_type | Should -Be "nist/secg curve over a 521 bit prime field"
@@ -194,7 +194,7 @@ Describe  "Add Self Signed Certificate" {
         }
 
         It "Add Server Self Signed Certificate (HTTPS RSA) with parameter (RSA 2048 / SHA-256)" -Skip:$skip_test_server_cert {
-            $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(RSA)"  -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password -private_key_type "2048-bit rsa" -digest_algorithm SHA-256
+            $ssc = Add-ArubaCPSelfSignedCertificate -type "HTTPS(RSA)" -server $server_name -common_name MyPowerArubaCP -private_key_password $key_password -private_key_type "2048-bit rsa" -digest_algorithm SHA-256
             $ssc.certificate_type | Should -Be "server"
             $ssc.type | Should -Be "HTTPS(RSA) Server Certificate"
             $ssc.subject_CN | Should -Be "MyPowerArubaCP"
