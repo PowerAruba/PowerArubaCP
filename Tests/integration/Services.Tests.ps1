@@ -28,7 +28,7 @@ Describe "Get Service" {
         $s.name | Should -Be "[Policy Manager Admin Network Login Service]"
         $s.type | Should -Be "TACACS"
         $s.template | Should -Be "TACACS+ Enforcement"
-        $s.enabled | Should -Be "True"
+        $s.enabled | Should -Be "false"
         $s.order_No | Should -Be "1"
     }
 
@@ -69,16 +69,18 @@ Describe "Get Service" {
 
 Describe "Enable / Disable Service" {
 
+    It "Enable Service (id 1)" {
+        $s = Get-ArubaCPService -id 1
+        $s.enabled | Should -Be "false"
+        $s = Get-ArubaCPService -id 1 | Enable-ArubaCPService
+        $s.enabled | Should -Be "true"
+    }
+
     It "Disable Service (id 1)" {
         $s = Get-ArubaCPService -id 1
         $s.enabled | Should -Be "True"
         $s = Get-ArubaCPService -id 1 | Disable-ArubaCPService
         $s.enabled | Should -Be "false"
-    }
-
-    It "Enable Service (id 1)" {
-        $s = Get-ArubaCPService -id 1 | Enable-ArubaCPService
-        $s.enabled | Should -Be "true"
     }
 
 }
